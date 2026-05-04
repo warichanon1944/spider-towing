@@ -1411,29 +1411,53 @@ window.onload = async ()=>{
 
   status.disabled = true;
 
-  // AUTO ENABLE SOUND
+  const btn = document.querySelector(".sound-btn");
+
+  // FORCE ENABLE SOUND
   soundEnabled = true;
 
-  const btn = document.querySelector(".sound-btn");
   btn.innerText = "🔊 SOUND ON";
 
   // INIT AUDIO
   initAudio();
 
-  // WAKE SPEECH ENGINE
+  // FORCE UNLOCK SPEECH
   try{
 
-    const msg = new SpeechSynthesisUtterance(" ");
+    const unlock = new SpeechSynthesisUtterance("system ready");
 
-    msg.volume = 0;
+    unlock.volume = 0;
 
-    window.speechSynthesis.speak(msg);
+    window.speechSynthesis.cancel();
+
+    window.speechSynthesis.speak(unlock);
 
   }catch(e){
+
     console.log(e);
+
   }
 
-  // LOAD DATA
+  // USER CLICK UNLOCK
+  document.body.addEventListener("click", ()=>{
+
+    initAudio();
+
+    soundEnabled = true;
+
+    try{
+
+      const msg = new SpeechSynthesisUtterance(" ");
+
+      msg.volume = 0;
+
+      window.speechSynthesis.speak(msg);
+
+    }catch(e){}
+
+  }, { once:true });
+
+  // LOAD
   await load();
 
 };
