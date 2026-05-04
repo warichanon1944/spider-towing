@@ -1439,23 +1439,7 @@ window.onload = async ()=>{
   }
 
   // USER CLICK UNLOCK
-  document.body.addEventListener("click", ()=>{
 
-    initAudio();
-
-    soundEnabled = true;
-
-    try{
-
-      const msg = new SpeechSynthesisUtterance(" ");
-
-      msg.volume = 0;
-
-      window.speechSynthesis.speak(msg);
-
-    }catch(e){}
-
-  }, { once:true });
 
   // LOAD
   await load();
@@ -1595,10 +1579,10 @@ async function unlockAudio(){
 
   try{
 
-    // เปิดเสียง
+    // enable
     soundEnabled = true;
 
-    // สร้าง AudioContext
+    // audio context
     if(!audioCtx){
 
       audioCtx =
@@ -1606,25 +1590,43 @@ async function unlockAudio(){
 
     }
 
-    // ปลุก audio engine
     await audioCtx.resume();
 
-    // reset speech
+    // reset speech engine
     window.speechSynthesis.cancel();
 
-    // unlock speech engine
+    // TEST SPEAK
     const msg =
-      new SpeechSynthesisUtterance("audio enabled");
+      new SpeechSynthesisUtterance("sound enabled");
 
-    msg.volume = 0.01;
+    msg.lang = "en-US";
+    msg.volume = 1;
     msg.rate = 1;
+
+    msg.onstart = ()=>{
+
+      console.log("speech start");
+
+    };
+
+    msg.onend = ()=>{
+
+      console.log("speech end");
+
+    };
+
+    msg.onerror = (e)=>{
+
+      console.log("speech error", e);
+
+    };
 
     window.speechSynthesis.speak(msg);
 
-    // ทดสอบ beep
+    // test beep
     playWarningBeep();
 
-    // เปลี่ยนปุ่ม
+    // UI
     const btn =
       document.querySelector(".sound-btn");
 
@@ -1634,12 +1636,11 @@ async function unlockAudio(){
 
   }catch(e){
 
-    console.log(e);
+    console.log("unlock fail", e);
 
   }
 
 }
-
 
 function isScheduled(d){
 
@@ -1708,6 +1709,14 @@ async function processQueue(){
 
   const msg1 =
     new SpeechSynthesisUtterance(item.text.main);
+
+msg1.onerror = (e)=>{
+  console.log("msg1 error", e);
+};
+
+msg1.onstart = ()=>{
+  console.log("msg1 start");
+};
 
   msg1.lang = "en-US";
   msg1.rate = 0.75;
@@ -1805,9 +1814,17 @@ if(needBeep){
 
   speechWatchdog = Date.now();
 
+try{
+
   window.speechSynthesis.cancel();
 
-window.speechSynthesis.speak(msg1);
+}catch(e){}
+
+setTimeout(()=>{
+
+  window.speechSynthesis.speak(msg1);
+
+},200);
 
 }
 }
