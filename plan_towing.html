@@ -1,0 +1,2275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>AIRPORT OPS CONTROL</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#040b16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+
+<style>
+
+:root{
+  --bg:#040b16;
+  --panel:#09111f;
+  --panel2:#0f172a;
+  --line:rgba(255,255,255,0.08);
+  --soft:rgba(255,255,255,0.04);
+
+  --green:#00ff9c;
+  --blue:#3b82f6;
+  --yellow:#facc15;
+  --red:#ef4444;
+
+  --text:#ffffff;
+  --muted:#94a3b8;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(circle at top left,#12304f55,transparent 35%),
+    radial-gradient(circle at bottom right,#0c7c5944,transparent 35%),
+    linear-gradient(180deg,#020617,#07111f);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+
+  background-size:40px 40px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,0.7),transparent);
+  pointer-events:none;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:999;
+
+  height:82px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 28px;
+
+  background:rgba(6,12,24,0.78);
+  backdrop-filter:blur(14px);
+
+  border-bottom:1px solid rgba(255,255,255,0.06);
+
+  box-shadow:
+    0 0 30px rgba(0,255,156,0.08),
+    0 10px 40px rgba(0,0,0,0.35);
+}
+
+.logo-wrap{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.radar{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  position:relative;
+  border:2px solid rgba(0,255,156,0.4);
+
+  box-shadow:
+    0 0 20px rgba(0,255,156,0.25),
+    inset 0 0 20px rgba(0,255,156,0.15);
+}
+
+.radar::before{
+  content:'';
+  position:absolute;
+  inset:6px;
+  border-radius:50%;
+  border:1px solid rgba(0,255,156,0.2);
+}
+
+.title{
+  display:flex;
+  flex-direction:column;
+}
+
+.title h1{
+  font-size:20px;
+  letter-spacing:2px;
+  font-weight:700;
+}
+
+.title span{
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:3px;
+  margin-top:3px;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.live{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+
+  padding:10px 14px;
+  border-radius:14px;
+}
+
+.live-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:var(--green);
+
+  box-shadow:
+    0 0 10px var(--green),
+    0 0 20px var(--green);
+
+  animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+  50%{
+    opacity:0.5;
+    transform:scale(0.7);
+  }
+}
+
+.clock{
+  font-size:14px;
+  font-weight:600;
+}
+
+.container{
+  display:grid;
+  grid-template-columns:390px minmax(0,1fr);
+  gap:22px;
+  padding:22px;
+}
+
+.panel{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+
+  border:1px solid rgba(255,255,255,0.06);
+
+  border-radius:24px;
+
+  padding:22px;
+
+  backdrop-filter:blur(12px);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 20px 40px rgba(0,0,0,0.35);
+
+  overflow:hidden;
+  position:relative;
+}
+
+.panel::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+
+  background:linear-gradient(90deg,
+    transparent,
+    var(--green),
+    transparent);
+}
+
+.panel-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.panel-title h3{
+  font-size:15px;
+  letter-spacing:2px;
+}
+
+.panel-badge{
+  font-size:11px;
+  color:var(--green);
+  padding:6px 10px;
+  border-radius:999px;
+
+  background:rgba(0,255,156,0.08);
+  border:1px solid rgba(0,255,156,0.18);
+}
+
+.form{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.row2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field label{
+  font-size:11px;
+  color:#6b7280;
+  letter-spacing:1px;
+}
+
+input,
+select{
+  width:100%;
+  height:48px;
+
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.06);
+
+  background:
+    linear-gradient(180deg,
+    rgba(255,255,255,0.04),
+    rgba(255,255,255,0.02));
+
+  padding:0 14px;
+
+  color:#fff;
+  font-size:13px;
+  outline:none;
+
+  transition:0.25s;
+}
+
+input:focus{
+  border-color:rgba(0,255,156,0.5);
+
+  box-shadow:
+    0 0 0 4px rgba(0,255,156,0.08),
+    0 0 20px rgba(0,255,156,0.08);
+
+  transform:translateY(-1px);
+}
+
+input::placeholder{
+  color:rgba(255,255,255,0.25);
+}
+
+.buttons{
+  display:flex;
+  gap:10px;
+  margin-top:8px;
+}
+
+button{
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:700;
+  height:46px;
+  transition:0.25s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+.save{
+  flex:1;
+
+  background:linear-gradient(135deg,#00ff9c,#00d084);
+  color:#00130b;
+
+  box-shadow:0 10px 25px rgba(0,255,156,0.2);
+}
+
+.update{
+  flex:1;
+
+  background:linear-gradient(135deg,#f59e0b,#ffcb52);
+  color:#000;
+}
+
+.clear{
+  width:120px;
+
+  background:rgba(239,68,68,0.15);
+  color:#ff8d8d;
+
+  border:1px solid rgba(239,68,68,0.2);
+}
+
+.table-wrap{
+  overflow:auto;
+  border-radius:18px;
+}
+
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 10px;
+  min-width:1000px;
+}
+
+thead th{
+  color:#64748b;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  padding:0 12px 10px;
+}
+
+tbody tr{
+  background:rgba(255,255,255,0.03);
+  transition:0.2s;
+}
+
+tbody tr:hover{
+  transform:scale(1.004);
+  background:rgba(255,255,255,0.05);
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 10px 20px rgba(0,0,0,0.3);
+}
+
+tbody td{
+  padding:14px 12px;
+  text-align:center;
+  font-size:13px;
+  border-top:1px solid rgba(255,255,255,0.03);
+  border-bottom:1px solid rgba(255,255,255,0.03);
+}
+
+tbody td:first-child{
+  border-left:1px solid rgba(255,255,255,0.03);
+  border-radius:14px 0 0 14px;
+}
+
+tbody td:last-child{
+  border-right:1px solid rgba(255,255,255,0.03);
+  border-radius:0 14px 14px 0;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:95px;
+  height:34px;
+
+  border-radius:999px;
+
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1px;
+
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.status:hover{
+  transform:scale(1.05);
+}
+
+.waiting{
+  background:rgba(250,204,21,0.12);
+  color:var(--yellow);
+  border:1px solid rgba(250,204,21,0.18);
+}
+
+.towing{
+  background: rgba(250,204,21,0.12);
+  color: #ffd54a;
+  border: 1px solid rgba(250,204,21,0.25);
+
+  animation: towStrobe 0.9s infinite;
+}
+
+.done{
+  background:rgba(0,255,156,0.12);
+  color:var(--green);
+  border:1px solid rgba(0,255,156,0.18);
+}
+
+.action-area{
+  display:flex;
+  gap:6px;
+  justify-content:center;
+}
+
+.action-btn{
+  border:none;
+  border-radius:10px;
+  height:34px;
+  min-width:60px;
+
+  font-size:11px;
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+.edit{
+  background:rgba(245,158,11,0.18);
+  color:#ffd27b;
+  border:1px solid rgba(245,158,11,0.2);
+}
+
+.del{
+  background:rgba(239,68,68,0.15);
+  color:#ff8d8d;
+  border:1px solid rgba(239,68,68,0.2);
+}
+
+@media(max-width:1100px){
+
+  .container{
+    grid-template-columns:1fr;
+  }
+
+}
+
+input:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+}
+
+.apx-tag{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+
+  background:rgba(59,130,246,0.15);
+  border:1px solid rgba(59,130,246,0.25);
+
+  color:#7cc2ff;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.flight-type{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  min-width:70px;
+  height:30px;
+
+  border-radius:999px;
+
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.dep{
+  background: rgba(0,255,156,0.12);
+  color:#00ff9c;
+  border:1px solid rgba(0,255,156,0.2);
+}
+
+.arv{
+  background: rgba(239,68,68,0.12);
+  color:#ff5c5c;
+  border:1px solid rgba(239,68,68,0.25);
+}
+
+.dep-row{
+  background: linear-gradient(
+    90deg,
+    rgba(0,255,156,0.12),
+    rgba(0,0,0,0.15)
+  );
+  box-shadow: inset 0 0 25px rgba(0,255,156,0.08);
+}
+
+.arv-row{
+  background:
+    linear-gradient(90deg, rgba(239,68,68,0.14), rgba(255,255,255,0.03));
+}
+
+.towing-row{
+  background:
+    linear-gradient(90deg, rgba(250,204,21,0.18), rgba(255,255,255,0.03));
+}
+
+.status.towing{
+  animation: towStrobe 0.9s infinite;
+}
+.done-row{
+  background: linear-gradient(
+    90deg,
+    rgba(0,255,156,0.18),
+    rgba(255,255,255,0.03)
+  );
+  filter: brightness(1.1);
+}
+
+@keyframes towStatusBlink{
+  0%,100%{
+    opacity:1;
+    box-shadow:0 0 10px rgba(250,204,21,0.3);
+  }
+  50%{
+    opacity:0.4;
+    box-shadow:0 0 25px rgba(250,204,21,0.7);
+  }
+}
+
+@keyframes towStrobe{
+  0%,100%{
+    opacity:1;
+    box-shadow:0 0 10px rgba(250,204,21,0.3);
+  }
+  50%{
+    opacity:0.35;
+    box-shadow:0 0 25px rgba(250,204,21,0.8);
+  }
+}
+
+.sound-btn{
+  height:38px;
+  padding:0 14px;
+
+  border-radius:12px;
+  border:1px solid rgba(0,255,156,0.25);
+
+  background:rgba(0,255,156,0.08);
+  color:var(--green);
+
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1px;
+
+  cursor:pointer;
+
+  transition:0.25s;
+
+  box-shadow:0 0 15px rgba(0,255,156,0.1);
+}
+
+.sound-btn:hover{
+  transform:translateY(-2px);
+  background:rgba(0,255,156,0.15);
+  box-shadow:0 0 25px rgba(0,255,156,0.25);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+  <div class="logo-wrap">
+
+    <div class="radar"></div>
+
+    <div class="title">
+      <h1>SPIDER TOWING CONTROL</h1>
+      <span>TOWING MANAGEMENT SYSTEM</span>
+    </div>
+
+  </div>
+
+  <div class="header-right">
+
+    <div class="live">
+      <div class="live-dot"></div>
+      <div>LIVE SYSTEM</div>
+    </div>
+
+    <div class="clock" id="clock"></div>
+
+	  <button class="sound-btn" onclick="unlockAudio()">
+    🔊 ENABLE SOUND
+  </button>
+
+  </div>
+
+</div>
+
+<div class="container">
+
+  <div class="panel">
+
+    <div class="panel-title">
+      <h3>FLIGHT INPUT</h3>
+      <div class="panel-badge">OPS ACTIVE</div>
+    </div>
+
+    <div class="form">
+
+      <div class="row2">
+
+        <div class="field">
+          <label>AIRCRAFT REG</label>
+          <input id="reg" placeholder="HS-XXX">
+        </div>
+
+<div class="field">
+  <label>FLIGHT</label>
+  <input id="flight" placeholder="TG101">
+</div>
+
+<div class="field">
+  <label>TYPE</label>
+
+  <select id="flightType">
+
+    <option value="AUTO">AUTO DETECT</option>
+    <option value="DEP">DEP</option>
+    <option value="ARV">ARV</option>
+
+  </select>
+</div>
+
+      </div>
+
+      <div class="row2">
+
+        <div class="field">
+          <label>TIME</label>
+          <input id="time" type="text" placeholder="10:30">
+        </div>
+
+        <div class="field">
+          <label>A/C@GATE</label>
+          <input id="gate" placeholder="BEFORE DEP 2 HR.">
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label>BAY</label>
+        <input id="bay" placeholder="BAY 25">
+      </div>
+
+      <div class="field">
+        <label>REMARK</label>
+        <input id="remark" placeholder="OPS NOTE">
+      </div>
+
+	<!-- HIDDEN STATUS -->
+<select id="status" style="display:none;">
+  <option value="WAITING">WAITING</option>
+  <option value="TOWING">TOWING</option>
+  <option value="DONE">DONE</option>
+</select>
+
+
+
+      <div class="buttons">
+
+        <button id="saveBtn" class="save" onclick="addRow()">
+          + ADD FLIGHT
+        </button>
+
+        <button class="clear" onclick="clearForm()">
+          CLEAR
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-title">
+      <h3>PLAN TOWING</h3>
+      <div class="panel-badge">REALTIME</div>
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Reg</th>
+                        <th>Flight</th>
+                        <th>Type</th>
+                        <th>Time</th>
+            <th>A/C@Gate</th>
+            <th>Bay</th>
+            <th>Status</th>
+            <th>Remark</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="tb"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+let audioCtx = null;
+
+let soundEnabled = false;
+
+let speechQueue = [];
+let isSpeaking = false;
+let speechWatchdog = Date.now();
+
+// ======================
+// AUDIO INIT
+// ======================
+
+function initAudio(){
+
+  try{
+
+    if(!audioCtx){
+
+      audioCtx =
+        new (window.AudioContext || window.webkitAudioContext)();
+
+    }
+
+    if(audioCtx.state === "suspended"){
+
+      audioCtx.resume();
+
+    }
+
+  }catch(e){
+
+    console.log("audio init fail", e);
+
+  }
+
+}
+
+
+
+
+const API = "https://script.google.com/macros/s/AKfycbw2Trg424LyjDDpx0u1fRQyRdObfukYYVFJ3wEAfAlqry1LkTJXXozMefkphKc-eiLPyg/exec";
+
+let data = [];
+let editRow = null;
+
+// 🔥 ADD ตรงนี้
+let speakCountMap = {};
+const MAX_SPEAK = 2;
+
+// ======================
+// DEP FLIGHT LIST
+// ======================
+
+const DEP_LIST = [
+
+"101",
+"103",
+"105",
+"111",
+"121",
+"131",
+"133",
+"137",
+"165",
+"221",
+"222",
+"242",
+"250",
+"260",
+"264",
+"268",
+"284",
+"286",
+"290",
+"292",
+"302",
+"304",
+"310",
+"314",
+"316",
+"318",
+"320",
+"322",
+"324",
+"326",
+"327",
+"328",
+"330",
+"332",
+"336",
+"338",
+"340",
+"342",
+"344",
+"346",
+"350",
+"352",
+"402",
+"404",
+"408",
+"410",
+"414",
+"416",
+"418",
+"426",
+"432",
+"434",
+"436",
+"462",
+"466",
+"476",
+"482",
+"504",
+"551",
+"557",
+"561",
+"565",
+"571",
+"575",
+"585",
+"587",
+"589",
+"601",
+"603",
+"607",
+"613",
+"615",
+"619",
+"621",
+"623",
+"625",
+"631",
+"633",
+"635",
+"639",
+"643",
+"645",
+"646",
+"647",
+"649",
+"653",
+"657",
+"659",
+"661",
+"665",
+"669",
+"671",
+"673",
+"677",
+"683",
+"901",
+"911",
+"917",
+"921",
+"923",
+"925",
+"931",
+"935",
+"941",
+"951",
+"955",
+"961",
+"971",
+
+
+];
+
+
+
+// ======================
+// ARV FLIGHT LIST
+// ======================
+
+const ARV_LIST = [
+
+"3",
+"5",
+"9",
+"21",
+"29",
+"41",
+"43",
+"45",
+"47",
+"103",
+"105",
+"111",
+"121",
+"131",
+"133",
+"137",
+"165",
+"202",
+"204",
+"212",
+"216",
+"218",
+"242",
+"250",
+"260",
+"264",
+"268",
+"284",
+"286",
+"290",
+"292",
+"302",
+"304",
+"310",
+"314",
+"316",
+"318",
+"320",
+"322",
+"324",
+"326",
+"330",
+"332",
+"336",
+"338",
+"340",
+"342",
+"344",
+"346",
+"350",
+"352",
+"402",
+"404",
+"408",
+"410",
+"414",
+"416",
+"418",
+"426",
+"432",
+"434",
+"436",
+"462",
+"466",
+"476",
+"482",
+"504",
+"551",
+"557",
+"561",
+"565",
+"571",
+"575",
+"585",
+"587",
+"589",
+"601",
+"603",
+"607",
+"613",
+"615",
+"619",
+"621",
+"623",
+"625",
+"631",
+"633",
+"635",
+"639",
+"643",
+"645",
+"649",
+"653",
+"657",
+"659",
+"661",
+"665",
+"669",
+"671",
+"673",
+"677",
+"683",
+"901",
+"911",
+"917",
+"921",
+"923",
+"925",
+"931",
+"935",
+"951",
+"955",
+"961",
+"971",
+"941",
+"646",
+"647",
+"222",
+"327",
+"328"
+
+];
+
+// ======================
+// GET FLIGHT TYPE
+// ======================
+
+function getFlightType(flight){
+
+  // ======================
+  // USER FORCE TYPE
+  // ======================
+
+  if(flightType.value === "DEP"){
+    return "DEP";
+  }
+
+  if(flightType.value === "ARV"){
+    return "ARV";
+  }
+
+  // ======================
+  // AUTO MODE
+  // ======================
+
+  if(!flight) return "DEP";
+
+  const clean = String(flight)
+    .toUpperCase()
+    .replace("TG","")
+    .trim();
+
+  if(ARV_LIST.includes(clean)){
+    return "ARV";
+  }
+
+  return "DEP";
+}
+
+let lastSpeakMap = {};
+const SPEAK_LOCK = 15000; // 15 วิล็อก
+
+// CLOCK
+setInterval(()=>{
+  clock.innerText = new Date().toLocaleTimeString();
+},1000);
+
+// ======================
+function fmt(v){
+  return (v === "" || v === null || v === undefined) ? "-" : v;
+}
+
+// ======================
+// LOAD
+// ======================
+let lastDataHash = "";
+let isLoading = false;
+
+async function load(){
+
+  if(isLoading) return;
+  isLoading = true;
+
+  try{
+
+    const res = await fetch(API + "?t=" + Date.now());
+    const newData = await res.json();
+
+    data = newData;
+
+    cleanupMaps();
+    render();
+
+  }catch(e){
+    console.log(e);
+  }
+
+  isLoading = false;
+}
+
+// ======================
+// TOGGLE STATUS
+// ======================
+
+
+// ======================
+// EDIT
+// ======================
+// ======================
+// EDIT
+// ======================
+function edit(i){
+
+  let d = data[i];
+
+  editRow = d.row;
+
+  reg.value = d.reg;
+  flight.value = d.flight;
+  time.value = d.time;
+
+  // FIX GATE
+  gate.value = d.ac_gate || d.gate || "";
+
+  bay.value = d.bay;
+  remark.value = d.remark;
+
+  // ตอนกด EDIT ถึงจะเปลี่ยน STATUS ได้
+  status.value = d.status;
+  status.disabled = false;
+
+  saveBtn.innerText = "UPDATE";
+  saveBtn.className = "update";
+}
+
+// ======================
+// DELETE
+// ======================
+async function del(i){
+
+  if(!confirm("Delete this flight?")) return;
+
+  await fetch(API,{
+    method:"POST",
+    body: JSON.stringify({
+      type:"delete",
+      row:data[i].row
+    })
+  });
+
+  load();
+}
+
+
+
+// ======================
+// ADD / UPDATE
+// ======================
+// ======================
+// ADD / UPDATE
+// ======================
+async function addRow(){
+
+  // หา row ที่กำลัง edit
+  let currentData =
+    data.find(x => x.row === editRow);
+
+  const row = {
+
+    reg: reg.value,
+    flight: flight.value,
+    time: String(time.value),
+
+    ac_gate: gate.value,
+
+    bay: bay.value,
+    remark: remark.value,
+
+    // IMPORTANT
+    status: editRow
+      ? (status.value || currentData.status)
+      : "WAITING"
+  };
+
+  await fetch(API,{
+    method:"POST",
+    body: JSON.stringify(
+
+      editRow ? {
+
+        type:"update",
+        row: editRow,
+        ...row
+
+      } : row
+
+    )
+  });
+
+  clearForm();
+
+}
+
+function toggleStatus(i){
+
+  // ต้องกด EDIT ก่อน
+  if(editRow !== data[i].row){
+
+    alert("Please press EDIT first");
+    return;
+  }
+
+  const states = ["WAITING","TOWING","DONE"];
+
+  let current = status.value || data[i].status;
+
+  let next =
+    states[(states.indexOf(current)+1)%3];
+
+  // เปลี่ยนแค่ local UI
+  data[i].status = next;
+
+  // เก็บไว้รอ SAVE
+  status.value = next;
+
+  // render ใหม่
+  render();
+}
+
+
+// ======================
+// RENDER
+// ======================
+function render(){
+
+  tb.innerHTML = "";
+
+data.forEach((d,i)=>{
+
+  let warning = checkWarning(d);
+  let slot = checkSlot(d);
+
+  tb.innerHTML += `
+
+<tr class="${
+  d.status === 'TOWING'
+    ? 'towing-row'
+    : d.status === 'DONE'
+      ? 'done-row'
+      : getFlightType(d.flight) === 'DEP'
+        ? 'dep-row'
+        : 'arv-row'
+}">
+
+  <td>${i+1}</td>
+
+  <td>${fmt(d.reg)}</td>
+
+  <td>${fmt(d.flight)}</td>
+
+  <td>
+
+    <span class="flight-type
+      ${getFlightType(d.flight) === 'DEP'
+        ? 'dep'
+        : 'arv'}">
+
+      ${getFlightType(d.flight)}
+
+    </span>
+
+  </td>
+
+  <td>${fmt(d.time)}</td>
+
+  <td>
+    ${
+      d.ac_gate && d.ac_gate !== ""
+        ? `<span class="apx-tag">APX ${d.ac_gate}</span>`
+        : "-"
+    }
+  </td>
+
+  <td>${fmt(d.bay)}</td>
+
+  <td onclick="toggleStatus(${i})">
+
+    <span class="status ${cls(d.status)}">
+      ${fmt(d.status)}
+    </span>
+
+  </td>
+
+ 
+<td>
+  ${fmt(d.remark)}
+  <br>
+
+  ${warning ? `<span style="color:#ff3b3b;font-weight:800">⚠ ${warning}</span>` : ""}
+
+  ${slot ? `<span style="color:#00ff9c;font-weight:800">${slot}</span>` : ""}
+</td>
+
+  <td>
+
+    <div class="action-area">
+
+      <button class="action-btn edit"
+        onclick="edit(${i})">
+        EDIT
+      </button>
+
+      <button class="action-btn del"
+        onclick="del(${i})">
+        DELETE
+      </button>
+
+    </div>
+
+  </td>
+
+</tr>
+
+`;
+
+ });
+
+}  
+
+// ======================
+function cls(s){
+
+  if(s=="WAITING") return "waiting";
+
+  if(s=="TOWING") return "towing";
+
+  return "done";
+}
+
+// ======================
+// ======================
+function clearForm(){
+
+  reg.value="";
+  flight.value="";
+  time.value="";
+  gate.value="";
+  bay.value="";
+  remark.value="";
+
+  status.value="WAITING";
+
+  // ปิด STATUS ตอนเพิ่มใหม่
+  status.disabled = true;
+
+  editRow=null;
+
+  saveBtn.innerText="+ ADD FLIGHT";
+  saveBtn.className="save";
+}
+
+// ======================
+function updateRowUI(i,status){
+
+  const el =
+    document.querySelectorAll("tbody tr")[i];
+
+  if(!el) return;
+
+  el.children[6].innerHTML =
+    `<span class="status ${cls(status)}">${status}</span>`;
+}
+
+// STATUS LOCK
+window.onload = ()=>{
+
+  status.disabled = true;
+
+  const btn = document.querySelector(".sound-btn");
+  btn.innerText = "🔇 SOUND OFF";
+};
+
+flightType.addEventListener("change", ()=>{
+
+  const type = getFlightType(flight.value);
+
+  // DEP
+  if(type === "DEP"){
+
+    gate.disabled = false;
+    gate.style.opacity = "1";
+
+    remark.value = "ปลายทางว่าง :";
+  }
+
+  // ARV
+  else{
+
+    gate.value = "";
+
+    gate.disabled = true;
+    gate.style.opacity = "0.5";
+
+    remark.value = "ลากก่อน :";
+  }
+
+});
+
+flight.addEventListener("input", ()=>{
+
+  const type = getFlightType(flight.value);
+
+  // DEP
+  if(type === "DEP"){
+
+    gate.disabled = false;
+    gate.style.opacity = "1";
+
+    remark.value = "ปลายทางว่าง :";
+  }
+
+  // ARV
+  else{
+
+    gate.value = "";
+
+    gate.disabled = true;
+    gate.style.opacity = "0.5";
+
+    remark.value = "ลากก่อน :";
+  }
+
+});
+
+
+
+let warnedMap = {};
+
+function checkWarning(d){
+
+  if(isScheduled(d)) return "";
+  if(!d.remark) return "";
+
+  const match = d.remark.match(/(\d{2}:\d{2})/);
+  if(!match) return "";
+
+  const limit = match[1];
+  const now = new Date().toTimeString().slice(0,5);
+
+  if(now > limit){
+
+    if(!warnedMap[d.row]){
+      warnedMap[d.row] = true;
+
+      queueSpeak(buildTowSpeakText(d), d.reg + "-tow");
+    }
+
+    return "WARNING";
+  }
+
+  return "";
+}
+
+function playAlarm(d){
+
+  if(!soundEnabled) return;
+
+  const key = d.reg + "-warn";
+
+  const now = Date.now();
+  if(lastSpeakMap[key] && now - lastSpeakMap[key] < SPEAK_COOLDOWN) return;
+
+  lastSpeakMap[key] = now;
+
+  queueSpeak(buildSpeakText(d), key);
+}
+let lastAlarmTime = 0;
+
+let slotWarnedMap = {};
+
+function checkSlot(d){
+
+  if(isScheduled(d)) return "";
+  if(!d.remark) return "";
+  if(!d.remark.includes("ปลายทางว่าง")) return "";
+
+  const match = d.remark.match(/(\d{2}:\d{2})/);
+  if(!match) return "";
+
+  const limit = match[1];
+  const now = new Date().toTimeString().slice(0,5);
+
+  if(now >= limit){
+
+    // 🔥 พูดครั้งเดียว
+    if(!slotWarnedMap[d.row]){
+
+      slotWarnedMap[d.row] = true;
+
+      const key = d.reg + "-slot";
+
+      queueSpeak(buildSlotSpeakText(d), key);
+    }
+
+    return "SLOT AVAILABLE";
+  }
+
+  return "";
+}
+
+
+function unlockAudio(){
+
+  initAudio();
+
+  soundEnabled = !soundEnabled;
+
+  const btn = document.querySelector(".sound-btn");
+
+  if(soundEnabled){
+    btn.innerText = "🔊 SOUND ON";
+  }else{
+    btn.innerText = "🔇 SOUND OFF";
+  }
+
+  // unlock browser audio policy
+  const audio = document.getElementById("alarm");
+
+  audio.play().then(()=>{
+
+    audio.pause();
+    audio.currentTime = 0;
+
+  }).catch(()=>{});
+
+}
+
+
+function isScheduled(d){
+
+  if(!d.remark) return false;
+
+  return d.remark.includes("นัดลาก");
+}
+
+function canPlaySound(d){
+
+  if(!soundEnabled) return false;
+
+  if(isScheduled(d)) return false;
+
+  return true;
+}
+
+function speak(text){
+
+  if(!soundEnabled) return;
+
+  const msg = new SpeechSynthesisUtterance(text);
+
+  msg.lang = "en-US";
+  msg.rate = 1;
+  msg.pitch = 1;
+
+  window.speechSynthesis.speak(msg);
+}
+
+async function queueSpeak(text, key){
+
+  if(!soundEnabled) return;
+
+  const now = Date.now();
+
+  if(lastSpeakMap[key] && now - lastSpeakMap[key] < SPEAK_LOCK){
+    return;
+  }
+
+  if(!speakCountMap[key]) speakCountMap[key] = 0;
+
+  if(speakCountMap[key] >= MAX_SPEAK){
+    return;
+  }
+
+  lastSpeakMap[key] = now;
+  speakCountMap[key]++;
+if(speechQueue.length > 10){
+  return;
+}
+
+  speechQueue.push({ text, key });
+
+  processQueue();
+}
+
+async function processQueue(){
+
+  if(isSpeaking) return;
+  if(speechQueue.length === 0) return;
+
+  isSpeaking = true;
+
+  const item = speechQueue.shift();
+
+  const msg1 =
+    new SpeechSynthesisUtterance(item.text.main);
+
+  msg1.lang = "en-US";
+  msg1.rate = 0.75;
+
+  const msg2 =
+    new SpeechSynthesisUtterance(item.text.tow);
+
+  msg2.lang = "en-US";
+  msg2.rate = 0.65;
+
+  // ===== MAIN END =====
+msg1.onend = () => {
+
+  setTimeout(() => {
+
+    if(!soundEnabled){
+      isSpeaking = false;
+      processQueue();
+      return;
+    }
+
+    speechWatchdog = Date.now();
+
+    try{
+
+      window.speechSynthesis.cancel();
+window.speechSynthesis.speak(msg2);
+
+    }catch(e){
+
+      console.log(e);
+
+      isSpeaking = false;
+
+      processQueue();
+
+    }
+
+  }, 300);
+
+};
+
+  // ===== FINISH =====
+msg2.onend = () => {
+
+  isSpeaking = false;
+
+  setTimeout(()=>{
+
+    processQueue();
+
+  },300);
+
+};
+  // =========================
+  // BEEP ONLY FOR ATTENTION / INFORMATION
+  // =========================
+
+  const needBeep =
+    item.text.main.startsWith("ATTENTION") ||
+    item.text.main.startsWith("INFORMATION");
+
+if(needBeep){
+
+  playWarningBeep().then(() => {
+
+    setTimeout(() => {
+
+      if(!soundEnabled){
+        isSpeaking = false;
+        processQueue();
+        return;
+      }
+
+      speechWatchdog = Date.now();
+
+      window.speechSynthesis.speak(msg1);
+
+    }, 3000);
+
+  });
+
+}else{
+
+  if(!soundEnabled){
+    isSpeaking = false;
+    processQueue();
+    return;
+  }
+
+  speechWatchdog = Date.now();
+
+  window.speechSynthesis.speak(msg1);
+
+}
+}
+
+
+let spokenMap = {};
+const SPEAK_COOLDOWN = 10000;
+
+function regToNATO(str){
+
+  const map = {
+    A:"ALPHA", B:"BRAVO", C:"CHARLIE", D:"DELTA", E:"ECHO",
+    F:"FOXTROT", G:"GOLF", H:"HOTEL", I:"INDIA", J:"JULIETT",
+    K:"KILO", L:"LIMA", M:"MIKE", N:"NOVEMBER", O:"OSCAR",
+    P:"PAPA", Q:"QUEBEC", R:"ROMEO", S:"SIERRA", T:"TANGO",
+    U:"UNIFORM", V:"VICTOR", W:"WHISKEY", X:"X-RAY",
+    Y:"YANKEE", Z:"ZULU",
+    0:"ZERO",1:"ONE",2:"TWO",3:"THREE",4:"FOUR",
+    5:"FIVE",6:"SIX",7:"SEVEN",8:"EIGHT",9:"NINE",
+    "-":"-"
+  };
+
+  return str.toUpperCase()
+    .split("")
+    .map(c => map[c] || c)
+    .join(" ");
+}
+
+function flightNormal(str){
+
+  return String(str || "")
+    .toUpperCase()
+    .replace(/TG/g, "T G")
+    .replace(/-/g, " ")
+    .split("")
+    .map(c => {
+
+      if(/[0-9]/.test(c)) return c;   // 👉 อ่านทีละตัว
+      return c;
+
+    })
+    .join(" ");
+}
+
+function bayToNATO(str){
+
+  if(!str) return "";
+
+  const numMap = {
+    0:"ZERO",1:"ONE",2:"TWO",3:"THREE",4:"FOUR",
+    5:"FIVE",6:"SIX",7:"SEVEN",8:"EIGHT",9:"NINE"
+  };
+
+  const letterMap = {
+    A:"ALPHA", B:"BRAVO", C:"CHARLIE", D:"DELTA",
+    E:"ECHO", F:"FOXTROT", G:"GOLF", H:"HOTEL",
+    I:"INDIA", J:"JULIETT", K:"KILO", L:"LIMA",
+    M:"MIKE", N:"NOVEMBER", O:"OSCAR", P:"PAPA",
+    Q:"QUEBEC", R:"ROMEO", S:"SIERRA", T:"TANGO",
+    U:"UNIFORM", V:"VICTOR", W:"WHISKEY",
+    X:"X-RAY", Y:"YANKEE", Z:"ZULU"
+  };
+
+  return String(str)
+    .toUpperCase()
+    .replace(/-/g, " TOW ")
+    .split("")
+    .map(c => {
+
+      if(/[0-9]/.test(c)) return numMap[c];
+      if(/[A-Z]/.test(c)) return letterMap[c] || c;
+
+      return "";
+
+    })
+    .join(" ")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function bayToSpeech(input){
+
+  if(!input) return "";
+
+  // =========================
+  // 1) NORMALIZE
+  // =========================
+  let str = String(input)
+    .toUpperCase()
+    .trim()
+    .replace(/\s+/g, "");
+
+  // =========================
+  // 2) HANGAR MAP (FIXED CORE)
+  // =========================
+  const hangarMap = {
+    "H1C": "HANGAR ONE CENTER",
+    "H1L": "HANGAR ONE LEFT",
+    "H1R": "HANGAR ONE RIGHT",
+    "H1":  "HANGAR ONE",
+
+    "H2C": "HANGAR TWO CENTER",
+    "H2L": "HANGAR TWO LEFT",
+    "H2R": "HANGAR TWO RIGHT",
+
+    "H3C": "HANGAR THREE CENTER",
+    "H3L": "HANGAR THREE LEFT",
+    "H3R": "HANGAR THREE RIGHT"
+  };
+
+  // =========================
+  // 3) NATO MAP
+  // =========================
+  const letterMap = {
+    A:"ALPHA", B:"BRAVO", C:"CHARLIE", D:"DELTA", E:"ECHO",
+    F:"FOXTROT", G:"GOLF", H:"HOTEL", I:"INDIA", J:"JULIETT",
+    K:"KILO", L:"LIMA", M:"MIKE", N:"NOVEMBER", O:"OSCAR",
+    P:"PAPA", Q:"QUEBEC", R:"ROMEO", S:"SIERRA", T:"TANGO",
+    U:"UNIFORM", V:"VICTOR", W:"WHISKEY", X:"X-RAY",
+    Y:"YANKEE", Z:"ZULU",
+    0:"ZERO",1:"ONE",2:"TWO",3:"THREE",4:"FOUR",
+    5:"FIVE",6:"SIX",7:"SEVEN",8:"EIGHT",9:"NINE"
+  };
+
+  // =========================
+  // 4) SPLIT BY "-"
+  // =========================
+  const parts = str.split("-");
+
+  const spoken = parts.map(part => {
+
+    // 1) HANGAR CODE (H2R)
+    if(hangarMap[part]){
+      return hangarMap[part];
+    }
+
+    // 2) LETTER + NUMBER (C10)
+    const match = part.match(/^([A-Z])(\d+)$/);
+    if(match){
+
+      const letter = letterMap[match[1]] || match[1];
+
+      const numbers = match[2]
+        .split("")
+        .map(n => letterMap[n] || n)
+        .join(" ");
+
+      return `${letter} ${numbers}`;
+    }
+
+    // 3) fallback
+    return part
+      .split("")
+      .map(c => letterMap[c] || c)
+      .join(" ");
+
+  });
+
+  // =========================
+  // 5) OUTPUT FORMAT
+  // =========================
+  if(spoken.length === 2){
+    return `${spoken[0]} TOW TO ${spoken[1]}`;
+  }
+
+  if(spoken.length === 3){
+    return `${spoken[0]} TOW TO ${spoken[1]} ${spoken[2]}`;
+  }
+
+  return spoken.join(" TOW TO ");
+}
+function playWarningBeep() {
+
+  if (!soundEnabled) return Promise.resolve();
+
+  // 🔥 ปลุก audio ก่อนทุกครั้ง
+  initAudio();
+
+  // 🔥 ถ้ายังไม่มี audioCtx ไม่ต้องทำต่อ
+  if(!audioCtx){
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => {
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    // ===== เสียงออดสนามบิน =====
+    osc.type = "triangle";
+
+    // โทนต่ำๆ หนาๆ
+    osc.frequency.setValueAtTime(
+      420,
+      audioCtx.currentTime
+    );
+
+    // connect
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    // ===== FADE IN =====
+    gain.gain.setValueAtTime(
+      0.001,
+      audioCtx.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.6,
+      audioCtx.currentTime + 0.15
+    );
+
+    // ===== HOLD =====
+    gain.gain.setValueAtTime(
+      0.6,
+      audioCtx.currentTime + 2.6
+    );
+
+    // ===== FADE OUT =====
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioCtx.currentTime + 3
+    );
+
+    // start
+    osc.start();
+
+    // stop 3 วิ
+    osc.stop(audioCtx.currentTime + 3);
+
+    osc.onended = () => {
+      resolve();
+    };
+
+  });
+}
+
+function buildTowSpeakText(d){
+
+  const tone = getTone(d);
+
+  const reg = regToNATO(d.reg || "");
+  const flight = flightNormal(d.flight || "");
+  const bay = bayToSpeech(d.bay || "");
+
+if(tone === "URGENT"){
+  return {
+    main: `ATTENTION. ${reg}. ${flight}. BAY ${bay}.`,
+    tow: `NEED TO TOW IMMEDIATELY.`
+  };
+}
+
+if(tone === "INFO"){
+  return {
+    main: `INFORMATION. ${reg}. ${flight}. BAY ${bay}.`,
+    tow: `THE DESTINATION PARKING BAY AVAILABLE.`
+  };
+}
+
+  return {
+    main: `ATTENTION. ${reg}. ${flight}. BAY ${bay}.`,
+    tow: `MUST BE TOWED IMMEDIATELY.`
+  };
+}
+
+function buildSlotSpeakText(d){
+
+  const reg = regToNATO(d.reg || "");
+  const flight = flightNormal(d.flight || "");
+  const bay = bayToSpeech(d.bay || "");
+
+  return {
+    main: `INFORMATION. ${reg}. ${flight}. BAY ${bay}.`,
+    tow: `DESTINATION PARKING BAY AVAILABLE.`
+  };
+}
+function speakChunk(text, rate = 1, pitch = 1){
+
+  return new Promise(resolve => {
+
+    const msg = new SpeechSynthesisUtterance(text);
+
+    msg.lang = "en-US";
+    msg.rate = rate;
+    msg.pitch = pitch;
+
+    msg.onend = () => resolve();
+
+    window.speechSynthesis.speak(msg);
+  });
+}
+
+function getTone(d){
+
+  if(d.status === "TOWING"){
+    return "URGENT";
+  }
+
+  if(d.remark?.includes("ปลายทางว่าง")){
+    return "INFO";
+  }
+
+  return "NORMAL";
+}
+
+function speakChunks(text, rate = 0.7){
+
+  const chunks = text
+    .replace(/\./g, "")   // ลบจุดทิ้ง
+    .split(",")           // ใช้ comma เป็นตัวเว้น
+    .map(t => t.trim())
+    .filter(Boolean);
+
+  let i = 0;
+
+  function next(){
+
+    if(i >= chunks.length){
+      isSpeaking = false;
+      processQueue();
+      return;
+    }
+
+    const msg = new SpeechSynthesisUtterance(chunks[i]);
+
+    msg.rate = rate;
+    msg.pitch = 1;
+    msg.lang = "en-US";
+
+    msg.onend = () => {
+
+      i++;
+
+      // 🔥 หน่วงนิดเดียวให้เหมือน ATC breathing
+      setTimeout(next, 250);
+    };
+
+    window.speechSynthesis.speak(msg);
+  }
+
+  next();
+}
+
+function speakATC(text){
+
+  const parts = text.split(".");
+
+  let i = 0;
+
+  function next(){
+
+    if(i >= parts.length){
+      isSpeaking = false;
+      processQueue();
+      return;
+    }
+
+    const msg = new SpeechSynthesisUtterance(parts[i].trim());
+
+    msg.lang = "en-US";
+    msg.rate = 0.65;
+    msg.pitch = 1;
+
+    msg.onend = () => {
+      setTimeout(() => {
+        i++;
+        next();
+      }, 300); // 👈 ATC pause
+    };
+
+    window.speechSynthesis.speak(msg);
+  }
+
+  next();
+}
+
+// ======================
+// REALTIME LOOP
+// ======================
+
+setInterval(load, 3000);
+
+setInterval(() => {
+
+  data.forEach((d) => {
+    checkWarning(d);
+    checkSlot(d);
+  });
+
+}, 1500);
+
+
+document.addEventListener("visibilitychange", async () => {
+
+  if(!document.hidden){
+
+    await recoverAudio();
+
+  }
+
+});
+
+function safeResetSpeech(){
+  isSpeaking = false;
+  speechQueue = [];
+  window.speechSynthesis.cancel();
+}
+
+function cleanupMaps(){
+
+  const ids = new Set(data.map(d => d.row));
+
+  Object.keys(warnedMap).forEach(k => {
+    if(!ids.has(Number(k))) delete warnedMap[k];
+  });
+
+  Object.keys(slotWarnedMap).forEach(k => {
+    if(!ids.has(Number(k))) delete slotWarnedMap[k];
+  });
+}
+
+// ======================
+// AUTO RECOVER AUDIO
+// ======================
+
+async function recoverAudio(){
+
+  try{
+
+    // revive audio context
+    if(audioCtx && audioCtx.state === "suspended"){
+
+      await audioCtx.resume();
+
+      console.log("audio resumed");
+
+    }
+
+    // revive speech engine
+    if(window.speechSynthesis){
+
+      window.speechSynthesis.pause();
+      window.speechSynthesis.resume();
+
+    }
+
+    // ถ้าค้างนาน reset queue
+    if(isSpeaking && !window.speechSynthesis.speaking){
+
+      console.log("speech stuck reset");
+
+      isSpeaking = false;
+
+      processQueue();
+
+    }
+
+  }catch(e){
+
+    console.log("recover fail", e);
+
+  }
+
+}
+
+// ปลุกทุก 20 วิ
+setInterval(recoverAudio,20000);
+
+setInterval(()=>{
+
+  // speech engine ค้าง
+  if(
+    isSpeaking &&
+    Date.now() - speechWatchdog > 20000
+  ){
+
+    console.log("FORCE RESET SPEECH");
+
+    window.speechSynthesis.cancel();
+
+    isSpeaking = false;
+
+    processQueue();
+  }
+
+},5000);
+
+setInterval(()=>{
+
+  console.log("AUTO RELOAD");
+
+  location.reload();
+
+},1000 * 60 * 60 * 6);
+
+let hiddenSince = null;
+
+document.addEventListener("visibilitychange",()=>{
+
+  if(document.hidden){
+
+
+    hiddenSince = Date.now();
+
+  }else{
+
+    if(hiddenSince &&
+      Date.now() - hiddenSince > 1000*60*30){
+
+      location.reload();
+
+    }
+
+    hiddenSince = null;
+  }
+
+});
+
+
+
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then(() => console.log("SW READY"));
+
+}
+</script>
+
+<audio id="alarm" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
+
+</body>
+</html>
+
+
+
+
+
+

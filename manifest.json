@@ -1,0 +1,9 @@
+{
+  "name": "Spider Towing Control",
+  "short_name": "SpiderTow",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#040b16",
+  "theme_color": "#040b16",
+  "orientation": "landscape"
+}
