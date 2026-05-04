@@ -1591,29 +1591,52 @@ function checkSlot(d){
 }
 
 
-function unlockAudio(){
+async function unlockAudio(){
 
-  initAudio();
+  try{
 
-  soundEnabled = !soundEnabled;
+    // เปิดเสียง
+    soundEnabled = true;
 
-  const btn = document.querySelector(".sound-btn");
+    // สร้าง AudioContext
+    if(!audioCtx){
 
-  if(soundEnabled){
+      audioCtx =
+        new (window.AudioContext || window.webkitAudioContext)();
+
+    }
+
+    // ปลุก audio engine
+    await audioCtx.resume();
+
+    // reset speech
+    window.speechSynthesis.cancel();
+
+    // unlock speech engine
+    const msg =
+      new SpeechSynthesisUtterance("audio enabled");
+
+    msg.volume = 0.01;
+    msg.rate = 1;
+
+    window.speechSynthesis.speak(msg);
+
+    // ทดสอบ beep
+    playWarningBeep();
+
+    // เปลี่ยนปุ่ม
+    const btn =
+      document.querySelector(".sound-btn");
+
     btn.innerText = "🔊 SOUND ON";
-  }else{
-    btn.innerText = "🔇 SOUND OFF";
+
+    console.log("AUDIO READY");
+
+  }catch(e){
+
+    console.log(e);
+
   }
-
-  // unlock browser audio policy
-  const audio = document.getElementById("alarm");
-
-  audio.play().then(()=>{
-
-    audio.pause();
-    audio.currentTime = 0;
-
-  }).catch(()=>{});
 
 }
 
