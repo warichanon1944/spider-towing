@@ -1721,37 +1721,42 @@ async function processQueue(){
   // ===== MAIN END =====
 msg1.onend = () => {
 
-  setTimeout(() => {
+  if(!soundEnabled){
 
-    if(!soundEnabled){
-      isSpeaking = false;
-      processQueue();
-      return;
-    }
+    isSpeaking = false;
+    processQueue();
+    return;
 
-    speechWatchdog = Date.now();
+  }
 
-    try{
+  speechWatchdog = Date.now();
 
-      window.speechSynthesis.cancel();
-window.speechSynthesis.speak(msg2);
+  try{
 
-    }catch(e){
+    window.speechSynthesis.cancel();
 
-      console.log(e);
+    setTimeout(()=>{
 
-      isSpeaking = false;
+      window.speechSynthesis.speak(msg2);
 
-      processQueue();
+    },200);
 
-    }
+  }catch(e){
 
-  }, 300);
+    console.log(e);
+
+    isSpeaking = false;
+
+    processQueue();
+
+  }
 
 };
 
   // ===== FINISH =====
 msg2.onend = () => {
+
+  speechWatchdog = Date.now();
 
   isSpeaking = false;
 
@@ -1800,7 +1805,9 @@ if(needBeep){
 
   speechWatchdog = Date.now();
 
-  window.speechSynthesis.speak(msg1);
+  window.speechSynthesis.cancel();
+
+window.speechSynthesis.speak(msg1);
 
 }
 }
