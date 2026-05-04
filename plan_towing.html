@@ -6,11 +6,6 @@
 
 <title>AIRPORT OPS CONTROL</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#040b16">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 
@@ -627,13 +622,10 @@ input:disabled{
 
     <div class="clock" id="clock"></div>
 
-<button class="sound-btn" onclick="unlockAudio()">
-  🔊 ENABLE SOUND
-</button>
+	  <button class="sound-btn" onclick="unlockAudio()">
+    🔊 ENABLE SOUND
+  </button>
 
-<button class="sound-btn" onclick="testVoice()">
-  TEST VOICE
-</button>
   </div>
 
 </div>
@@ -761,42 +753,13 @@ input:disabled{
 </div>
 
 <script>
-let audioCtx = null;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 let soundEnabled = false;
 
 let speechQueue = [];
 let isSpeaking = false;
-let speechWatchdog = Date.now();
 
-// ======================
-// AUDIO INIT
-// ======================
-
-function initAudio(){
-
-  try{
-
-    if(!audioCtx){
-
-      audioCtx =
-        new (window.AudioContext || window.webkitAudioContext)();
-
-    }
-
-    if(audioCtx.state === "suspended"){
-
-      audioCtx.resume();
-
-    }
-
-  }catch(e){
-
-    console.log("audio init fail", e);
-
-  }
-
-}
 
 
 
@@ -1410,43 +1373,12 @@ function updateRowUI(i,status){
 }
 
 // STATUS LOCK
-window.onload = async ()=>{
+window.onload = ()=>{
 
   status.disabled = true;
 
   const btn = document.querySelector(".sound-btn");
-
-  // FORCE ENABLE SOUND
-  soundEnabled = true;
-
-  btn.innerText = "🔊 SOUND ON";
-
-  // INIT AUDIO
-  initAudio();
-
-  // FORCE UNLOCK SPEECH
-  try{
-
-    const unlock = new SpeechSynthesisUtterance("system ready");
-
-    unlock.volume = 0;
-
-    
-
-    window.speechSynthesis.speak(unlock);
-
-  }catch(e){
-
-    console.log(e);
-
-  }
-
-  // USER CLICK UNLOCK
-
-
-  // LOAD
-  await load();
-
+  btn.innerText = "🔇 SOUND OFF";
 };
 
 flightType.addEventListener("change", ()=>{
@@ -1577,97 +1509,24 @@ function checkSlot(d){
   return "";
 }
 
+function unlockAudio(){
 
-async function unlockAudio(){
+  soundEnabled = !soundEnabled;
 
-  try{
+  const btn = document.querySelector(".sound-btn");
 
-    soundEnabled = true;
-
-    // INIT AUDIO
-    if(!audioCtx){
-
-      audioCtx =
-        new (window.AudioContext || window.webkitAudioContext)();
-
-    }
-
-    await audioCtx.resume();
-
-    // ===== PLAY SILENT BEEP =====
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    gain.gain.value = 0.001;
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.05);
-
-    // ===== UNLOCK SPEECH =====
-    const msg =
-      new SpeechSynthesisUtterance("system ready");
-
-    msg.volume = 1;
-    msg.rate = 1;
-    msg.lang = "en-US";
-
-    msg.onstart = ()=>console.log("speech start");
-    msg.onend = ()=>console.log("speech end");
-    msg.onerror = (e)=>console.log("speech error",e);
-
-    window.speechSynthesis.speak(msg);
-
-    console.log("AUDIO UNLOCKED");
-
-  }catch(e){
-
-    console.log(e);
-
+  if(soundEnabled){
+    btn.innerText = "🔊 SOUND ON";
+  }else{
+    btn.innerText = "🔇 SOUND OFF";
   }
 
-}
-
-function testVoice(){
-
-  try{
-
-    
-
-    const msg =
-      new SpeechSynthesisUtterance(
-        "THIS IS TEST VOICE"
-      );
-
-    msg.lang = "en-US";
-    msg.volume = 1;
-    msg.rate = 1;
-    msg.pitch = 1;
-
-    msg.onstart = ()=>{
-      console.log("VOICE START");
-    };
-
-    msg.onend = ()=>{
-      console.log("VOICE END");
-    };
-
-    msg.onerror = (e)=>{
-      console.log("VOICE ERROR", e);
-    };
-
-    window.speechSynthesis.speak(msg);
-
-    console.log("TEST RUN");
-
-  }catch(e){
-
-    console.log("TEST FAIL", e);
-
-  }
-
+  // ต้อง trigger audio unlock browser policy
+  const audio = document.getElementById("alarm");
+  audio.play().then(()=>{
+    audio.pause();
+    audio.currentTime = 0;
+  }).catch(()=>{});
 }
 
 function isScheduled(d){
@@ -1703,12 +1562,16 @@ async function queueSpeak(text, key){
 
   if(!soundEnabled) return;
 
+  window.speechSynthesis.cancel(); // 🔥 สำคัญ
+
   const now = Date.now();
 
+  // 🔥 กันซ้ำแบบ time lock
   if(lastSpeakMap[key] && now - lastSpeakMap[key] < SPEAK_LOCK){
     return;
   }
 
+  // 🔥 กันเกิน 2 ครั้ง
   if(!speakCountMap[key]) speakCountMap[key] = 0;
 
   if(speakCountMap[key] >= MAX_SPEAK){
@@ -1717,9 +1580,6 @@ async function queueSpeak(text, key){
 
   lastSpeakMap[key] = now;
   speakCountMap[key]++;
-if(speechQueue.length > 10){
-  return;
-}
 
   speechQueue.push({ text, key });
 
@@ -1738,14 +1598,6 @@ async function processQueue(){
   const msg1 =
     new SpeechSynthesisUtterance(item.text.main);
 
-msg1.onerror = (e)=>{
-  console.log("msg1 error", e);
-};
-
-msg1.onstart = ()=>{
-  console.log("msg1 start");
-};
-
   msg1.lang = "en-US";
   msg1.rate = 0.75;
 
@@ -1756,54 +1608,24 @@ msg1.onstart = ()=>{
   msg2.rate = 0.65;
 
   // ===== MAIN END =====
-msg1.onend = () => {
+  msg1.onend = () => {
 
-  if(!soundEnabled){
-
-    isSpeaking = false;
-    processQueue();
-    return;
-
-  }
-
-  speechWatchdog = Date.now();
-
-  try{
-
-    window.speechSynthesis.cancel();
-
-    setTimeout(()=>{
+    setTimeout(() => {
 
       window.speechSynthesis.speak(msg2);
 
-    },200);
+    }, 300);
 
-  }catch(e){
-
-    console.log(e);
-
-    isSpeaking = false;
-
-    processQueue();
-
-  }
-
-};
+  };
 
   // ===== FINISH =====
-msg2.onend = () => {
+  msg2.onend = () => {
 
-  speechWatchdog = Date.now();
-
-  isSpeaking = false;
-
-  setTimeout(()=>{
-
+    isSpeaking = false;
     processQueue();
 
-  },300);
+  };
 
-};
   // =========================
   // BEEP ONLY FOR ATTENTION / INFORMATION
   // =========================
@@ -1812,50 +1634,26 @@ msg2.onend = () => {
     item.text.main.startsWith("ATTENTION") ||
     item.text.main.startsWith("INFORMATION");
 
-if(needBeep){
+  if(needBeep){
 
-  playWarningBeep().then(() => {
+    playWarningBeep().then(() => {
 
-    setTimeout(() => {
+      setTimeout(() => {
 
-      if(!soundEnabled){
-        isSpeaking = false;
-        processQueue();
-        return;
-      }
+        window.speechSynthesis.speak(msg1);
 
-      speechWatchdog = Date.now();
+      }, 3000);
 
-      window.speechSynthesis.speak(msg1);
+    });
 
-    }, 3000);
+  }else{
 
-  });
+    window.speechSynthesis.speak(msg1);
 
-}else{
-
-  if(!soundEnabled){
-    isSpeaking = false;
-    processQueue();
-    return;
   }
 
-  speechWatchdog = Date.now();
-
-try{
-
-  window.speechSynthesis.cancel();
-
-}catch(e){}
-
-setTimeout(()=>{
-
-  window.speechSynthesis.speak(msg1);
-
-},200);
-
 }
-}
+
 
 
 let spokenMap = {};
@@ -2027,14 +1825,6 @@ function bayToSpeech(input){
 function playWarningBeep() {
 
   if (!soundEnabled) return Promise.resolve();
-
-  // 🔥 ปลุก audio ก่อนทุกครั้ง
-  initAudio();
-
-  // 🔥 ถ้ายังไม่มี audioCtx ไม่ต้องทำต่อ
-  if(!audioCtx){
-    return Promise.resolve();
-  }
 
   return new Promise((resolve) => {
 
@@ -2245,14 +2035,11 @@ setInterval(() => {
 }, 1500);
 
 
-document.addEventListener("visibilitychange", async () => {
-
-  if(!document.hidden){
-
-    await recoverAudio();
-
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    window.speechSynthesis.resume();
+    window.speechSynthesis.cancel();
   }
-
 });
 
 function safeResetSpeech(){
@@ -2274,120 +2061,12 @@ function cleanupMaps(){
   });
 }
 
-// ======================
-// AUTO RECOVER AUDIO
-// ======================
-
-async function recoverAudio(){
-
-  try{
-
-    // revive audio context
-    if(audioCtx && audioCtx.state === "suspended"){
-
-      await audioCtx.resume();
-
-      console.log("audio resumed");
-
-    }
-
-    // revive speech engine
-    if(window.speechSynthesis){
-
-      window.speechSynthesis.pause();
-      window.speechSynthesis.resume();
-
-    }
-
-    // ถ้าค้างนาน reset queue
-    if(isSpeaking && !window.speechSynthesis.speaking){
-
-      console.log("speech stuck reset");
-
-      isSpeaking = false;
-
-      processQueue();
-
-    }
-
-  }catch(e){
-
-    console.log("recover fail", e);
-
-  }
-
-}
-
-// ปลุกทุก 20 วิ
-setInterval(recoverAudio,20000);
-
-setInterval(()=>{
-
-  // speech engine ค้าง
-  if(
-    isSpeaking &&
-    Date.now() - speechWatchdog > 20000
-  ){
-
-    console.log("FORCE RESET SPEECH");
-
-    
-
-    isSpeaking = false;
-
-    processQueue();
-  }
-
-},5000);
-
-setInterval(()=>{
-
-  console.log("AUTO RELOAD");
-
-  location.reload();
-
-},1000 * 60 * 60 * 6);
-
-let hiddenSince = null;
-
-document.addEventListener("visibilitychange",()=>{
-
-  if(document.hidden){
-
-
-    hiddenSince = Date.now();
-
-  }else{
-
-    if(hiddenSince &&
-      Date.now() - hiddenSince > 1000*60*30){
-
-      location.reload();
-
-    }
-
-    hiddenSince = null;
-  }
-
-});
-
 
 
 </script>
-
-<script>
-if ("serviceWorker" in navigator) {
-
-  navigator.serviceWorker
-    .register("./sw.js")
-    .then(() => console.log("SW READY"));
-
-}
-</script>
-
 <audio id="alarm" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
-
 </body>
+
 </html>
 
 
