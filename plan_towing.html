@@ -627,10 +627,13 @@ input:disabled{
 
     <div class="clock" id="clock"></div>
 
-	  <button class="sound-btn" onclick="unlockAudio()">
-    🔊 ENABLE SOUND
-  </button>
+<button class="sound-btn" onclick="unlockAudio()">
+  🔊 ENABLE SOUND
+</button>
 
+<button class="sound-btn" onclick="testVoice()">
+  TEST VOICE
+</button>
   </div>
 
 </div>
@@ -1428,7 +1431,7 @@ window.onload = async ()=>{
 
     unlock.volume = 0;
 
-    window.speechSynthesis.cancel();
+    
 
     window.speechSynthesis.speak(unlock);
 
@@ -1579,10 +1582,9 @@ async function unlockAudio(){
 
   try{
 
-    // enable
     soundEnabled = true;
 
-    // audio context
+    // INIT AUDIO
     if(!audioCtx){
 
       audioCtx =
@@ -1592,51 +1594,77 @@ async function unlockAudio(){
 
     await audioCtx.resume();
 
-    // reset speech engine
-    window.speechSynthesis.cancel();
+    // ===== PLAY SILENT BEEP =====
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
 
-    // TEST SPEAK
+    gain.gain.value = 0.001;
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+
+    // ===== UNLOCK SPEECH =====
     const msg =
-      new SpeechSynthesisUtterance("sound enabled");
+      new SpeechSynthesisUtterance("system ready");
+
+    msg.volume = 1;
+    msg.rate = 1;
+    msg.lang = "en-US";
+
+    msg.onstart = ()=>console.log("speech start");
+    msg.onend = ()=>console.log("speech end");
+    msg.onerror = (e)=>console.log("speech error",e);
+
+    window.speechSynthesis.speak(msg);
+
+    console.log("AUDIO UNLOCKED");
+
+  }catch(e){
+
+    console.log(e);
+
+  }
+
+}
+
+function testVoice(){
+
+  try{
+
+    
+
+    const msg =
+      new SpeechSynthesisUtterance(
+        "THIS IS TEST VOICE"
+      );
 
     msg.lang = "en-US";
     msg.volume = 1;
     msg.rate = 1;
+    msg.pitch = 1;
 
     msg.onstart = ()=>{
-
-      console.log("speech start");
-
+      console.log("VOICE START");
     };
 
     msg.onend = ()=>{
-
-      console.log("speech end");
-
+      console.log("VOICE END");
     };
 
     msg.onerror = (e)=>{
-
-      console.log("speech error", e);
-
+      console.log("VOICE ERROR", e);
     };
 
     window.speechSynthesis.speak(msg);
 
-    // test beep
-    playWarningBeep();
-
-    // UI
-    const btn =
-      document.querySelector(".sound-btn");
-
-    btn.innerText = "🔊 SOUND ON";
-
-    console.log("AUDIO READY");
+    console.log("TEST RUN");
 
   }catch(e){
 
-    console.log("unlock fail", e);
+    console.log("TEST FAIL", e);
 
   }
 
@@ -2303,7 +2331,7 @@ setInterval(()=>{
 
     console.log("FORCE RESET SPEECH");
 
-    window.speechSynthesis.cancel();
+    
 
     isSpeaking = false;
 
