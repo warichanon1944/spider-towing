@@ -1,7 +1,7 @@
 {
   "name": "Spider Towing Control",
   "short_name": "SpiderTow",
-  "start_url": "./",
+  "start_url": "./plan_towing.html"
   "display": "standalone",
   "background_color": "#040b16",
   "theme_color": "#040b16",
