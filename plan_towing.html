@@ -142,6 +142,12 @@ body::before{
   gap:18px;
 }
 
+.btn-group{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
 .live{
   display:flex;
   align-items:center;
@@ -611,6 +617,61 @@ html{
   zoom: 100%;
 }
 
+/* =========================
+   STEP 2: ZOOM MODE (FULL SCREEN PLAN)
+========================= */
+
+body.zoom-mode .container{
+  grid-template-columns: 1fr !important;
+}
+
+/* ซ่อน FLIGHT INPUT PANEL */
+body.zoom-mode .panel:first-child{
+  display:none !important;
+}
+
+/* ทำ PLAN TOWING เต็มจอ */
+body.zoom-mode .panel{
+  height: calc(100vh - 90px);
+}
+
+/* ตารางใหญ่ขึ้น */
+body.zoom-mode table{
+  font-size: 22px;
+}
+
+/* ทำให้ scroll ลื่นขึ้น */
+body.zoom-mode .table-wrap{
+  max-height: calc(100vh - 140px);
+  overflow:auto;
+}
+
+body.zoom-mode{
+  font-size: 24px;
+}
+
+body.zoom-mode h1{
+  font-size: 28px;
+}
+
+body.zoom-mode h3{
+  font-size: 22px;
+}
+
+body.zoom-mode input,
+body.zoom-mode select{
+  font-size: 18px;
+  height: 56px;
+}
+
+body.zoom-mode td{
+  font-size: 20px;
+}
+
+body.zoom-mode .status{
+  font-size: 16px;
+}
+
 </style>
 
 </head>
@@ -630,22 +691,27 @@ html{
 
   </div>
 
-  <div class="header-right">
+<div class="header-right">
 
-    <div class="live">
-      <div class="live-dot"></div>
-      <div>LIVE SYSTEM</div>
-    </div>
+  <div class="btn-group">
+<button id="zoomBtn" class="sound-btn" onclick="toggleZoom()">
+  🔍 ZOOM
+</button>
 
-    <div class="clock" id="clock"></div>
-
-	  <button class="sound-btn" onclick="unlockAudio()">
-    🔊 ENABLE SOUND
-  </button>
-
+<button id="soundBtn" class="sound-btn" onclick="toggleSound()">
+  🔊 SOUND
+</button>
   </div>
 
-</div>
+  <div class="live">
+    <div class="live-dot"></div>
+    <div>LIVE SYSTEM</div>
+  </div>
+
+  <div class="clock" id="clock"></div>
+
+</div> 
+</div> 
 
 <div class="container">
 
@@ -1393,11 +1459,15 @@ function updateRowUI(i,status){
 
 // STATUS LOCK
 window.onload = ()=>{
+  const soundBtn = document.getElementById("soundBtn");
+
+  if(soundEnabled){
+    soundBtn.innerText = "🔇 SOUND OFF";
+  }else{
+    soundBtn.innerText = "🔊 SOUND ON";
+  }
 
   status.disabled = true;
-
-  const btn = document.querySelector(".sound-btn");
-  btn.innerText = "🔇 SOUND OFF";
 };
 
 flightType.addEventListener("change", ()=>{
@@ -1500,6 +1570,7 @@ let slotWarnedMap = {};
 
 function checkSlot(d){
 
+
   if(isScheduled(d)) return "";
   if(!d.remark) return "";
   if(!d.remark.includes("ปลายทางว่าง")) return "";
@@ -1528,22 +1599,28 @@ function checkSlot(d){
   return "";
 }
 
-function unlockAudio(){
+function toggleSound(){
 
-  soundEnabled = true;
+  soundEnabled = !soundEnabled;
 
-  const btn = document.querySelector(".sound-btn");
-  btn.innerText = "🔊 SOUND ON";
+  const soundBtn = document.getElementById("soundBtn");
 
-  // 🔥 สำคัญมาก
-  audioCtx.resume();
-  window.speechSynthesis.resume();
+  if(soundEnabled){
 
-  const audio = document.getElementById("alarm");
-  audio.play().then(()=>{
-    audio.pause();
-    audio.currentTime = 0;
-  }).catch(()=>{});
+    soundBtn.innerText = "🔇 SOUND OFF";
+
+    audioCtx.resume();
+    window.speechSynthesis.resume();
+
+  } else {
+
+    soundBtn.innerText = "🔊 SOUND ON";
+
+    window.speechSynthesis.cancel(); // หยุดเสียงทันที
+
+    speechQueue = []; // ล้างคิว
+    isSpeaking = false;
+  }
 }
 
 function isScheduled(d){
@@ -2048,6 +2125,19 @@ setInterval(() => {
   });
 }, 1000);
 
+let zoomMode = false;
+
+function toggleZoom(){
+
+  zoomMode = !zoomMode;
+
+  if(zoomMode){
+    document.body.classList.add("zoom-mode");
+  }else{
+    document.body.classList.remove("zoom-mode");
+  }
+
+}
 
 
 </script>
@@ -2055,6 +2145,8 @@ setInterval(() => {
 </body>
 
 </html>
+
+
 
 
 
