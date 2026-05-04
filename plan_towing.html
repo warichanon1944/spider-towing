@@ -1407,12 +1407,35 @@ function updateRowUI(i,status){
 }
 
 // STATUS LOCK
-window.onload = ()=>{
+window.onload = async ()=>{
 
   status.disabled = true;
 
+  // AUTO ENABLE SOUND
+  soundEnabled = true;
+
   const btn = document.querySelector(".sound-btn");
-  btn.innerText = "🔇 SOUND OFF";
+  btn.innerText = "🔊 SOUND ON";
+
+  // INIT AUDIO
+  initAudio();
+
+  // WAKE SPEECH ENGINE
+  try{
+
+    const msg = new SpeechSynthesisUtterance(" ");
+
+    msg.volume = 0;
+
+    window.speechSynthesis.speak(msg);
+
+  }catch(e){
+    console.log(e);
+  }
+
+  // LOAD DATA
+  await load();
+
 };
 
 flightType.addEventListener("change", ()=>{
