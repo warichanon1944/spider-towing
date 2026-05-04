@@ -1074,30 +1074,32 @@ function fmt(v){
 // ======================
 // LOAD
 // ======================
-let lastDataHash = "";
-let isLoading = false;
-
 async function load(){
-
-  if(isLoading) return;
-  isLoading = true;
 
   try{
 
-    const res = await fetch(API + "?t=" + Date.now());
+    const res = await fetch(API);
     const newData = await res.json();
 
-    data = newData;
+    // 🔥 เช็คว่าข้อมูลเปลี่ยนจริงไหม
+    const hash = JSON.stringify(newData);
 
-    cleanupMaps();
-    render();
+lastDataHash = hash;
+data = newData;
+render();
+
+data = newData;
+warnedMap = {};
+render();
 
   }catch(e){
     console.log(e);
   }
-
-  isLoading = false;
 }
+
+let lastDataHash = "";
+
+load();
 
 // ======================
 // TOGGLE STATUS
@@ -1511,17 +1513,15 @@ function checkSlot(d){
 
 function unlockAudio(){
 
-  soundEnabled = !soundEnabled;
+  soundEnabled = true;
 
   const btn = document.querySelector(".sound-btn");
+  btn.innerText = "🔊 SOUND ON";
 
-  if(soundEnabled){
-    btn.innerText = "🔊 SOUND ON";
-  }else{
-    btn.innerText = "🔇 SOUND OFF";
-  }
+  // 🔥 สำคัญมาก
+  audioCtx.resume();
+  window.speechSynthesis.resume();
 
-  // ต้อง trigger audio unlock browser policy
   const audio = document.getElementById("alarm");
   audio.play().then(()=>{
     audio.pause();
@@ -1561,8 +1561,6 @@ function speak(text){
 async function queueSpeak(text, key){
 
   if(!soundEnabled) return;
-
-  window.speechSynthesis.cancel(); // 🔥 สำคัญ
 
   const now = Date.now();
 
@@ -2022,44 +2020,16 @@ function speakATC(text){
 // ======================
 // REALTIME LOOP
 // ======================
-
-setInterval(load, 3000);
+setInterval(() => {
+  load();
+}, 1500); // 🔥 1.5 วิ realtime
 
 setInterval(() => {
-
-  data.forEach((d) => {
+  data.forEach((d, i) => {
     checkWarning(d);
     checkSlot(d);
   });
-
-}, 1500);
-
-
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) {
-    window.speechSynthesis.resume();
-    window.speechSynthesis.cancel();
-  }
-});
-
-function safeResetSpeech(){
-  isSpeaking = false;
-  speechQueue = [];
-  window.speechSynthesis.cancel();
-}
-
-function cleanupMaps(){
-
-  const ids = new Set(data.map(d => d.row));
-
-  Object.keys(warnedMap).forEach(k => {
-    if(!ids.has(Number(k))) delete warnedMap[k];
-  });
-
-  Object.keys(slotWarnedMap).forEach(k => {
-    if(!ids.has(Number(k))) delete slotWarnedMap[k];
-  });
-}
+}, 1000);
 
 
 
@@ -2068,6 +2038,7 @@ function cleanupMaps(){
 </body>
 
 </html>
+
 
 
 
