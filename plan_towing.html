@@ -770,6 +770,20 @@ body.zoom-mode *{
   }
 }
 
+.slot-row{
+  animation: slotBlink 0.8s infinite;
+}
+
+@keyframes slotBlink{
+  0%,100%{
+    background: rgba(0,255,156,0.12);
+    box-shadow: 0 0 10px rgba(0,255,156,0.2);
+  }
+  50%{
+    background: rgba(0,255,156,0.35);
+    box-shadow: 0 0 25px rgba(0,255,156,0.6);
+  }
+}
 
 </style>
 
@@ -1427,17 +1441,13 @@ data.forEach((d,i)=>{
 
   tb.innerHTML += `
 
-<tr class="${
-  warning
-    ? 'warning-row'
-    : d.status === 'TOWING'
-      ? 'towing-row'
-      : d.status === 'DONE'
-        ? 'done-row'
-        : getFlightType(d.flight) === 'DEP'
-          ? 'dep-row'
-          : 'arv-row'
-}">
+<tr class="
+  ${getFlightType(d.flight) === 'DEP' ? 'dep-row' : 'arv-row'}
+  ${d.status === 'TOWING' ? 'towing-row' : ''}
+  ${d.status === 'DONE' ? 'done-row' : ''}
+  ${warning ? 'warning-row' : ''}
+  ${slot ? 'slot-row' : ''}
+">
 
   <td>${i+1}</td>
 
@@ -1567,7 +1577,7 @@ window.onload = ()=>{
 
   status.disabled = true;
 
-  const btn = document.querySelector(".sound-btn");
+  const btn = document.querySelector('button[onclick="unlockAudio()"]');
   btn.innerText = "🔇 SOUND OFF";
 };
 
