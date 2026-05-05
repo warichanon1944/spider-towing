@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -140,12 +142,6 @@ body::before{
   display:flex;
   align-items:center;
   gap:18px;
-}
-
-.btn-group{
-  display:flex;
-  gap:10px;
-  align-items:center;
 }
 
 .live{
@@ -618,58 +614,125 @@ html{
 }
 
 /* =========================
-   STEP 2: ZOOM MODE (FULL SCREEN PLAN)
+   ZOOM MODE (THEATER MODE)
 ========================= */
 
 body.zoom-mode .container{
   grid-template-columns: 1fr !important;
 }
 
-/* ซ่อน FLIGHT INPUT PANEL */
-body.zoom-mode .panel:first-child{
-  display:none !important;
+body.zoom-mode .container .panel:first-child{
+  display: none; /* ❌ hide FLIGHT INPUT */
 }
 
-/* ทำ PLAN TOWING เต็มจอ */
-body.zoom-mode .panel{
-  height: calc(100vh - 90px);
+body.zoom-mode .container .panel:last-child{
+  width: 100%;
+  transform: scale(1.05);
 }
 
-/* ตารางใหญ่ขึ้น */
+/* ทำให้ table ใหญ่ขึ้น */
 body.zoom-mode table{
-  font-size: 22px;
-}
-
-/* ทำให้ scroll ลื่นขึ้น */
-body.zoom-mode .table-wrap{
-  max-height: calc(100vh - 140px);
-  overflow:auto;
-}
-
-body.zoom-mode{
-  font-size: 24px;
-}
-
-body.zoom-mode h1{
-  font-size: 28px;
-}
-
-body.zoom-mode h3{
-  font-size: 22px;
-}
-
-body.zoom-mode input,
-body.zoom-mode select{
   font-size: 18px;
-  height: 56px;
 }
 
-body.zoom-mode td{
+body.zoom-mode tbody td{
+  padding: 18px 14px;
+}
+
+/* header ใหญ่ขึ้น */
+body.zoom-mode .panel-title h3{
   font-size: 20px;
 }
 
+/* status pill ใหญ่ขึ้น */
 body.zoom-mode .status{
+  min-width: 120px;
+  height: 42px;
+  font-size: 14px;
+}
+
+/* action button ใหญ่ขึ้น */
+body.zoom-mode .action-btn{
+  height: 40px;
+  min-width: 80px;
+  font-size: 12px;
+}
+
+/* =========================
+   ZOOM MODE + BIG FONT
+========================= */
+
+body.zoom-mode{
+  font-size: 30px; /* 🔥 ทำให้ทั้งระบบใหญ่ขึ้น */
+}
+
+/* header ใหญ่ขึ้น */
+body.zoom-mode .title h1{
+  font-size: 28px;
+}
+
+body.zoom-mode .title span{
+  font-size: 13px;
+}
+
+/* clock + live */
+body.zoom-mode .clock{
+  font-size: 18px;
+}
+
+body.zoom-mode .live{
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+/* panel title */
+body.zoom-mode .panel-title h3{
+  font-size: 22px;
+}
+
+/* input ใหญ่ขึ้น */
+body.zoom-mode input,
+body.zoom-mode select{
+  height: 56px;
   font-size: 16px;
+}
+
+/* table text */
+body.zoom-mode table{
+  font-size: 20px;
+}
+
+/* table cell padding */
+body.zoom-mode tbody td{
+  padding: 20px 16px;
+}
+
+/* status ใหญ่ + ชัดขึ้น */
+body.zoom-mode .status{
+  min-width: 140px;
+  height: 48px;
+  font-size: 16px;
+}
+
+/* button ใหญ่ */
+body.zoom-mode button{
+  height: 52px;
+  font-size: 14px;
+}
+
+/* action button */
+body.zoom-mode .action-btn{
+  height: 44px;
+  min-width: 90px;
+  font-size: 13px;
+}
+
+body.zoom-mode{
+  font-size: 130%;
+}
+
+body.zoom-mode *{
+  font-size: inherit !important;
 }
 
 </style>
@@ -691,27 +754,27 @@ body.zoom-mode .status{
 
   </div>
 
-<div class="header-right">
+  <div class="header-right">
 
-  <div class="btn-group">
-<button id="zoomBtn" class="sound-btn" onclick="toggleZoom()">
-  🔍 ZOOM
-</button>
+    <div class="live">
+      <div class="live-dot"></div>
+      <div>LIVE SYSTEM</div>
+    </div>
 
-<button id="soundBtn" class="sound-btn" onclick="toggleSound()">
-  🔊 SOUND
-</button>
+    <div class="clock" id="clock"></div>
+
+	  <button class="sound-btn" onclick="unlockAudio()">
+    🔊 ENABLE SOUND
+  </button>
+  <button class="sound-btn" onclick="toggleZoom()">
+    🔍 ZOOM PLAN
+  </button>
+
+</div>
+
   </div>
 
-  <div class="live">
-    <div class="live-dot"></div>
-    <div>LIVE SYSTEM</div>
-  </div>
-
-  <div class="clock" id="clock"></div>
-
-</div> 
-</div> 
+</div>
 
 <div class="container">
 
@@ -1459,15 +1522,11 @@ function updateRowUI(i,status){
 
 // STATUS LOCK
 window.onload = ()=>{
-  const soundBtn = document.getElementById("soundBtn");
-
-  if(soundEnabled){
-    soundBtn.innerText = "🔇 SOUND OFF";
-  }else{
-    soundBtn.innerText = "🔊 SOUND ON";
-  }
 
   status.disabled = true;
+
+  const btn = document.querySelector(".sound-btn");
+  btn.innerText = "🔇 SOUND OFF";
 };
 
 flightType.addEventListener("change", ()=>{
@@ -1570,7 +1629,6 @@ let slotWarnedMap = {};
 
 function checkSlot(d){
 
-
   if(isScheduled(d)) return "";
   if(!d.remark) return "";
   if(!d.remark.includes("ปลายทางว่าง")) return "";
@@ -1599,28 +1657,22 @@ function checkSlot(d){
   return "";
 }
 
-function toggleSound(){
+function unlockAudio(){
 
-  soundEnabled = !soundEnabled;
+  soundEnabled = true;
 
-  const soundBtn = document.getElementById("soundBtn");
+  const btn = document.querySelector(".sound-btn");
+  btn.innerText = "🔊 SOUND ON";
 
-  if(soundEnabled){
+  // 🔥 สำคัญมาก
+  audioCtx.resume();
+  window.speechSynthesis.resume();
 
-    soundBtn.innerText = "🔇 SOUND OFF";
-
-    audioCtx.resume();
-    window.speechSynthesis.resume();
-
-  } else {
-
-    soundBtn.innerText = "🔊 SOUND ON";
-
-    window.speechSynthesis.cancel(); // หยุดเสียงทันที
-
-    speechQueue = []; // ล้างคิว
-    isSpeaking = false;
-  }
+  const audio = document.getElementById("alarm");
+  audio.play().then(()=>{
+    audio.pause();
+    audio.currentTime = 0;
+  }).catch(()=>{});
 }
 
 function isScheduled(d){
@@ -2131,13 +2183,27 @@ function toggleZoom(){
 
   zoomMode = !zoomMode;
 
-  if(zoomMode){
-    document.body.classList.add("zoom-mode");
-  }else{
-    document.body.classList.remove("zoom-mode");
-  }
+  document.body.classList.toggle("zoom-mode", zoomMode);
 
+  const btn = document.querySelector('button[onclick="toggleZoom()"]');
+
+  if(zoomMode){
+    btn.innerText = "🔍 EXIT ZOOM";
+
+    // optional: full screen
+    if(document.documentElement.requestFullscreen){
+      document.documentElement.requestFullscreen();
+    }
+
+  }else{
+    btn.innerText = "🔍 ZOOM PLAN";
+
+    if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
 }
+
 
 
 </script>
