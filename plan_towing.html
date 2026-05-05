@@ -828,6 +828,10 @@ body.zoom-mode table{
     🔍 ZOOM PLAN
   </button>
 
+<button class="sound-btn" onclick="adminLogin()">
+  🔐 LOGIN
+</button>
+
 </div>
 
   </div>
@@ -992,6 +996,8 @@ const API = "https://script.google.com/macros/s/AKfycbw2Trg424LyjDDpx0u1fRQyRdOb
 
 let data = [];
 let editRow = null;
+let isAdmin = false;
+const ADMIN_PASSWORD = "spider123";
 
 // 🔥 ADD ตรงนี้
 let speakCountMap = {};
@@ -1338,6 +1344,11 @@ load();
 // ======================
 function edit(i){
 
+if(!isAdmin){
+  alert("NO PERMISSION");
+  return;
+}
+
   let d = data[i];
 
   editRow = d.row;
@@ -1365,6 +1376,11 @@ function edit(i){
 // ======================
 async function del(i){
 
+if(!isAdmin){
+  alert("NO PERMISSION");
+  return;
+}
+
   if(!confirm("Delete this flight?")) return;
 
   await fetch(API,{
@@ -1387,6 +1403,11 @@ async function del(i){
 // ADD / UPDATE
 // ======================
 async function addRow(){
+
+if(!isAdmin){
+  alert("NO PERMISSION");
+  return;
+}
 
   // หา row ที่กำลัง edit
   let currentData =
@@ -2324,6 +2345,23 @@ setInterval(() => {
   location.reload();
 
 }, 1000 * 60 * 60 * 4);
+
+function adminLogin(){
+
+  const pass = prompt("ENTER PASSWORD");
+
+  if(pass === ADMIN_PASSWORD){
+
+    isAdmin = true;
+
+    alert("ADMIN MODE ENABLED");
+
+  }else{
+
+    alert("WRONG PASSWORD");
+
+  }
+}
 
 
 
