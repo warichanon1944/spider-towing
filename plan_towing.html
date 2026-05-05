@@ -728,12 +728,48 @@ body.zoom-mode .action-btn{
 }
 
 body.zoom-mode{
-  font-size: 130%;
+  font-size: 100%;
 }
 
 body.zoom-mode *{
   font-size: inherit !important;
 }
+
+.scheduled-text{
+  color:#3b82f6;
+  font-weight:800;
+  text-shadow:0 0 10px rgba(59,130,246,0.6);
+}
+
+.scheduled-box{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:8px;
+
+  border:1px solid rgba(0,255,156,0.6);
+  background:rgba(0,255,156,0.08);
+
+  color:#00ff9c;
+  font-weight:800;
+
+  box-shadow:0 0 12px rgba(0,255,156,0.15);
+}
+
+.warning-row{
+  animation: warningBlink 0.8s infinite;
+}
+
+@keyframes warningBlink{
+  0%,100%{
+    background: rgba(239,68,68,0.12);
+    box-shadow: 0 0 10px rgba(239,68,68,0.2);
+  }
+  50%{
+    background: rgba(239,68,68,0.35);
+    box-shadow: 0 0 25px rgba(239,68,68,0.6);
+  }
+}
+
 
 </style>
 
@@ -1392,13 +1428,15 @@ data.forEach((d,i)=>{
   tb.innerHTML += `
 
 <tr class="${
-  d.status === 'TOWING'
-    ? 'towing-row'
-    : d.status === 'DONE'
-      ? 'done-row'
-      : getFlightType(d.flight) === 'DEP'
-        ? 'dep-row'
-        : 'arv-row'
+  warning
+    ? 'warning-row'
+    : d.status === 'TOWING'
+      ? 'towing-row'
+      : d.status === 'DONE'
+        ? 'done-row'
+        : getFlightType(d.flight) === 'DEP'
+          ? 'dep-row'
+          : 'arv-row'
 }">
 
   <td>${i+1}</td>
@@ -1442,7 +1480,11 @@ data.forEach((d,i)=>{
 
  
 <td>
-  ${fmt(d.remark)}
+  ${
+    isScheduled(d)
+      ? `<span class="scheduled-box">${fmt(d.remark)}</span>`
+      : fmt(d.remark)
+  }
   <br>
 
   ${warning ? `<span style="color:#ff3b3b;font-weight:800">⚠ ${warning}</span>` : ""}
@@ -1679,7 +1721,7 @@ function isScheduled(d){
 
   if(!d.remark) return false;
 
-  return d.remark.includes("นัดลาก");
+  return d.remark.includes("นัดลาก") || d.remark.includes("นัดแล้ว");
 }
 
 function canPlaySound(d){
@@ -2203,6 +2245,7 @@ function toggleZoom(){
     }
   }
 }
+
 
 
 
