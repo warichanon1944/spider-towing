@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>AIRPORT OPS CONTROL</title>
+<title>SPIDER TOWING CONTROL</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -1626,12 +1626,48 @@ function updateRowUI(i,status){
 }
 
 // STATUS LOCK
-window.onload = ()=>{
+window.onload = async ()=>{
 
   status.disabled = true;
 
   const btn = document.querySelector('button[onclick="unlockAudio()"]');
-  btn.innerText = "🔇 SOUND OFF";
+
+  // =====================
+  // AUTO RESTORE SOUND
+  // =====================
+
+  if(localStorage.getItem("soundEnabled") === "1"){
+
+    soundEnabled = true;
+
+    btn.innerText = "🔊 SOUND ON";
+
+    try{
+
+      await audioCtx.resume();
+
+      window.speechSynthesis.resume();
+
+      // ยิง silent audio ปลุก browser
+      const audio = document.getElementById("alarm");
+
+      await audio.play();
+
+      audio.pause();
+      audio.currentTime = 0;
+
+    }catch(e){
+
+      console.log("AUTO SOUND RESTORE FAIL", e);
+
+    }
+
+  }else{
+
+    btn.innerText = "🔇 SOUND OFF";
+
+  }
+
 };
 
 flightType.addEventListener("change", ()=>{
@@ -1760,14 +1796,17 @@ function unlockAudio(){
 
   soundEnabled = true;
 
+  // ✅ จำว่าเปิดเสียงแล้ว
+  localStorage.setItem("soundEnabled", "1");
+
   const btn = document.querySelector(".sound-btn");
   btn.innerText = "🔊 SOUND ON";
 
-  // 🔥 สำคัญมาก
   audioCtx.resume();
   window.speechSynthesis.resume();
 
   const audio = document.getElementById("alarm");
+
   audio.play().then(()=>{
     audio.pause();
     audio.currentTime = 0;
