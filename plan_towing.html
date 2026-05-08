@@ -1485,6 +1485,10 @@ function render(){
 
 data.forEach((d,i)=>{
 
+  if(d.status === "DONE"){
+    delete warnedMap[d.row];
+  }
+
   let warning = checkWarning(d);
   let slot = checkSlot(d);
 
@@ -1700,9 +1704,13 @@ function checkWarning(d){
   if(now > limit){
 
     if(!warnedMap[d.row]){
+
       warnedMap[d.row] = true;
 
-      queueSpeak(buildTowSpeakText(d), d.reg + "-tow");
+      queueSpeak(
+        buildTowSpeakText(d),
+        "warning-" + d.row
+      );
     }
 
     return "WARNING";
@@ -1810,6 +1818,10 @@ async function queueSpeak(text, key){
   if(!soundEnabled) return;
 await wakeAudio();
 
+await audioCtx.resume();
+
+window.speechSynthesis.resume();
+
   const now = Date.now();
 
   // 🔥 กันซ้ำแบบ time lock
@@ -1868,12 +1880,14 @@ window.speechSynthesis.speak(msg2);
   };
 
   // ===== FINISH =====
-  msg2.onend = () => {
+msg2.onend = () => {
 
-    isSpeaking = false;
-    processQueue();
+  lastSpeechTime = Date.now();
 
-  };
+  isSpeaking = false;
+  processQueue();
+
+};
 
   // =========================
   // BEEP ONLY FOR ATTENTION / INFORMATION
