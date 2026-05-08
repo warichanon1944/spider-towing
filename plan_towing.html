@@ -2344,6 +2344,15 @@ function toggleZoom(){
 
 setInterval(() => {
 
+  // ห้าม reload ตอน edit
+  if(editRow) return;
+
+  // ห้าม reload ตอนกำลังพูด
+  if(isSpeaking) return;
+
+  // ห้าม reload ถ้ามี queue รอพูด
+  if(speechQueue.length > 0) return;
+
   location.reload();
 
 }, 1000 * 60 * 60);
