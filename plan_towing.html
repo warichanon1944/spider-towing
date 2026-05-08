@@ -994,6 +994,7 @@ let isSpeaking = false;
 
 const API = "https://script.google.com/macros/s/AKfycbw2Trg424LyjDDpx0u1fRQyRdObfukYYVFJ3wEAfAlqry1LkTJXXozMefkphKc-eiLPyg/exec";
 
+let pauseRealtime = false;
 let data = [];
 let editRow = null;
 let isAdmin = false;
@@ -1001,7 +1002,7 @@ const ADMIN_PASSWORD = "spider123";
 
 // 🔥 ADD ตรงนี้
 let speakCountMap = {};
-const MAX_SPEAK = 2;
+const MAX_SPEAK = 1;
 
 // ======================
 // DEP FLIGHT LIST
@@ -1319,7 +1320,6 @@ data = newData;
 render();
 
 data = newData;
-warnedMap = {};
 render();
 
   }catch(e){
@@ -1344,10 +1344,12 @@ load();
 // ======================
 function edit(i){
 
-if(!isAdmin){
-  alert("NO PERMISSION");
-  return;
-}
+  if(!isAdmin){
+    alert("NO PERMISSION");
+    return;
+  }
+
+  pauseRealtime = true;
 
   let d = data[i];
 
@@ -1357,20 +1359,17 @@ if(!isAdmin){
   flight.value = d.flight;
   time.value = d.time;
 
-  // FIX GATE
   gate.value = d.ac_gate || d.gate || "";
 
   bay.value = d.bay;
   remark.value = d.remark;
 
-  // ตอนกด EDIT ถึงจะเปลี่ยน STATUS ได้
   status.value = d.status;
   status.disabled = false;
 
   saveBtn.innerText = "UPDATE";
   saveBtn.className = "update";
 }
-
 // ======================
 // DELETE
 // ======================
@@ -1445,6 +1444,10 @@ if(!isAdmin){
     )
   });
 
+  pauseRealtime = false;
+
+  load();
+
   clearForm();
 
 }
@@ -1484,10 +1487,6 @@ function render(){
   tb.innerHTML = "";
 
 data.forEach((d,i)=>{
-
-  if(d.status === "DONE"){
-    delete warnedMap[d.row];
-  }
 
   let warning = checkWarning(d);
   let slot = checkSlot(d);
@@ -1611,6 +1610,7 @@ function clearForm(){
 
   saveBtn.innerText="+ ADD FLIGHT";
   saveBtn.className="save";
+	pauseRealtime = false;
 }
 
 // ======================
@@ -1704,13 +1704,9 @@ function checkWarning(d){
   if(now > limit){
 
     if(!warnedMap[d.row]){
-
       warnedMap[d.row] = true;
 
-      queueSpeak(
-        buildTowSpeakText(d),
-        "warning-" + d.row
-      );
+      queueSpeak(buildTowSpeakText(d), d.reg + "-tow");
     }
 
     return "WARNING";
@@ -1724,14 +1720,8 @@ function playAlarm(d){
   if(!soundEnabled) return;
 
   const key = d.reg + "-warn";
-
-  const now = Date.now();
-  if(lastSpeakMap[key] && now - lastSpeakMap[key] < SPEAK_COOLDOWN) return;
-
-  lastSpeakMap[key] = now;
-
-  queueSpeak(buildSpeakText(d), key);
 }
+
 let lastAlarmTime = 0;
 
 let slotWarnedMap = {};
@@ -1818,10 +1808,6 @@ async function queueSpeak(text, key){
   if(!soundEnabled) return;
 await wakeAudio();
 
-await audioCtx.resume();
-
-window.speechSynthesis.resume();
-
   const now = Date.now();
 
   // 🔥 กันซ้ำแบบ time lock
@@ -1880,14 +1866,12 @@ window.speechSynthesis.speak(msg2);
   };
 
   // ===== FINISH =====
-msg2.onend = () => {
+  msg2.onend = () => {
 
-  lastSpeechTime = Date.now();
+    isSpeaking = false;
+    processQueue();
 
-  isSpeaking = false;
-  processQueue();
-
-};
+  };
 
   // =========================
   // BEEP ONLY FOR ATTENTION / INFORMATION
@@ -2287,8 +2271,12 @@ function speakATC(text){
 // REALTIME LOOP
 // ======================
 setInterval(() => {
+
+  if(pauseRealtime) return;
+
   load();
-}, 1500); // 🔥 1.5 วิ realtime
+
+}, 1500);
 
 // ======================
 // KEEP AUDIO CONTEXT ALIVE
@@ -2385,7 +2373,6 @@ function adminLogin(){
 </body>
 
 </html>
-
 
 
 
