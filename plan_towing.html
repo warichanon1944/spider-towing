@@ -821,9 +821,13 @@ body.zoom-mode table{
 
     <div class="clock" id="clock"></div>
 
-	  <button class="sound-btn" onclick="unlockAudio()">
-    🔊 ENABLE SOUND
-  </button>
+<button class="sound-btn" onclick="unlockAudio()">
+  🔊 ENABLE SOUND
+</button>
+
+<button class="sound-btn" onclick="toggleMute()" id="muteBtn">
+  🔇 MUTE OFF
+</button>
   <button class="sound-btn" onclick="toggleZoom()">
     🔍 ZOOM PLAN
   </button>
@@ -984,6 +988,7 @@ async function wakeAudio(){
 }
 
 let soundEnabled = false;
+let muted = false;
 
 let speechQueue = [];
 let isSpeaking = false;
@@ -1631,6 +1636,24 @@ window.onload = async ()=>{
   status.disabled = true;
 
   const btn = document.querySelector('button[onclick="unlockAudio()"]');
+const muteBtn = document.getElementById("muteBtn");
+// =====================
+// RESTORE MUTE
+// =====================
+
+if(localStorage.getItem("muted") === "1"){
+
+  muted = true;
+
+  muteBtn.innerText = "🔇 MUTED";
+
+}else{
+
+  muted = false;
+
+  muteBtn.innerText = "🔇 MUTE OFF";
+
+}
 
   // =====================
   // AUTO RESTORE SOUND
@@ -1813,6 +1836,26 @@ function unlockAudio(){
   }).catch(()=>{});
 }
 
+function toggleMute(){
+
+  muted = !muted;
+
+  const btn = document.getElementById("muteBtn");
+
+  if(muted){
+
+    // หยุดเสียงพูดทันที
+    window.speechSynthesis.cancel();
+
+    btn.innerText = "🔇 MUTED";
+
+  }else{
+
+    btn.innerText = "🔇 MUTE OFF";
+
+  }
+}
+
 function isScheduled(d){
 
   if(!d.remark) return false;
@@ -1843,6 +1886,8 @@ function speak(text){
 }
 
 async function queueSpeak(text, key){
+
+  if(muted) return;
 
   if(!soundEnabled) return;
 await wakeAudio();
@@ -2421,7 +2466,6 @@ function adminLogin(){
 </body>
 
 </html>
-
 
 
 
