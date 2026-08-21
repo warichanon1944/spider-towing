@@ -1,8 +1,7 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
@@ -10,12 +9,10 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-
-
 <style>
 
 body{
-  font-size: 18px;
+  font-size:18px;
 }
 
 :root{
@@ -34,8 +31,6 @@ body{
   --muted:#94a3b8;
 }
 
-
-
 *{
   margin:0;
   padding:0;
@@ -43,22 +38,25 @@ body{
 }
 
 body{
+
   font-family:'Inter',sans-serif;
+
   background:
     radial-gradient(circle at top left,#12304f55,transparent 35%),
     radial-gradient(circle at bottom right,#0c7c5944,transparent 35%),
     linear-gradient(180deg,#020617,#07111f);
+
   color:var(--text);
+
   min-height:100vh;
+
   overflow-x:hidden;
 }
 
-body{
-  overflow-x: hidden;
-}
-
 body::before{
+
   content:'';
+
   position:fixed;
   inset:0;
 
@@ -67,11 +65,22 @@ body::before{
     linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
 
   background-size:40px 40px;
-  mask-image:linear-gradient(to bottom,rgba(0,0,0,0.7),transparent);
+
+  mask-image:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.7),
+    transparent
+  );
+
   pointer-events:none;
 }
 
+/* =========================
+   HEADER
+========================= */
+
 .header{
+
   position:sticky;
   top:0;
   z-index:999;
@@ -85,6 +94,7 @@ body::before{
   padding:0 28px;
 
   background:rgba(6,12,24,0.78);
+
   backdrop-filter:blur(14px);
 
   border-bottom:1px solid rgba(255,255,255,0.06);
@@ -95,16 +105,22 @@ body::before{
 }
 
 .logo-wrap{
+
   display:flex;
   align-items:center;
+
   gap:16px;
 }
 
 .radar{
+
   width:50px;
   height:50px;
+
   border-radius:50%;
+
   position:relative;
+
   border:2px solid rgba(0,255,156,0.4);
 
   box-shadow:
@@ -113,53 +129,74 @@ body::before{
 }
 
 .radar::before{
+
   content:'';
+
   position:absolute;
   inset:6px;
+
   border-radius:50%;
+
   border:1px solid rgba(0,255,156,0.2);
 }
 
 .title{
+
   display:flex;
   flex-direction:column;
 }
 
 .title h1{
+
   font-size:20px;
+
   letter-spacing:2px;
+
   font-weight:700;
 }
 
 .title span{
+
   font-size:11px;
+
   color:var(--muted);
+
   letter-spacing:3px;
+
   margin-top:3px;
 }
 
 .header-right{
+
   display:flex;
   align-items:center;
+
   gap:18px;
 }
 
 .live{
+
   display:flex;
   align-items:center;
+
   gap:10px;
 
   background:rgba(255,255,255,0.04);
+
   border:1px solid rgba(255,255,255,0.06);
 
   padding:10px 14px;
+
   border-radius:14px;
 }
 
 .live-dot{
+
   width:10px;
   height:10px;
+
   border-radius:50%;
+
   background:var(--green);
 
   box-shadow:
@@ -170,32 +207,52 @@ body::before{
 }
 
 @keyframes pulse{
+
   50%{
     opacity:0.5;
     transform:scale(0.7);
   }
+
 }
 
 .clock{
+
   font-size:14px;
+
   font-weight:600;
 }
 
+/* =========================
+   MAIN
+========================= */
+
 .container{
+
   display:grid;
+
   grid-template-columns:390px minmax(0,1fr);
+
   gap:22px;
+
   padding:22px;
 }
 
-@media (max-width: 900px){
+@media(max-width:1100px){
+
   .container{
     grid-template-columns:1fr;
   }
+
 }
+
 .panel{
+
   background:
-    linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.03),
+      rgba(255,255,255,0.01)
+    );
 
   border:1px solid rgba(255,255,255,0.06);
 
@@ -210,92 +267,133 @@ body::before{
     0 20px 40px rgba(0,0,0,0.35);
 
   overflow:hidden;
+
   position:relative;
 }
 
 .panel::before{
+
   content:'';
+
   position:absolute;
+
   top:0;
   left:0;
   right:0;
+
   height:2px;
 
-  background:linear-gradient(90deg,
-    transparent,
-    var(--green),
-    transparent);
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--green),
+      transparent
+    );
 }
 
 .panel-title{
+
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
   margin-bottom:22px;
 }
 
 .panel-title h3{
+
   font-size:15px;
+
   letter-spacing:2px;
 }
 
 .panel-badge{
+
   font-size:11px;
+
   color:var(--green);
+
   padding:6px 10px;
+
   border-radius:999px;
 
   background:rgba(0,255,156,0.08);
+
   border:1px solid rgba(0,255,156,0.18);
 }
 
+/* =========================
+   FORM
+========================= */
+
 .form{
+
   display:flex;
   flex-direction:column;
+
   gap:14px;
 }
 
 .row2{
+
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:14px;
 }
 
 .field{
+
   display:flex;
   flex-direction:column;
+
   gap:7px;
 }
 
 .field label{
+
   font-size:11px;
+
   color:#6b7280;
+
   letter-spacing:1px;
 }
 
 input,
 select{
+
   width:100%;
+
   height:48px;
 
   border-radius:14px;
+
   border:1px solid rgba(255,255,255,0.06);
 
   background:
-    linear-gradient(180deg,
-    rgba(255,255,255,0.04),
-    rgba(255,255,255,0.02));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.04),
+      rgba(255,255,255,0.02)
+    );
 
   padding:0 14px;
 
   color:#fff;
+
   font-size:13px;
+
   outline:none;
 
   transition:0.25s;
 }
 
 input:focus{
+
   border-color:rgba(0,255,156,0.5);
 
   box-shadow:
@@ -306,79 +404,145 @@ input:focus{
 }
 
 input::placeholder{
+
   color:rgba(255,255,255,0.25);
 }
 
+input:disabled{
+
+  opacity:0.5;
+
+  cursor:not-allowed;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
 .buttons{
+
   display:flex;
+
   gap:10px;
+
   margin-top:8px;
 }
 
 button{
+
   border:none;
+
   border-radius:14px;
+
   cursor:pointer;
+
   font-weight:700;
+
   height:46px;
+
   transition:0.25s;
 }
 
 button:hover{
+
   transform:translateY(-2px);
 }
 
 .save{
+
   flex:1;
 
-  background:linear-gradient(135deg,#00ff9c,#00d084);
+  background:
+    linear-gradient(
+      135deg,
+      #00ff9c,
+      #00d084
+    );
+
   color:#00130b;
 
-  box-shadow:0 10px 25px rgba(0,255,156,0.2);
+  box-shadow:
+    0 10px 25px rgba(0,255,156,0.2);
 }
 
 .update{
+
   flex:1;
 
-  background:linear-gradient(135deg,#f59e0b,#ffcb52);
+  background:
+    linear-gradient(
+      135deg,
+      #f59e0b,
+      #ffcb52
+    );
+
   color:#000;
 }
 
 .clear{
+
   width:120px;
 
   background:rgba(239,68,68,0.15);
+
   color:#ff8d8d;
 
   border:1px solid rgba(239,68,68,0.2);
 }
 
+/* =========================
+   TABLE
+========================= */
+
 .table-wrap{
+
   overflow:auto;
+
   border-radius:18px;
 }
 
 table{
+
   width:100%;
+
   min-width:unset;
+
+  border-collapse:separate;
+
+  border-spacing:0 5px;
 }
 
 thead th{
+
   color:#64748b;
+
   font-size:11px;
+
   font-weight:600;
+
   letter-spacing:1px;
+
   text-transform:uppercase;
+
   padding:0 12px 10px;
 }
 
 tbody tr{
+
   background:rgba(255,255,255,0.03);
-  transition:0.2s;
+
+  transition:
+    transform 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+
+  cursor:default;
 }
 
 tbody tr:hover{
+
   transform:scale(1.004);
+
   background:rgba(255,255,255,0.05);
 
   box-shadow:
@@ -387,410 +551,814 @@ tbody tr:hover{
 }
 
 tbody td{
+
   padding:14px 12px;
+
   text-align:center;
+
   font-size:13px;
+
   border-top:1px solid rgba(255,255,255,0.03);
+
   border-bottom:1px solid rgba(255,255,255,0.03);
 }
 
 tbody td:first-child{
+
   border-left:1px solid rgba(255,255,255,0.03);
+
   border-radius:14px 0 0 14px;
 }
 
 tbody td:last-child{
+
   border-right:1px solid rgba(255,255,255,0.03);
+
   border-radius:0 14px 14px 0;
 }
 
-.status{
+/* =========================
+   DRAG HANDLE
+========================= */
+
+.drag-cell{
+
+  width:48px;
+
+  padding-left:8px !important;
+  padding-right:8px !important;
+}
+
+.drag-handle{
+
+  width:34px;
+  height:34px;
+
   display:inline-flex;
+
   align-items:center;
   justify-content:center;
+
+  border-radius:10px;
+
+  background:rgba(59,130,246,0.10);
+
+  border:1px solid rgba(59,130,246,0.18);
+
+  color:#7cc2ff;
+
+  cursor:grab;
+
+  user-select:none;
+
+  font-size:17px;
+
+  transition:0.2s;
+}
+
+.drag-handle:hover{
+
+  background:rgba(59,130,246,0.20);
+
+  box-shadow:
+    0 0 15px rgba(59,130,246,0.2);
+
+  transform:none;
+}
+
+.drag-handle:active{
+
+  cursor:grabbing;
+}
+
+body:not(.admin-mode) .drag-handle{
+
+  opacity:0.25;
+
+  cursor:not-allowed;
+}
+
+body:not(.admin-mode) .reorder-btn{
+
+  opacity:0.25;
+
+  cursor:not-allowed;
+}
+
+/* =========================
+   DRAGGING
+========================= */
+
+tr.dragging{
+
+  opacity:0.35;
+
+  transform:scale(0.98);
+
+  background:rgba(59,130,246,0.15) !important;
+}
+
+tr.drag-over{
+
+  box-shadow:
+    0 -3px 0 var(--green),
+    0 0 20px rgba(0,255,156,0.18);
+}
+
+/* =========================
+   REORDER BUTTONS
+========================= */
+
+.reorder-area{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:4px;
+
+  align-items:center;
+}
+
+.reorder-btn{
+
+  width:30px;
+
+  height:25px;
+
+  min-width:30px;
+
+  border-radius:8px;
+
+  background:rgba(255,255,255,0.05);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  color:#cbd5e1;
+
+  font-size:12px;
+
+  line-height:1;
+
+  padding:0;
+
+  cursor:pointer;
+
+  transition:0.2s;
+}
+
+.reorder-btn:hover{
+
+  background:rgba(0,255,156,0.14);
+
+  border-color:rgba(0,255,156,0.25);
+
+  color:var(--green);
+
+  transform:none;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
   min-width:95px;
+
   height:34px;
 
   border-radius:999px;
 
   font-size:12px;
+
   font-weight:700;
+
   letter-spacing:1px;
 
   cursor:pointer;
+
   transition:0.2s;
 }
 
 .status:hover{
+
   transform:scale(1.05);
 }
 
 .waiting{
+
   background:rgba(250,204,21,0.12);
+
   color:var(--yellow);
+
   border:1px solid rgba(250,204,21,0.18);
 }
 
 .towing{
-  background: rgba(250,204,21,0.12);
-  color: #ffd54a;
-  border: 1px solid rgba(250,204,21,0.25);
 
-  animation: towStrobe 0.9s infinite;
+  background:rgba(250,204,21,0.12);
+
+  color:#ffd54a;
+
+  border:1px solid rgba(250,204,21,0.25);
+
+  animation:towStrobe 0.9s infinite;
 }
 
 .done{
+
   background:rgba(0,255,156,0.12);
+
   color:var(--green);
+
   border:1px solid rgba(0,255,156,0.18);
 }
 
+/* =========================
+   ACTION
+========================= */
+
 .action-area{
+
   display:flex;
+
   gap:6px;
+
   justify-content:center;
 }
 
 .action-btn{
+
   border:none;
+
   border-radius:10px;
+
   height:34px;
+
   min-width:60px;
 
   font-size:11px;
+
   font-weight:700;
 
   cursor:pointer;
 }
 
 .edit{
+
   background:rgba(245,158,11,0.18);
+
   color:#ffd27b;
+
   border:1px solid rgba(245,158,11,0.2);
 }
 
 .del{
+
   background:rgba(239,68,68,0.15);
+
   color:#ff8d8d;
+
   border:1px solid rgba(239,68,68,0.2);
 }
 
-@media(max-width:1100px){
-
-  .container{
-    grid-template-columns:1fr;
-  }
-
-}
-
-input:disabled{
-  opacity:0.5;
-  cursor:not-allowed;
-}
+/* =========================
+   TAGS
+========================= */
 
 .apx-tag{
+
   display:inline-block;
+
   padding:6px 12px;
+
   border-radius:999px;
 
   background:rgba(59,130,246,0.15);
+
   border:1px solid rgba(59,130,246,0.25);
 
   color:#7cc2ff;
+
   font-size:11px;
+
   font-weight:700;
+
   letter-spacing:1px;
 }
 
 .flight-type{
+
   display:inline-flex;
+
   align-items:center;
+
   justify-content:center;
 
   min-width:70px;
+
   height:30px;
 
   border-radius:999px;
 
   font-size:11px;
+
   font-weight:700;
+
   letter-spacing:1px;
 }
 
 .dep{
-  background: rgba(0,255,156,0.12);
+
+  background:rgba(0,255,156,0.12);
+
   color:#00ff9c;
+
   border:1px solid rgba(0,255,156,0.2);
 }
 
 .arv{
-  background: rgba(239,68,68,0.12);
+
+  background:rgba(239,68,68,0.12);
+
   color:#ff5c5c;
+
   border:1px solid rgba(239,68,68,0.25);
 }
 
+/* =========================
+   ROW STATUS
+========================= */
+
 .dep-row{
-  background: linear-gradient(
-    90deg,
-    rgba(0,255,156,0.12),
-    rgba(0,0,0,0.15)
-  );
-  box-shadow: inset 0 0 25px rgba(0,255,156,0.08);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,255,156,0.12),
+      rgba(0,0,0,0.15)
+    );
+
+  box-shadow:
+    inset 0 0 25px rgba(0,255,156,0.08);
 }
 
 .arv-row{
+
   background:
-    linear-gradient(90deg, rgba(239,68,68,0.14), rgba(255,255,255,0.03));
+    linear-gradient(
+      90deg,
+      rgba(239,68,68,0.14),
+      rgba(255,255,255,0.03)
+    );
 }
 
 .towing-row{
+
   background:
-    linear-gradient(90deg, rgba(250,204,21,0.18), rgba(255,255,255,0.03));
+    linear-gradient(
+      90deg,
+      rgba(250,204,21,0.18),
+      rgba(255,255,255,0.03)
+    );
 }
 
-.status.towing{
-  animation: towStrobe 0.9s infinite;
-}
 .done-row{
-  background: linear-gradient(
-    90deg,
-    rgba(0,255,156,0.18),
-    rgba(255,255,255,0.03)
-  );
-  filter: brightness(1.1);
-}
 
-@keyframes towStatusBlink{
-  0%,100%{
-    opacity:1;
-    box-shadow:0 0 10px rgba(250,204,21,0.3);
-  }
-  50%{
-    opacity:0.4;
-    box-shadow:0 0 25px rgba(250,204,21,0.7);
-  }
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,255,156,0.18),
+      rgba(255,255,255,0.03)
+    );
+
+  filter:brightness(1.1);
 }
 
 @keyframes towStrobe{
+
   0%,100%{
+
     opacity:1;
-    box-shadow:0 0 10px rgba(250,204,21,0.3);
+
+    box-shadow:
+      0 0 10px rgba(250,204,21,0.3);
   }
+
   50%{
+
     opacity:0.35;
-    box-shadow:0 0 25px rgba(250,204,21,0.8);
+
+    box-shadow:
+      0 0 25px rgba(250,204,21,0.8);
   }
+
 }
 
+.scheduled-text{
+
+  color:#3b82f6;
+
+  font-weight:800;
+
+  text-shadow:
+    0 0 10px rgba(59,130,246,0.6);
+}
+
+.scheduled-box{
+
+  display:inline-block;
+
+  padding:4px 10px;
+
+  border-radius:8px;
+
+  border:1px solid rgba(0,255,156,0.6);
+
+  background:rgba(0,255,156,0.08);
+
+  color:#00ff9c;
+
+  font-weight:800;
+
+  box-shadow:
+    0 0 12px rgba(0,255,156,0.15);
+}
+
+.warning-row{
+
+  animation:warningBlink 0.8s infinite;
+}
+
+@keyframes warningBlink{
+
+  0%,100%{
+
+    background:rgba(239,68,68,0.12);
+
+    box-shadow:
+      0 0 10px rgba(239,68,68,0.2);
+  }
+
+  50%{
+
+    background:rgba(239,68,68,0.35);
+
+    box-shadow:
+      0 0 25px rgba(239,68,68,0.6);
+  }
+
+}
+
+.slot-row{
+
+  animation:slotBlink 0.8s infinite;
+}
+
+@keyframes slotBlink{
+
+  0%,100%{
+
+    background:rgba(0,255,156,0.12);
+
+    box-shadow:
+      0 0 10px rgba(0,255,156,0.2);
+  }
+
+  50%{
+
+    background:rgba(0,255,156,0.35);
+
+    box-shadow:
+      0 0 25px rgba(0,255,156,0.6);
+  }
+
+}
+
+/* =========================
+   SOUND
+========================= */
+
 .sound-btn{
+
   height:38px;
+
   padding:0 14px;
 
   border-radius:12px;
+
   border:1px solid rgba(0,255,156,0.25);
 
   background:rgba(0,255,156,0.08);
+
   color:var(--green);
 
   font-size:12px;
+
   font-weight:700;
+
   letter-spacing:1px;
 
   cursor:pointer;
 
   transition:0.25s;
 
-  box-shadow:0 0 15px rgba(0,255,156,0.1);
+  box-shadow:
+    0 0 15px rgba(0,255,156,0.1);
 }
 
 .sound-btn:hover{
-  transform:translateY(-2px);
-  background:rgba(0,255,156,0.15);
-  box-shadow:0 0 25px rgba(0,255,156,0.25);
-}
 
-html{
-  zoom: 100%;
+  transform:translateY(-2px);
+
+  background:rgba(0,255,156,0.15);
+
+  box-shadow:
+    0 0 25px rgba(0,255,156,0.25);
 }
 
 /* =========================
-   ZOOM MODE (THEATER MODE)
+   ADMIN MODE
 ========================= */
 
+.admin-indicator{
+
+  display:none;
+
+  align-items:center;
+
+  gap:7px;
+
+  padding:7px 11px;
+
+  border-radius:999px;
+
+  color:var(--green);
+
+  background:rgba(0,255,156,0.08);
+
+  border:1px solid rgba(0,255,156,0.2);
+
+  font-size:10px;
+
+  font-weight:700;
+
+  letter-spacing:1px;
+}
+
+body.admin-mode .admin-indicator{
+
+  display:flex;
+}
+
+body.admin-mode .drag-handle{
+
+  opacity:1;
+}
+
+/* =========================
+   ZOOM MODE
+========================= */
+
+html{
+
+  zoom:100%;
+}
+
 body.zoom-mode .container{
-  grid-template-columns: 1fr !important;
+
+  grid-template-columns:1fr !important;
 }
 
 body.zoom-mode .container .panel:first-child{
-  display: none; /* ❌ hide FLIGHT INPUT */
+
+  display:none;
 }
 
 body.zoom-mode .container .panel:last-child{
-  width: 100%;
-  transform: scale(1.05);
+
+  width:100%;
+
+  transform:scale(1.05);
 }
 
-/* ทำให้ table ใหญ่ขึ้น */
 body.zoom-mode table{
-  font-size: 18px;
+
+  font-size:18px;
+
+  table-layout:fixed;
 }
 
 body.zoom-mode tbody td{
-  padding: 18px 14px;
+
+  padding:18px 14px;
 }
 
-/* header ใหญ่ขึ้น */
 body.zoom-mode .panel-title h3{
-  font-size: 20px;
+
+  font-size:20px;
 }
 
-/* status pill ใหญ่ขึ้น */
 body.zoom-mode .status{
-  min-width: 120px;
-  height: 42px;
-  font-size: 14px;
+
+  min-width:120px;
+
+  height:42px;
+
+  font-size:14px;
 }
 
-/* action button ใหญ่ขึ้น */
 body.zoom-mode .action-btn{
-  height: 40px;
-  min-width: 80px;
-  font-size: 12px;
+
+  height:40px;
+
+  min-width:80px;
+
+  font-size:12px;
 }
 
-/* =========================
-   ZOOM MODE + BIG FONT
-========================= */
-
-body.zoom-mode{
-  font-size: 30px; /* 🔥 ทำให้ทั้งระบบใหญ่ขึ้น */
-}
-
-/* header ใหญ่ขึ้น */
 body.zoom-mode .title h1{
-  font-size: 28px;
+
+  font-size:28px;
 }
 
 body.zoom-mode .title span{
-  font-size: 13px;
+
+  font-size:13px;
 }
 
-/* clock + live */
 body.zoom-mode .clock{
-  font-size: 18px;
+
+  font-size:18px;
 }
 
 body.zoom-mode .live{
-  padding: 12px 16px;
-  font-size: 14px;
+
+  padding:12px 16px;
+
+  font-size:14px;
 }
 
-/* panel title */
-body.zoom-mode .panel-title h3{
-  font-size: 22px;
-}
-
-/* input ใหญ่ขึ้น */
 body.zoom-mode input,
 body.zoom-mode select{
-  height: 56px;
-  font-size: 16px;
+
+  height:56px;
+
+  font-size:16px;
 }
 
-/* table text */
-body.zoom-mode table{
-  font-size: 20px;
-}
-
-/* table cell padding */
 body.zoom-mode tbody td{
-  padding: 20px 16px;
+
+  padding:20px 16px;
 }
 
-/* status ใหญ่ + ชัดขึ้น */
 body.zoom-mode .status{
-  min-width: 140px;
-  height: 48px;
-  font-size: 16px;
+
+  min-width:140px;
+
+  height:48px;
+
+  font-size:16px;
 }
 
-/* button ใหญ่ */
 body.zoom-mode button{
-  height: 52px;
-  font-size: 14px;
+
+  height:52px;
+
+  font-size:14px;
 }
 
-/* action button */
 body.zoom-mode .action-btn{
-  height: 44px;
-  min-width: 90px;
-  font-size: 13px;
+
+  height:44px;
+
+  min-width:90px;
+
+  font-size:13px;
 }
 
-body.zoom-mode{
-  font-size: 100%;
-}
-
-body.zoom-mode *{
-  font-size: inherit !important;
-}
-
-.scheduled-text{
-  color:#3b82f6;
-  font-weight:800;
-  text-shadow:0 0 10px rgba(59,130,246,0.6);
-}
-
-.scheduled-box{
-  display:inline-block;
-  padding:4px 10px;
-  border-radius:8px;
-
-  border:1px solid rgba(0,255,156,0.6);
-  background:rgba(0,255,156,0.08);
-
-  color:#00ff9c;
-  font-weight:800;
-
-  box-shadow:0 0 12px rgba(0,255,156,0.15);
-}
-
-.warning-row{
-  animation: warningBlink 0.8s infinite;
-}
-
-@keyframes warningBlink{
-  0%,100%{
-    background: rgba(239,68,68,0.12);
-    box-shadow: 0 0 10px rgba(239,68,68,0.2);
-  }
-  50%{
-    background: rgba(239,68,68,0.35);
-    box-shadow: 0 0 25px rgba(239,68,68,0.6);
-  }
-}
-
-.slot-row{
-  animation: slotBlink 0.8s infinite;
-}
-
-@keyframes slotBlink{
-  0%,100%{
-    background: rgba(0,255,156,0.12);
-    box-shadow: 0 0 10px rgba(0,255,156,0.2);
-  }
-  50%{
-    background: rgba(0,255,156,0.35);
-    box-shadow: 0 0 25px rgba(0,255,156,0.6);
-  }
-}
+/* =========================
+   HIDE LAST ACTION COLUMN
+   IN ZOOM
+========================= */
 
 body.zoom-mode th:last-child,
 body.zoom-mode td:last-child{
-  display: none;
+
+  display:none;
 }
-body.zoom-mode table{
-  table-layout: fixed;
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+  .header{
+
+    height:auto;
+
+    min-height:82px;
+
+    padding:14px;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+  }
+
+  .header-right{
+
+    gap:7px;
+
+    flex-wrap:wrap;
+
+    justify-content:flex-end;
+  }
+
+  .live{
+
+    display:none;
+  }
+
+  .row2{
+
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* =========================
+   REORDER SAVING
+========================= */
+
+.reorder-saving{
+
+  position:fixed;
+
+  top:100px;
+
+  right:24px;
+
+  z-index:5000;
+
+  display:none;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:12px 16px;
+
+  border-radius:14px;
+
+  background:rgba(4,11,22,0.92);
+
+  border:1px solid rgba(0,255,156,0.25);
+
+  color:var(--green);
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,0.4),
+    0 0 20px rgba(0,255,156,0.12);
+
+  font-size:12px;
+
+  font-weight:700;
+}
+
+.reorder-saving.show{
+
+  display:flex;
+}
+
+.spinner{
+
+  width:16px;
+  height:16px;
+
+  border-radius:50%;
+
+  border:2px solid rgba(255,255,255,0.15);
+
+  border-top-color:var(--green);
+
+  animation:spin 0.7s linear infinite;
+}
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
 }
 
 </style>
@@ -799,6 +1367,10 @@ body.zoom-mode table{
 
 <body>
 
+<!-- =========================
+     HEADER
+========================= -->
+
 <div class="header">
 
   <div class="logo-wrap">
@@ -806,8 +1378,11 @@ body.zoom-mode table{
     <div class="radar"></div>
 
     <div class="title">
+
       <h1>SPIDER TOWING CONTROL</h1>
+
       <span>TOWING MANAGEMENT SYSTEM</span>
+
     </div>
 
   </div>
@@ -815,40 +1390,90 @@ body.zoom-mode table{
   <div class="header-right">
 
     <div class="live">
+
       <div class="live-dot"></div>
+
       <div>LIVE SYSTEM</div>
+
     </div>
 
     <div class="clock" id="clock"></div>
 
-<button class="sound-btn" onclick="unlockAudio()">
-  🔊 ENABLE SOUND
-</button>
+    <div class="admin-indicator">
+      🔐 ADMIN MODE
+    </div>
 
-<button class="sound-btn" onclick="toggleMute()" id="muteBtn">
-  🔇 MUTE OFF
-</button>
-  <button class="sound-btn" onclick="toggleZoom()">
-    🔍 ZOOM PLAN
-  </button>
+    <button
+      class="sound-btn"
+      onclick="unlockAudio()">
 
-<button class="sound-btn" onclick="adminLogin()">
-  🔐 LOGIN
-</button>
+      🔊 ENABLE SOUND
 
-</div>
+    </button>
+
+    <button
+      class="sound-btn"
+      onclick="toggleMute()"
+      id="muteBtn">
+
+      🔇 MUTE OFF
+
+    </button>
+
+    <button
+      class="sound-btn"
+      onclick="toggleZoom()">
+
+      🔍 ZOOM PLAN
+
+    </button>
+
+    <button
+      class="sound-btn"
+      onclick="adminLogin()">
+
+      🔐 LOGIN
+
+    </button>
 
   </div>
 
 </div>
 
+<!-- =========================
+     REORDER SAVING INDICATOR
+========================= -->
+
+<div
+  id="reorderSaving"
+  class="reorder-saving">
+
+  <div class="spinner"></div>
+
+  SAVING NEW ORDER...
+
+</div>
+
+<!-- =========================
+     MAIN
+========================= -->
+
 <div class="container">
+
+  <!-- =========================
+       FLIGHT INPUT
+  ========================= -->
 
   <div class="panel">
 
     <div class="panel-title">
+
       <h3>FLIGHT INPUT</h3>
-      <div class="panel-badge">OPS ACTIVE</div>
+
+      <div class="panel-badge">
+        OPS ACTIVE
+      </div>
+
     </div>
 
     <div class="form">
@@ -856,70 +1481,131 @@ body.zoom-mode table{
       <div class="row2">
 
         <div class="field">
+
           <label>AIRCRAFT REG</label>
-          <input id="reg" placeholder="HS-XXX">
+
+          <input
+            id="reg"
+            placeholder="HS-XXX">
+
         </div>
 
-<div class="field">
-  <label>FLIGHT</label>
-  <input id="flight" placeholder="TG101">
-</div>
+        <div class="field">
 
-<div class="field">
-  <label>TYPE</label>
+          <label>FLIGHT</label>
 
-  <select id="flightType">
+          <input
+            id="flight"
+            placeholder="TG101">
 
-    <option value="AUTO">AUTO DETECT</option>
-    <option value="DEP">DEP</option>
-    <option value="ARV">ARV</option>
+        </div>
 
-  </select>
-</div>
+        <div class="field">
+
+          <label>TYPE</label>
+
+          <select id="flightType">
+
+            <option value="AUTO">
+              AUTO DETECT
+            </option>
+
+            <option value="DEP">
+              DEP
+            </option>
+
+            <option value="ARV">
+              ARV
+            </option>
+
+          </select>
+
+        </div>
 
       </div>
 
       <div class="row2">
 
         <div class="field">
+
           <label>TIME</label>
-          <input id="time" type="text" placeholder="10:30">
+
+          <input
+            id="time"
+            type="text"
+            placeholder="10:30">
+
         </div>
 
         <div class="field">
+
           <label>A/C@GATE</label>
-          <input id="gate" placeholder="BEFORE DEP 2 HR.">
+
+          <input
+            id="gate"
+            placeholder="BEFORE DEP 2 HR.">
+
         </div>
 
       </div>
 
       <div class="field">
+
         <label>BAY</label>
-        <input id="bay" placeholder="BAY 25">
+
+        <input
+          id="bay"
+          placeholder="BAY 25">
+
       </div>
 
       <div class="field">
+
         <label>REMARK</label>
-        <input id="remark" placeholder="OPS NOTE">
+
+        <input
+          id="remark"
+          placeholder="OPS NOTE">
+
       </div>
 
-	<!-- HIDDEN STATUS -->
-<select id="status" style="display:none;">
-  <option value="WAITING">WAITING</option>
-  <option value="TOWING">TOWING</option>
-  <option value="DONE">DONE</option>
-</select>
+      <!-- HIDDEN STATUS -->
 
+      <select
+        id="status"
+        style="display:none;">
 
+        <option value="WAITING">
+          WAITING
+        </option>
+
+        <option value="TOWING">
+          TOWING
+        </option>
+
+        <option value="DONE">
+          DONE
+        </option>
+
+      </select>
 
       <div class="buttons">
 
-        <button id="saveBtn" class="save" onclick="addRow()">
+        <button
+          id="saveBtn"
+          class="save"
+          onclick="addRow()">
+
           + ADD FLIGHT
+
         </button>
 
-        <button class="clear" onclick="clearForm()">
+        <button
+          class="clear"
+          onclick="clearForm()">
+
           CLEAR
+
         </button>
 
       </div>
@@ -928,11 +1614,20 @@ body.zoom-mode table{
 
   </div>
 
+  <!-- =========================
+       PLAN TOWING
+  ========================= -->
+
   <div class="panel">
 
     <div class="panel-title">
+
       <h3>PLAN TOWING</h3>
-      <div class="panel-badge">REALTIME</div>
+
+      <div class="panel-badge">
+        REALTIME
+      </div>
+
     </div>
 
     <div class="table-wrap">
@@ -940,18 +1635,34 @@ body.zoom-mode table{
       <table>
 
         <thead>
+
           <tr>
+
+            <!-- NEW -->
+            <th>MOVE</th>
+
             <th>No</th>
+
             <th>Reg</th>
-                        <th>Flight</th>
-                        <th>Type</th>
-                        <th>Time</th>
+
+            <th>Flight</th>
+
+            <th>Type</th>
+
+            <th>Time</th>
+
             <th>A/C@Gate</th>
+
             <th>Bay</th>
+
             <th>Status</th>
+
             <th>Remark</th>
+
             <th>Action</th>
+
           </tr>
+
         </thead>
 
         <tbody id="tb"></tbody>
@@ -965,53 +1676,88 @@ body.zoom-mode table{
 </div>
 
 <script>
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-// ======================
-// KEEP AUDIO ALIVE
-// ======================
+
+/* =========================================================
+   AUDIO
+========================================================= */
+
+const audioCtx =
+  new (
+    window.AudioContext ||
+    window.webkitAudioContext
+  )();
+
+/* =========================
+   KEEP AUDIO ALIVE
+========================= */
 
 async function wakeAudio(){
 
   try{
 
-    // ปลุก AudioContext
     if(audioCtx.state === "suspended"){
+
       await audioCtx.resume();
+
     }
 
-    // ปลุก speech synthesis
     window.speechSynthesis.resume();
 
   }catch(e){
-    console.log("wakeAudio error", e);
+
+    console.log(
+      "wakeAudio error",
+      e
+    );
+
   }
+
 }
 
 let soundEnabled = false;
+
 let muted = false;
 
 let speechQueue = [];
+
 let isSpeaking = false;
 
 
+/* =========================================================
+   IMPORTANT
+   =========================
+   PUT YOUR APPS SCRIPT WEB APP URL HERE
+========================================================= */
+
+const API =
+  "https://script.google.com/macros/s/AKfycbwJ8UtGaUrzS_cqK9_7WnBIJsaPjD5GLyrHieLRAYFGAEtEf5357goVgi7IIkpdCv9tpw/exec";
 
 
-
-const API = "https://script.google.com/macros/s/AKfycbw2Trg424LyjDDpx0u1fRQyRdObfukYYVFJ3wEAfAlqry1LkTJXXozMefkphKc-eiLPyg/exec";
+/* =========================================================
+   SYSTEM VARIABLES
+========================================================= */
 
 let pauseRealtime = false;
-let data = [];
-let editRow = null;
-let isAdmin = false;
-const ADMIN_PASSWORD = "spider123";
 
-// 🔥 ADD ตรงนี้
+let isReordering = false;
+
+let data = [];
+
+let editRow = null;
+
+let isAdmin = false;
+
+const ADMIN_PASSWORD =
+  "spider123";
+
 let speakCountMap = {};
+
 const MAX_SPEAK = 1;
 
-// ======================
-// DEP FLIGHT LIST
-// ======================
+
+/* =========================================================
+   DEP FLIGHT LIST
+========================================================= */
 
 const DEP_LIST = [
 
@@ -1137,16 +1883,14 @@ const DEP_LIST = [
 "955",
 "961",
 "971",
-"936",
-
+"936"
 
 ];
 
 
-
-// ======================
-// ARV FLIGHT LIST
-// ======================
+/* =========================================================
+   ARV FLIGHT LIST
+========================================================= */
 
 const ARV_LIST = [
 
@@ -1280,19 +2024,16 @@ const ARV_LIST = [
 "327",
 "328",
 "222",
-"937",
+"937"
 
 ];
 
-// ======================
-// GET FLIGHT TYPE
-// ======================
+
+/* =========================================================
+   GET FLIGHT TYPE
+========================================================= */
 
 function getFlightType(flight){
-
-  // ======================
-  // USER FORCE TYPE
-  // ======================
 
   if(flightType.value === "DEP"){
     return "DEP";
@@ -1302,16 +2043,15 @@ function getFlightType(flight){
     return "ARV";
   }
 
-  // ======================
-  // AUTO MODE
-  // ======================
+  if(!flight){
+    return "DEP";
+  }
 
-  if(!flight) return "DEP";
-
-  const clean = String(flight)
-    .toUpperCase()
-    .replace("TG","")
-    .trim();
+  const clean =
+    String(flight)
+      .toUpperCase()
+      .replace("TG","")
+      .trim();
 
   if(ARV_LIST.includes(clean)){
     return "ARV";
@@ -1320,64 +2060,102 @@ function getFlightType(flight){
   return "DEP";
 }
 
-let lastSpeakMap = {};
-const SPEAK_LOCK = 15000; // 15 วิล็อก
 
-// CLOCK
+/* =========================================================
+   SPEECH LOCK
+========================================================= */
+
+let lastSpeakMap = {};
+
+const SPEAK_LOCK = 15000;
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
 setInterval(()=>{
-  clock.innerText = new Date().toLocaleTimeString();
+
+  clock.innerText =
+    new Date().toLocaleTimeString();
+
 },1000);
 
-// ======================
+
+/* =========================================================
+   FORMAT
+========================================================= */
+
 function fmt(v){
-  return (v === "" || v === null || v === undefined) ? "-" : v;
+
+  return (
+    v === "" ||
+    v === null ||
+    v === undefined
+  )
+  ? "-"
+  : v;
+
 }
 
-// ======================
-// LOAD
-// ======================
+
+/* =========================================================
+   LOAD
+========================================================= */
+
 async function load(){
+
+  /*
+    IMPORTANT:
+    ห้าม load ระหว่าง reorder
+  */
+
+  if(isReordering){
+    return;
+  }
 
   try{
 
-    const res = await fetch(API);
-    const newData = await res.json();
+    const res =
+      await fetch(API);
 
-    // 🔥 เช็คว่าข้อมูลเปลี่ยนจริงไหม
-    const hash = JSON.stringify(newData);
+    const newData =
+      await res.json();
 
-lastDataHash = hash;
-data = newData;
-render();
+    const hash =
+      JSON.stringify(newData);
 
-data = newData;
-render();
+    lastDataHash = hash;
+
+    data = newData;
+
+    render();
 
   }catch(e){
+
     console.log(e);
+
   }
+
 }
 
 let lastDataHash = "";
 
 load();
 
-// ======================
-// TOGGLE STATUS
-// ======================
 
+/* =========================================================
+   EDIT
+========================================================= */
 
-// ======================
-// EDIT
-// ======================
-// ======================
-// EDIT
-// ======================
 function edit(i){
 
   if(!isAdmin){
+
     alert("NO PERMISSION");
+
     return;
+
   }
 
   pauseRealtime = true;
@@ -1387,93 +2165,142 @@ function edit(i){
   editRow = d.row;
 
   reg.value = d.reg;
+
   flight.value = d.flight;
+
   time.value = d.time;
 
-  gate.value = d.ac_gate || d.gate || "";
+  gate.value =
+    d.ac_gate ||
+    d.gate ||
+    "";
 
   bay.value = d.bay;
+
   remark.value = d.remark;
 
   status.value = d.status;
+
   status.disabled = false;
 
   saveBtn.innerText = "UPDATE";
+
   saveBtn.className = "update";
+
 }
-// ======================
-// DELETE
-// ======================
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
 async function del(i){
 
-if(!isAdmin){
-  alert("NO PERMISSION");
-  return;
-}
+  if(!isAdmin){
 
-  if(!confirm("Delete this flight?")) return;
+    alert("NO PERMISSION");
+
+    return;
+
+  }
+
+  if(
+    !confirm(
+      "Delete this flight?"
+    )
+  ){
+
+    return;
+
+  }
 
   await fetch(API,{
+
     method:"POST",
-    body: JSON.stringify({
+
+    body:JSON.stringify({
+
       type:"delete",
+
       row:data[i].row
+
     })
+
   });
 
   load();
+
 }
 
 
+/* =========================================================
+   ADD / UPDATE
+========================================================= */
 
-// ======================
-// ADD / UPDATE
-// ======================
-// ======================
-// ADD / UPDATE
-// ======================
 async function addRow(){
 
-if(!isAdmin){
-  alert("NO PERMISSION");
-  return;
-}
+  if(!isAdmin){
 
-  // หา row ที่กำลัง edit
+    alert("NO PERMISSION");
+
+    return;
+
+  }
+
   let currentData =
-    data.find(x => x.row === editRow);
+    data.find(
+      x => x.row === editRow
+    );
 
   const row = {
 
-    reg: reg.value,
-    flight: flight.value,
-    time: String(time.value),
+    reg:reg.value,
 
-    ac_gate: gate.value,
+    flight:flight.value,
 
-    bay: bay.value,
-    remark: remark.value,
+    time:String(time.value),
 
-    // IMPORTANT
-    status: editRow
-      ? (status.value || currentData.status)
+    ac_gate:gate.value,
+
+    bay:bay.value,
+
+    remark:remark.value,
+
+    status:
+      editRow
+      ? (
+          status.value ||
+          currentData.status
+        )
       : "WAITING"
+
   };
 
+
   await fetch(API,{
+
     method:"POST",
-    body: JSON.stringify(
 
-      editRow ? {
+    body:JSON.stringify(
 
-        type:"update",
-        row: editRow,
-        ...row
+      editRow
 
-      } : row
+      ? {
+
+          type:"update",
+
+          row:editRow,
+
+          ...row
+
+        }
+
+      : row
 
     )
+
   });
+
 
   pauseRealtime = false;
 
@@ -1483,604 +2310,1490 @@ if(!isAdmin){
 
 }
 
+
+/* =========================================================
+   STATUS
+========================================================= */
+
 function toggleStatus(i){
 
-  // ต้องกด EDIT ก่อน
-  if(editRow !== data[i].row){
+  if(
+    editRow !== data[i].row
+  ){
 
-    alert("Please press EDIT first");
+    alert(
+      "Please press EDIT first"
+    );
+
     return;
+
   }
 
-  const states = ["WAITING","TOWING","DONE"];
+  const states = [
+    "WAITING",
+    "TOWING",
+    "DONE"
+  ];
 
-  let current = status.value || data[i].status;
+  let current =
+    status.value ||
+    data[i].status;
 
   let next =
-    states[(states.indexOf(current)+1)%3];
+    states[
+      (
+        states.indexOf(current)+1
+      ) % 3
+    ];
 
-  // เปลี่ยนแค่ local UI
   data[i].status = next;
 
-  // เก็บไว้รอ SAVE
   status.value = next;
 
-  // render ใหม่
   render();
+
 }
 
 
-// ======================
-// RENDER
-// ======================
+/* =========================================================
+   RENDER
+========================================================= */
+
 function render(){
 
   tb.innerHTML = "";
 
-data.forEach((d,i)=>{
+  data.forEach((d,i)=>{
 
-  let warning = checkWarning(d);
-  let slot = checkSlot(d);
+    let warning =
+      checkWarning(d);
 
-  tb.innerHTML += `
+    let slot =
+      checkSlot(d);
 
-<tr class="
-  ${getFlightType(d.flight) === 'DEP' ? 'dep-row' : 'arv-row'}
-  ${d.status === 'TOWING' ? 'towing-row' : ''}
-  ${d.status === 'DONE' ? 'done-row' : ''}
-  ${warning ? 'warning-row' : ''}
-  ${slot ? 'slot-row' : ''}
-">
+    tb.innerHTML += `
 
-  <td>${i+1}</td>
+      <tr
+        data-index="${i}"
+        data-row="${d.row}"
+        class="
+          ${getFlightType(d.flight) === 'DEP'
+            ? 'dep-row'
+            : 'arv-row'}
 
-  <td>${fmt(d.reg)}</td>
+          ${d.status === 'TOWING'
+            ? 'towing-row'
+            : ''}
 
-  <td>${fmt(d.flight)}</td>
+          ${d.status === 'DONE'
+            ? 'done-row'
+            : ''}
 
-  <td>
+          ${warning
+            ? 'warning-row'
+            : ''}
 
-    <span class="flight-type
-      ${getFlightType(d.flight) === 'DEP'
-        ? 'dep'
-        : 'arv'}">
+          ${slot
+            ? 'slot-row'
+            : ''}
+        "
+      >
 
-      ${getFlightType(d.flight)}
+        <!-- MOVE -->
 
-    </span>
+        <td class="drag-cell">
 
-  </td>
+          <div class="reorder-area">
 
-  <td>${fmt(d.time)}</td>
+            <button
+              class="reorder-btn"
+              onclick="moveUp(${i})"
+              title="MOVE UP">
 
-  <td>
-    ${
-      d.ac_gate && d.ac_gate !== ""
-        ? `<span class="apx-tag">APX ${d.ac_gate}</span>`
-        : "-"
-    }
-  </td>
+              ▲
 
-  <td>${fmt(d.bay)}</td>
+            </button>
 
-  <td onclick="toggleStatus(${i})">
+            <span
+              class="drag-handle"
+              draggable="true"
+              title="${
+                isAdmin
+                ? 'DRAG TO REORDER'
+                : 'ADMIN ONLY'
+              }">
 
-    <span class="status ${cls(d.status)}">
-      ${fmt(d.status)}
-    </span>
+              ☷
 
-  </td>
+            </span>
 
- 
-<td>
-  ${
-    isScheduled(d)
-      ? `<span class="scheduled-box">${fmt(d.remark)}</span>`
-      : fmt(d.remark)
-  }
-  <br>
+            <button
+              class="reorder-btn"
+              onclick="moveDown(${i})"
+              title="MOVE DOWN">
 
-  ${warning ? `<span style="color:#ff3b3b;font-weight:800">⚠ ${warning}</span>` : ""}
+              ▼
 
-  ${slot ? `<span style="color:#00ff9c;font-weight:800">${slot}</span>` : ""}
-</td>
+            </button>
 
-  <td>
+          </div>
 
-    <div class="action-area">
+        </td>
 
-      <button class="action-btn edit"
-        onclick="edit(${i})">
-        EDIT
-      </button>
 
-      <button class="action-btn del"
-        onclick="del(${i})">
-        DELETE
-      </button>
+        <!-- NO -->
 
-    </div>
+        <td>
+          ${i+1}
+        </td>
 
-  </td>
 
-</tr>
+        <!-- REG -->
 
-`;
+        <td>
+          ${fmt(d.reg)}
+        </td>
 
- });
 
-}  
+        <!-- FLIGHT -->
 
-// ======================
-function cls(s){
+        <td>
+          ${fmt(d.flight)}
+        </td>
 
-  if(s=="WAITING") return "waiting";
 
-  if(s=="TOWING") return "towing";
+        <!-- TYPE -->
 
-  return "done";
+        <td>
+
+          <span
+            class="
+              flight-type
+              ${getFlightType(d.flight) === 'DEP'
+                ? 'dep'
+                : 'arv'}
+            "
+          >
+
+            ${getFlightType(d.flight)}
+
+          </span>
+
+        </td>
+
+
+        <!-- TIME -->
+
+        <td>
+          ${fmt(d.time)}
+        </td>
+
+
+        <!-- GATE -->
+
+        <td>
+
+          ${
+            d.ac_gate &&
+            d.ac_gate !== ""
+
+            ?
+
+            `<span class="apx-tag">
+              APX ${d.ac_gate}
+            </span>`
+
+            :
+
+            "-"
+          }
+
+        </td>
+
+
+        <!-- BAY -->
+
+        <td>
+          ${fmt(d.bay)}
+        </td>
+
+
+        <!-- STATUS -->
+
+        <td
+          onclick="toggleStatus(${i})"
+        >
+
+          <span
+            class="
+              status
+              ${cls(d.status)}
+            "
+          >
+
+            ${fmt(d.status)}
+
+          </span>
+
+        </td>
+
+
+        <!-- REMARK -->
+
+        <td>
+
+          ${
+            isScheduled(d)
+
+            ?
+
+            `<span class="scheduled-box">
+              ${fmt(d.remark)}
+            </span>`
+
+            :
+
+            fmt(d.remark)
+          }
+
+          <br>
+
+          ${
+            warning
+
+            ?
+
+            `<span
+              style="
+                color:#ff3b3b;
+                font-weight:800
+              "
+            >
+
+              ⚠ ${warning}
+
+            </span>`
+
+            :
+
+            ""
+          }
+
+          ${
+            slot
+
+            ?
+
+            `<span
+              style="
+                color:#00ff9c;
+                font-weight:800
+              "
+            >
+
+              ${slot}
+
+            </span>`
+
+            :
+
+            ""
+          }
+
+        </td>
+
+
+        <!-- ACTION -->
+
+        <td>
+
+          <div class="action-area">
+
+            <button
+              class="action-btn edit"
+              onclick="edit(${i})"
+            >
+
+              EDIT
+
+            </button>
+
+            <button
+              class="action-btn del"
+              onclick="del(${i})"
+            >
+
+              DELETE
+
+            </button>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+  setupDragAndDrop();
+
 }
 
-// ======================
-// ======================
+
+/* =========================================================
+   STATUS CLASS
+========================================================= */
+
+function cls(s){
+
+  if(s=="WAITING"){
+    return "waiting";
+  }
+
+  if(s=="TOWING"){
+    return "towing";
+  }
+
+  return "done";
+
+}
+
+
+/* =========================================================
+   CLEAR FORM
+========================================================= */
+
 function clearForm(){
 
   reg.value="";
+
   flight.value="";
+
   time.value="";
+
   gate.value="";
+
   bay.value="";
+
   remark.value="";
 
   status.value="WAITING";
 
-  // ปิด STATUS ตอนเพิ่มใหม่
-  status.disabled = true;
+  status.disabled=true;
 
   editRow=null;
 
-  saveBtn.innerText="+ ADD FLIGHT";
-  saveBtn.className="save";
-	pauseRealtime = false;
+  saveBtn.innerText=
+    "+ ADD FLIGHT";
+
+  saveBtn.className=
+    "save";
+
+  pauseRealtime=false;
+
 }
 
-// ======================
+
+/* =========================================================
+   UPDATE UI
+========================================================= */
+
 function updateRowUI(i,status){
 
   const el =
-    document.querySelectorAll("tbody tr")[i];
+    document.querySelectorAll(
+      "tbody tr"
+    )[i];
 
-  if(!el) return;
+  if(!el){
+    return;
+  }
 
-  el.children[6].innerHTML =
-    `<span class="status ${cls(status)}">${status}</span>`;
-}
-
-// STATUS LOCK
-window.onload = async ()=>{
-
-  status.disabled = true;
-
-  const btn = document.querySelector('button[onclick="unlockAudio()"]');
-const muteBtn = document.getElementById("muteBtn");
-// =====================
-// RESTORE MUTE
-// =====================
-
-if(localStorage.getItem("muted") === "1"){
-
-  muted = true;
-
-  muteBtn.innerText = "🔇 MUTED";
-
-}else{
-
-  muted = false;
-
-  muteBtn.innerText = "🔇 MUTE OFF";
+  el.children[8].innerHTML =
+    `<span class="status ${cls(status)}">
+      ${status}
+    </span>`;
 
 }
 
-  // =====================
-  // AUTO RESTORE SOUND
-  // =====================
 
-  if(localStorage.getItem("soundEnabled") === "1"){
+/* =========================================================
+   DRAG & DROP VARIABLES
+========================================================= */
 
-    soundEnabled = true;
+let draggedIndex = null;
 
-    btn.innerText = "🔊 SOUND ON";
 
-    try{
+/* =========================================================
+   SETUP DRAG
+========================================================= */
 
-      await audioCtx.resume();
+function setupDragAndDrop(){
 
-      window.speechSynthesis.resume();
+  const handles =
+    document.querySelectorAll(
+      ".drag-handle"
+    );
 
-      // ยิง silent audio ปลุก browser
-      const audio = document.getElementById("alarm");
+  const rows =
+    document.querySelectorAll(
+      "#tb tr"
+    );
 
-      await audio.play();
 
-      audio.pause();
-      audio.currentTime = 0;
+  /* =========================
+     HANDLE DRAG START
+  ========================= */
 
-    }catch(e){
+  handles.forEach(handle=>{
 
-      console.log("AUTO SOUND RESTORE FAIL", e);
+    handle.addEventListener(
+      "dragstart",
+      function(e){
+
+        if(!isAdmin){
+
+          e.preventDefault();
+
+          alert(
+            "NO PERMISSION"
+          );
+
+          return;
+
+        }
+
+        isReordering = true;
+
+        const row =
+          this.closest("tr");
+
+        draggedIndex =
+          Number(
+            row.dataset.index
+          );
+
+        row.classList.add(
+          "dragging"
+        );
+
+        e.dataTransfer.effectAllowed =
+          "move";
+
+        e.dataTransfer.setData(
+          "text/plain",
+          String(draggedIndex)
+        );
+
+      }
+    );
+
+
+    handle.addEventListener(
+      "dragend",
+      function(){
+
+        document
+          .querySelectorAll(
+            "#tb tr"
+          )
+          .forEach(row=>{
+
+            row.classList.remove(
+              "dragging"
+            );
+
+            row.classList.remove(
+              "drag-over"
+            );
+
+          });
+
+        draggedIndex = null;
+
+      }
+    );
+
+  });
+
+
+  /* =========================
+     DRAG OVER ROW
+  ========================= */
+
+  rows.forEach(row=>{
+
+    row.addEventListener(
+      "dragover",
+      function(e){
+
+        if(!isAdmin){
+          return;
+        }
+
+        e.preventDefault();
+
+        e.dataTransfer.dropEffect =
+          "move";
+
+        this.classList.add(
+          "drag-over"
+        );
+
+      }
+    );
+
+
+    row.addEventListener(
+      "dragleave",
+      function(){
+
+        this.classList.remove(
+          "drag-over"
+        );
+
+      }
+    );
+
+
+    row.addEventListener(
+      "drop",
+      async function(e){
+
+        if(!isAdmin){
+
+          return;
+
+        }
+
+        e.preventDefault();
+
+        this.classList.remove(
+          "drag-over"
+        );
+
+        const fromIndex =
+          draggedIndex;
+
+        const toIndex =
+          Number(
+            this.dataset.index
+          );
+
+
+        if(
+          fromIndex === null ||
+          fromIndex === toIndex
+        ){
+
+          isReordering=false;
+
+          return;
+
+        }
+
+
+        await reorderData(
+          fromIndex,
+          toIndex
+        );
+
+      }
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   MOVE UP
+========================================================= */
+
+async function moveUp(i){
+
+  if(!isAdmin){
+
+    alert("NO PERMISSION");
+
+    return;
+
+  }
+
+  if(i <= 0){
+
+    return;
+
+  }
+
+  await reorderData(
+    i,
+    i - 1
+  );
+
+}
+
+
+/* =========================================================
+   MOVE DOWN
+========================================================= */
+
+async function moveDown(i){
+
+  if(!isAdmin){
+
+    alert("NO PERMISSION");
+
+    return;
+
+  }
+
+  if(
+    i >= data.length - 1
+  ){
+
+    return;
+
+  }
+
+  await reorderData(
+    i,
+    i + 1
+  );
+
+}
+
+
+/* =========================================================
+   REORDER DATA
+========================================================= */
+
+async function reorderData(
+  fromIndex,
+  toIndex
+){
+
+  if(!isAdmin){
+
+    alert(
+      "NO PERMISSION"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    fromIndex === toIndex
+  ){
+
+    isReordering=false;
+
+    return;
+
+  }
+
+
+  isReordering=true;
+
+  pauseRealtime=true;
+
+
+  /* =========================
+     COPY ARRAY
+  ========================= */
+
+  const newData =
+    [...data];
+
+
+  /* =========================
+     MOVE ITEM
+  ========================= */
+
+  const moved =
+    newData.splice(
+      fromIndex,
+      1
+    )[0];
+
+
+  newData.splice(
+    toIndex,
+    0,
+    moved
+  );
+
+
+  /* =========================
+     UPDATE LOCAL UI
+  ========================= */
+
+  data = newData;
+
+  render();
+
+
+  /* =========================
+     BUILD ORDER
+  ========================= */
+
+  const orders =
+    data.map(
+      (item,index)=>({
+
+        row:Number(item.row),
+
+        order:index + 1
+
+      })
+    );
+
+
+  /* =========================
+     SHOW SAVING
+  ========================= */
+
+  showReorderSaving();
+
+
+  try{
+
+    const response =
+      await fetch(API,{
+
+        method:"POST",
+
+        body:JSON.stringify({
+
+          type:"reorder",
+
+          orders:orders
+
+        })
+
+      });
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      result.status !==
+      "reordered"
+    ){
+
+      throw new Error(
+        result.message ||
+        "REORDER FAILED"
+      );
 
     }
 
-  }else{
 
-    btn.innerText = "🔇 SOUND OFF";
+    /*
+      รอ Apps Script flush
+      แล้วโหลดกลับมาเพื่อยืนยัน
+    */
+
+    await new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          300
+        )
+    );
+
+
+    isReordering=false;
+
+    pauseRealtime=false;
+
+    hideReorderSaving();
+
+    await load();
+
+
+  }catch(error){
+
+    console.error(
+      "REORDER ERROR:",
+      error
+    );
+
+
+    alert(
+      "REORDER FAILED\n\n" +
+      error.message
+    );
+
+
+    /*
+      โหลดข้อมูลจริงกลับมา
+    */
+
+    isReordering=false;
+
+    pauseRealtime=false;
+
+    hideReorderSaving();
+
+    await load();
 
   }
 
-};
+}
 
-flightType.addEventListener("change", ()=>{
 
-  const type = getFlightType(flight.value);
+/* =========================================================
+   REORDER SAVING UI
+========================================================= */
 
-  // DEP
-  if(type === "DEP"){
+function showReorderSaving(){
 
-    gate.disabled = false;
-    gate.style.opacity = "1";
+  const el =
+    document.getElementById(
+      "reorderSaving"
+    );
 
-    remark.value = "ปลายทางว่าง :";
+  if(el){
+
+    el.classList.add(
+      "show"
+    );
+
   }
 
-  // ARV
-  else{
+}
 
-    gate.value = "";
+function hideReorderSaving(){
 
-    gate.disabled = true;
-    gate.style.opacity = "0.5";
+  const el =
+    document.getElementById(
+      "reorderSaving"
+    );
 
-    remark.value = "ลากก่อน :";
+  if(el){
+
+    el.classList.remove(
+      "show"
+    );
+
   }
 
-});
-
-flight.addEventListener("input", ()=>{
-
-  const type = getFlightType(flight.value);
-
-  // DEP
-  if(type === "DEP"){
-
-    gate.disabled = false;
-    gate.style.opacity = "1";
-
-    remark.value = "ปลายทางว่าง :";
-  }
-
-  // ARV
-  else{
-
-    gate.value = "";
-
-    gate.disabled = true;
-    gate.style.opacity = "0.5";
-
-    remark.value = "ลากก่อน :";
-  }
-
-});
+}
 
 
+/* =========================================================
+   WARNING
+========================================================= */
 
 let warnedMap = {};
 
 function checkWarning(d){
 
-  if(isScheduled(d)) return "";
-  if(!d.remark) return "";
+  if(isScheduled(d)){
+    return "";
+  }
 
-  const match = d.remark.match(/(\d{2}:\d{2})/);
-  if(!match) return "";
+  if(!d.remark){
+    return "";
+  }
 
-  const limit = match[1];
-  const now = new Date().toTimeString().slice(0,5);
+  const match =
+    d.remark.match(
+      /(\d{2}:\d{2})/
+    );
+
+  if(!match){
+    return "";
+  }
+
+  const limit =
+    match[1];
+
+  const now =
+    new Date()
+      .toTimeString()
+      .slice(0,5);
 
   if(now > limit){
 
     if(!warnedMap[d.row]){
-      warnedMap[d.row] = true;
 
-      queueSpeak(buildTowSpeakText(d), d.reg + "-tow");
+      warnedMap[d.row]=true;
+
+      queueSpeak(
+        buildTowSpeakText(d),
+        d.reg + "-tow"
+      );
+
     }
 
     return "WARNING";
+
   }
 
   return "";
+
 }
+
+
+/* =========================================================
+   ALARM
+========================================================= */
 
 function playAlarm(d){
 
-  if(!soundEnabled) return;
+  if(!soundEnabled){
+    return;
+  }
 
-  const key = d.reg + "-warn";
+  const key =
+    d.reg + "-warn";
+
 }
 
-let lastAlarmTime = 0;
 
-let slotWarnedMap = {};
+/* =========================================================
+   SLOT
+========================================================= */
+
+let lastAlarmTime=0;
+
+let slotWarnedMap={};
 
 function checkSlot(d){
 
-  if(isScheduled(d)) return "";
-  if(!d.remark) return "";
-  if(!d.remark.includes("ปลายทางว่าง")) return "";
+  if(isScheduled(d)){
+    return "";
+  }
 
-  const match = d.remark.match(/(\d{2}:\d{2})/);
-  if(!match) return "";
+  if(!d.remark){
+    return "";
+  }
 
-  const limit = match[1];
-  const now = new Date().toTimeString().slice(0,5);
+  if(
+    !d.remark.includes(
+      "ปลายทางว่าง"
+    )
+  ){
+
+    return "";
+
+  }
+
+  const match =
+    d.remark.match(
+      /(\d{2}:\d{2})/
+    );
+
+  if(!match){
+    return "";
+  }
+
+  const limit =
+    match[1];
+
+  const now =
+    new Date()
+      .toTimeString()
+      .slice(0,5);
 
   if(now >= limit){
 
-    // 🔥 พูดครั้งเดียว
     if(!slotWarnedMap[d.row]){
 
-      slotWarnedMap[d.row] = true;
+      slotWarnedMap[d.row]=true;
 
-      const key = d.reg + "-slot";
+      const key =
+        d.reg + "-slot";
 
-      queueSpeak(buildSlotSpeakText(d), key);
+      queueSpeak(
+        buildSlotSpeakText(d),
+        key
+      );
+
     }
 
     return "SLOT AVAILABLE";
+
   }
 
   return "";
+
 }
+
+
+/* =========================================================
+   UNLOCK AUDIO
+========================================================= */
 
 function unlockAudio(){
 
-  soundEnabled = true;
+  soundEnabled=true;
 
-  // ✅ จำว่าเปิดเสียงแล้ว
-  localStorage.setItem("soundEnabled", "1");
+  localStorage.setItem(
+    "soundEnabled",
+    "1"
+  );
 
-  const btn = document.querySelector(".sound-btn");
-  btn.innerText = "🔊 SOUND ON";
+  const btn =
+    document.querySelector(
+      'button[onclick="unlockAudio()"]'
+    );
+
+  btn.innerText =
+    "🔊 SOUND ON";
 
   audioCtx.resume();
+
   window.speechSynthesis.resume();
 
-  const audio = document.getElementById("alarm");
+  const audio =
+    document.getElementById(
+      "alarm"
+    );
 
-  audio.play().then(()=>{
-    audio.pause();
-    audio.currentTime = 0;
-  }).catch(()=>{});
+  audio.play()
+    .then(()=>{
+
+      audio.pause();
+
+      audio.currentTime=0;
+
+    })
+    .catch(()=>{});
+
 }
+
+
+/* =========================================================
+   MUTE
+========================================================= */
 
 function toggleMute(){
 
-  muted = !muted;
+  muted=!muted;
 
-  const btn = document.getElementById("muteBtn");
+  const btn =
+    document.getElementById(
+      "muteBtn"
+    );
 
   if(muted){
 
-    // หยุดเสียงพูดทันที
     window.speechSynthesis.cancel();
 
-    btn.innerText = "🔇 MUTED";
+    btn.innerText =
+      "🔇 MUTED";
 
   }else{
 
-    btn.innerText = "🔇 MUTE OFF";
+    btn.innerText =
+      "🔇 MUTE OFF";
 
   }
+
 }
+
+
+/* =========================================================
+   SCHEDULE
+========================================================= */
 
 function isScheduled(d){
 
-  if(!d.remark) return false;
+  if(!d.remark){
+    return false;
+  }
 
-  return d.remark.includes("นัดลาก") || d.remark.includes("นัด");
- 
+  return (
+    d.remark.includes(
+      "นัดลาก"
+    ) ||
+    d.remark.includes(
+      "นัด"
+    )
+  );
+
 }
+
+
+/* =========================================================
+   SOUND
+========================================================= */
 
 function canPlaySound(d){
 
-  if(!soundEnabled) return false;
+  if(!soundEnabled){
+    return false;
+  }
 
-  if(isScheduled(d)) return false;
+  if(isScheduled(d)){
+    return false;
+  }
 
   return true;
+
 }
 
 function speak(text){
 
-  if(!soundEnabled) return;
+  if(!soundEnabled){
+    return;
+  }
 
-  const msg = new SpeechSynthesisUtterance(text);
+  const msg =
+    new SpeechSynthesisUtterance(
+      text
+    );
 
-  msg.lang = "en-US";
-  msg.rate = 1;
-  msg.pitch = 1;
+  msg.lang="en-US";
 
-  window.speechSynthesis.speak(msg);
+  msg.rate=1;
+
+  msg.pitch=1;
+
+  window.speechSynthesis.speak(
+    msg
+  );
+
 }
 
-async function queueSpeak(text, key){
 
-  if(muted) return;
+/* =========================================================
+   SPEECH QUEUE
+========================================================= */
 
-  if(!soundEnabled) return;
-await wakeAudio();
+async function queueSpeak(
+  text,
+  key
+){
 
-  const now = Date.now();
-
-  // 🔥 กันซ้ำแบบ time lock
-  if(lastSpeakMap[key] && now - lastSpeakMap[key] < SPEAK_LOCK){
+  if(muted){
     return;
   }
 
-  // 🔥 กันเกิน 2 ครั้ง
-  if(!speakCountMap[key]) speakCountMap[key] = 0;
-
-  if(speakCountMap[key] >= MAX_SPEAK){
+  if(!soundEnabled){
     return;
   }
 
-  lastSpeakMap[key] = now;
+  await wakeAudio();
+
+  const now =
+    Date.now();
+
+  if(
+    lastSpeakMap[key] &&
+    now-lastSpeakMap[key] <
+      SPEAK_LOCK
+  ){
+
+    return;
+
+  }
+
+  if(
+    !speakCountMap[key]
+  ){
+
+    speakCountMap[key]=0;
+
+  }
+
+  if(
+    speakCountMap[key] >=
+      MAX_SPEAK
+  ){
+
+    return;
+
+  }
+
+  lastSpeakMap[key]=now;
+
   speakCountMap[key]++;
 
-  speechQueue.push({ text, key });
+  speechQueue.push({
+
+    text:text,
+
+    key:key
+
+  });
 
   processQueue();
+
 }
+
+
+/* =========================================================
+   PROCESS SPEECH
+========================================================= */
 
 async function processQueue(){
 
-  if(isSpeaking) return;
-  if(speechQueue.length === 0) return;
+  if(isSpeaking){
+    return;
+  }
 
-  isSpeaking = true;
+  if(
+    speechQueue.length===0
+  ){
 
-  const item = speechQueue.shift();
+    return;
 
-window.speechSynthesis.cancel();
+  }
+
+  isSpeaking=true;
+
+  const item =
+    speechQueue.shift();
+
+  window.speechSynthesis.cancel();
+
 
   const msg1 =
-    new SpeechSynthesisUtterance(item.text.main);
+    new SpeechSynthesisUtterance(
+      item.text.main
+    );
 
-  msg1.lang = "en-US";
-  msg1.rate = 0.75;
+  msg1.lang="en-US";
+
+  msg1.rate=0.75;
+
 
   const msg2 =
-    new SpeechSynthesisUtterance(item.text.tow);
+    new SpeechSynthesisUtterance(
+      item.text.tow
+    );
 
-  msg2.lang = "en-US";
-  msg2.rate = 0.65;
+  msg2.lang="en-US";
 
-  // ===== MAIN END =====
-  msg1.onend = () => {
+  msg2.rate=0.65;
 
-    setTimeout(() => {
+
+  msg1.onend=()=>{
+
+    setTimeout(()=>{
 
       window.speechSynthesis.cancel();
-window.speechSynthesis.speak(msg2);
 
-    }, 300);
+      window.speechSynthesis.speak(
+        msg2
+      );
+
+    },300);
 
   };
 
-  // ===== FINISH =====
-  msg2.onend = () => {
 
-    isSpeaking = false;
+  msg2.onend=()=>{
+
+    isSpeaking=false;
+
     processQueue();
 
   };
 
-  // =========================
-  // BEEP ONLY FOR ATTENTION / INFORMATION
-  // =========================
 
   const needBeep =
-    item.text.main.startsWith("ATTENTION") ||
-    item.text.main.startsWith("INFORMATION");
+    item.text.main.startsWith(
+      "ATTENTION"
+    ) ||
+    item.text.main.startsWith(
+      "INFORMATION"
+    );
+
 
   if(needBeep){
 
-    playWarningBeep().then(() => {
+    playWarningBeep()
+      .then(()=>{
 
-      setTimeout(() => {
+        setTimeout(()=>{
 
           window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(msg1);
 
-      }, 3000);
+          window.speechSynthesis.speak(
+            msg1
+          );
 
-    });
+        },3000);
+
+      });
 
   }else{
 
-    window.speechSynthesis.speak(msg1);
+    window.speechSynthesis.speak(
+      msg1
+    );
 
   }
 
 }
 
 
-
-let spokenMap = {};
-const SPEAK_COOLDOWN = 10000;
+/* =========================================================
+   NATO
+========================================================= */
 
 function regToNATO(str){
 
-  const map = {
-    A:"ALPHA", B:"BRAVO", C:"CHARLIE", D:"DELTA", E:"ECHO",
-    F:"FOXTROT", G:"GOLF", H:"HOTEL", I:"INDIA", J:"JULIETT",
-    K:"KILO", L:"LIMA", M:"MIKE", N:"NOVEMBER", O:"OSCAR",
-    P:"PAPA", Q:"QUEBEC", R:"ROMEO", S:"SIERRA", T:"TANGO",
-    U:"UNIFORM", V:"VICTOR", W:"WHISKEY", X:"X-RAY",
-    Y:"YANKEE", Z:"ZULU",
-    0:"ZERO",1:"ONE",2:"TWO",3:"THREE",4:"FOUR",
-    5:"FIVE",6:"SIX",7:"SEVEN",8:"EIGHT",9:"NINE",
+  const map={
+
+    A:"ALPHA",
+    B:"BRAVO",
+    C:"CHARLIE",
+    D:"DELTA",
+    E:"ECHO",
+    F:"FOXTROT",
+    G:"GOLF",
+    H:"HOTEL",
+    I:"INDIA",
+    J:"JULIETT",
+    K:"KILO",
+    L:"LIMA",
+    M:"MIKE",
+    N:"NOVEMBER",
+    O:"OSCAR",
+    P:"PAPA",
+    Q:"QUEBEC",
+    R:"ROMEO",
+    S:"SIERRA",
+    T:"TANGO",
+    U:"UNIFORM",
+    V:"VICTOR",
+    W:"WHISKEY",
+    X:"X-RAY",
+    Y:"YANKEE",
+    Z:"ZULU",
+
+    0:"ZERO",
+    1:"ONE",
+    2:"TWO",
+    3:"THREE",
+    4:"FOUR",
+    5:"FIVE",
+    6:"SIX",
+    7:"SEVEN",
+    8:"EIGHT",
+    9:"NINE",
+
     "-":"-"
+
   };
 
-  return str.toUpperCase()
+  return str
+    .toUpperCase()
     .split("")
-    .map(c => map[c] || c)
+    .map(
+      c=>map[c] || c
+    )
     .join(" ");
+
 }
+
+
+/* =========================================================
+   FLIGHT SPEECH
+========================================================= */
 
 function flightNormal(str){
 
   return String(str || "")
     .toUpperCase()
-    .replace(/TG/g, "T G")
-    .replace(/-/g, " ")
+    .replace(/TG/g,"T G")
+    .replace(/-/g," ")
     .split("")
-    .map(c => {
+    .map(c=>{
 
-      if(/[0-9]/.test(c)) return c;   // 👉 อ่านทีละตัว
+      if(/[0-9]/.test(c)){
+        return c;
+      }
+
       return c;
 
     })
     .join(" ");
+
 }
+
+
+/* =========================================================
+   BAY NATO
+========================================================= */
 
 function bayToNATO(str){
 
-  if(!str) return "";
+  if(!str){
+    return "";
+  }
 
-  const numMap = {
-    0:"ZERO",1:"ONE",2:"TWO",3:"THREE",4:"FOUR",
-    5:"FIVE",6:"SIX",7:"SEVEN",8:"EIGHT",9:"NINE"
+  const numMap={
+
+    0:"ZERO",
+    1:"ONE",
+    2:"TWO",
+    3:"THREE",
+    4:"FOUR",
+    5:"FIVE",
+    6:"SIX",
+    7:"SEVEN",
+    8:"EIGHT",
+    9:"NINE"
+
   };
 
-  const letterMap = {
-    A:"ALPHA", B:"BRAVO", C:"CHARLIE", D:"DELTA",
-    E:"ECHO", F:"FOXTROT", G:"GOLF", H:"HOTEL",
-    I:"INDIA", J:"JULIETT", K:"KILO", L:"LIMA",
-    M:"MIKE", N:"NOVEMBER", O:"OSCAR", P:"PAPA",
-    Q:"QUEBEC", R:"ROMEO", S:"SIERRA", T:"TANGO",
-    U:"UNIFORM", V:"VICTOR", W:"WHISKEY",
-    X:"X-RAY", Y:"YANKEE", Z:"ZULU"
+  const letterMap={
+
+    A:"ALPHA",
+    B:"BRAVO",
+    C:"CHARLIE",
+    D:"DELTA",
+    E:"ECHO",
+    F:"FOXTROT",
+    G:"GOLF",
+    H:"HOTEL",
+    I:"INDIA",
+    J:"JULIETT",
+    K:"KILO",
+    L:"LIMA",
+    M:"MIKE",
+    N:"NOVEMBER",
+    O:"OSCAR",
+    P:"PAPA",
+    Q:"QUEBEC",
+    R:"ROMEO",
+    S:"SIERRA",
+    T:"TANGO",
+    U:"UNIFORM",
+    V:"VICTOR",
+    W:"WHISKEY",
+    X:"X-RAY",
+    Y:"YANKEE",
+    Z:"ZULU"
+
   };
 
   return String(str)
     .toUpperCase()
-    .replace(/-/g, " TOW ")
+    .replace(/-/g," TOW ")
     .split("")
-    .map(c => {
+    .map(c=>{
 
-      if(/[0-9]/.test(c)) return numMap[c];
-      if(/[A-Z]/.test(c)) return letterMap[c] || c;
+      if(/[0-9]/.test(c)){
+        return numMap[c];
+      }
+
+      if(/[A-Z]/.test(c)){
+        return letterMap[c] || c;
+      }
 
       return "";
 
@@ -2088,417 +3801,990 @@ function bayToNATO(str){
     .join(" ")
     .replace(/\s+/g," ")
     .trim();
+
 }
+
+
+/* =========================================================
+   BAY SPEECH
+========================================================= */
 
 function bayToSpeech(input){
 
-  if(!input) return "";
+  if(!input){
+    return "";
+  }
 
-  // =========================
-  // 1) NORMALIZE
-  // =========================
-  let str = String(input)
-    .toUpperCase()
-    .trim()
-    .replace(/\s+/g, "");
+  let str =
+    String(input)
+      .toUpperCase()
+      .trim()
+      .replace(/\s+/g,"");
 
-  // =========================
-  // 2) HANGAR MAP (FIXED CORE)
-  // =========================
-  const hangarMap = {
-    "H1C": "HANGAR ONE CENTER",
-    "H1L": "HANGAR ONE LEFT",
-    "H1R": "HANGAR ONE RIGHT",
-    "H1":  "HANGAR ONE",
 
-    "H2": "HANGAR TWO",
-    "H2C": "HANGAR TWO CENTER",
-    "H2L": "HANGAR TWO LEFT",
-    "H2R": "HANGAR TWO RIGHT",
+  const hangarMap={
 
-    "H3": "HANGAR THREE",
-    "H3C": "HANGAR THREE CENTER",
-    "H3L": "HANGAR THREE LEFT",
-    "H3R": "HANGAR THREE RIGHT"
+    "H1C":"HANGAR ONE CENTER",
+    "H1L":"HANGAR ONE LEFT",
+    "H1R":"HANGAR ONE RIGHT",
+    "H1":"HANGAR ONE",
+
+    "H2":"HANGAR TWO",
+    "H2C":"HANGAR TWO CENTER",
+    "H2L":"HANGAR TWO LEFT",
+    "H2R":"HANGAR TWO RIGHT",
+
+    "H3":"HANGAR THREE",
+    "H3C":"HANGAR THREE CENTER",
+    "H3L":"HANGAR THREE LEFT",
+    "H3R":"HANGAR THREE RIGHT"
+
   };
 
-  // =========================
-  // 3) NATO MAP
-  // =========================
-  const letterMap = {
-    A:"ALPHA", B:"BRAVO", C:"CHARLIE", D:"DELTA", E:"ECHO",
-    F:"FOXTROT", G:"GOLF", H:"HOTEL", I:"INDIA", J:"JULIETT",
-    K:"KILO", L:"LIMA", M:"MIKE", N:"NOVEMBER", O:"OSCAR",
-    P:"PAPA", Q:"QUEBEC", R:"ROMEO", S:"SIERRA", T:"TANGO",
-    U:"UNIFORM", V:"VICTOR", W:"WHISKEY", X:"X-RAY",
-    Y:"YANKEE", Z:"ZULU",
-    0:"ZERO",1:"ONE",2:"TWO",3:"THREE",4:"FOUR",
-    5:"FIVE",6:"SIX",7:"SEVEN",8:"EIGHT",9:"NINE"
+
+  const letterMap={
+
+    A:"ALPHA",
+    B:"BRAVO",
+    C:"CHARLIE",
+    D:"DELTA",
+    E:"ECHO",
+    F:"FOXTROT",
+    G:"GOLF",
+    H:"HOTEL",
+    I:"INDIA",
+    J:"JULIETT",
+    K:"KILO",
+    L:"LIMA",
+    M:"MIKE",
+    N:"NOVEMBER",
+    O:"OSCAR",
+    P:"PAPA",
+    Q:"QUEBEC",
+    R:"ROMEO",
+    S:"SIERRA",
+    T:"TANGO",
+    U:"UNIFORM",
+    V:"VICTOR",
+    W:"WHISKEY",
+    X:"X-RAY",
+    Y:"YANKEE",
+    Z:"ZULU",
+
+    0:"ZERO",
+    1:"ONE",
+    2:"TWO",
+    3:"THREE",
+    4:"FOUR",
+    5:"FIVE",
+    6:"SIX",
+    7:"SEVEN",
+    8:"EIGHT",
+    9:"NINE"
+
   };
 
-  // =========================
-  // 4) SPLIT BY "-"
-  // =========================
-  const parts = str.split("-");
 
-  const spoken = parts.map(part => {
+  const parts =
+    str.split("-");
 
-    // 1) HANGAR CODE (H2R)
-    if(hangarMap[part]){
-      return hangarMap[part];
-    }
 
-    // 2) LETTER + NUMBER (C10)
-    const match = part.match(/^([A-Z])(\d+)$/);
-    if(match){
+  const spoken =
+    parts.map(part=>{
 
-      const letter = letterMap[match[1]] || match[1];
+      if(hangarMap[part]){
+        return hangarMap[part];
+      }
 
-      const numbers = match[2]
+
+      const match =
+        part.match(
+          /^([A-Z])(\d+)$/
+        );
+
+
+      if(match){
+
+        const letter =
+          letterMap[match[1]] ||
+          match[1];
+
+        const numbers =
+          match[2]
+            .split("")
+            .map(
+              n=>letterMap[n] || n
+            )
+            .join(" ");
+
+        return (
+          `${letter} ${numbers}`
+        );
+
+      }
+
+
+      return part
         .split("")
-        .map(n => letterMap[n] || n)
+        .map(
+          c=>letterMap[c] || c
+        )
         .join(" ");
 
-      return `${letter} ${numbers}`;
-    }
+    });
 
-    // 3) fallback
-    return part
-      .split("")
-      .map(c => letterMap[c] || c)
-      .join(" ");
 
-  });
+  if(
+    spoken.length===2
+  ){
 
-  // =========================
-  // 5) OUTPUT FORMAT
-  // =========================
-  if(spoken.length === 2){
-    return `${spoken[0]} TOW TO ${spoken[1]}`;
+    return (
+      `${spoken[0]} TOW TO ${spoken[1]}`
+    );
+
   }
 
-  if(spoken.length === 3){
-    return `${spoken[0]} TOW TO ${spoken[1]} ${spoken[2]}`;
+
+  if(
+    spoken.length===3
+  ){
+
+    return (
+      `${spoken[0]} TOW TO ${spoken[1]} ${spoken[2]}`
+    );
+
   }
 
-  return spoken.join(" TOW TO ");
+
+  return spoken.join(
+    " TOW TO "
+  );
+
 }
-function playWarningBeep() {
 
-  if (!soundEnabled) return Promise.resolve();
 
-  return new Promise((resolve) => {
+/* =========================================================
+   WARNING BEEP
+========================================================= */
 
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+function playWarningBeep(){
 
-    // ===== เสียงออดสนามบิน =====
-    osc.type = "triangle";
+  if(!soundEnabled){
 
-    // โทนต่ำๆ หนาๆ
+    return Promise.resolve();
+
+  }
+
+  return new Promise(resolve=>{
+
+    const osc =
+      audioCtx.createOscillator();
+
+    const gain =
+      audioCtx.createGain();
+
+
+    osc.type="triangle";
+
+
     osc.frequency.setValueAtTime(
       420,
       audioCtx.currentTime
     );
 
-    // connect
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
 
-    // ===== FADE IN =====
+    osc.connect(gain);
+
+    gain.connect(
+      audioCtx.destination
+    );
+
+
     gain.gain.setValueAtTime(
       0.001,
       audioCtx.currentTime
     );
 
+
     gain.gain.exponentialRampToValueAtTime(
       0.6,
-      audioCtx.currentTime + 0.15
+      audioCtx.currentTime+0.15
     );
 
-    // ===== HOLD =====
+
     gain.gain.setValueAtTime(
       0.6,
-      audioCtx.currentTime + 2.6
+      audioCtx.currentTime+2.6
     );
 
-    // ===== FADE OUT =====
+
     gain.gain.exponentialRampToValueAtTime(
       0.001,
-      audioCtx.currentTime + 3
+      audioCtx.currentTime+3
     );
 
-    // start
+
     osc.start();
 
-    // stop 3 วิ
-    osc.stop(audioCtx.currentTime + 3);
 
-    osc.onended = () => {
+    osc.stop(
+      audioCtx.currentTime+3
+    );
+
+
+    osc.onended=()=>{
+
       resolve();
+
     };
 
   });
+
 }
+
+
+/* =========================================================
+   BUILD SPEECH
+========================================================= */
 
 function buildTowSpeakText(d){
 
-  const tone = getTone(d);
+  const tone =
+    getTone(d);
 
-  const reg = regToNATO(d.reg || "");
-  const flight = flightNormal(d.flight || "");
-  const bay = bayToSpeech(d.bay || "");
+  const reg =
+    regToNATO(
+      d.reg || ""
+    );
 
-if(tone === "URGENT"){
+  const flight =
+    flightNormal(
+      d.flight || ""
+    );
+
+  const bay =
+    bayToSpeech(
+      d.bay || ""
+    );
+
+
+  if(tone==="URGENT"){
+
+    return {
+
+      main:
+        `ATTENTION. ${reg}. ${flight}. BAY ${bay}.`,
+
+      tow:
+        `NEED TO TOW IMMEDIATELY.`
+
+    };
+
+  }
+
+
+  if(tone==="INFO"){
+
+    return {
+
+      main:
+        `INFORMATION. ${reg}. ${flight}. BAY ${bay}.`,
+
+      tow:
+        `THE DESTINATION PARKING BAY AVAILABLE.`
+
+    };
+
+  }
+
+
   return {
-    main: `ATTENTION. ${reg}. ${flight}. BAY ${bay}.`,
-    tow: `NEED TO TOW IMMEDIATELY.`
+
+    main:
+      `ATTENTION. ${reg}. ${flight}. BAY ${bay}.`,
+
+    tow:
+      `MUST BE TOWED IMMEDIATELY.`
+
   };
+
 }
 
-if(tone === "INFO"){
-  return {
-    main: `INFORMATION. ${reg}. ${flight}. BAY ${bay}.`,
-    tow: `THE DESTINATION PARKING BAY AVAILABLE.`
-  };
-}
 
-  return {
-    main: `ATTENTION. ${reg}. ${flight}. BAY ${bay}.`,
-    tow: `MUST BE TOWED IMMEDIATELY.`
-  };
-}
+/* =========================================================
+   SLOT SPEECH
+========================================================= */
 
 function buildSlotSpeakText(d){
 
-  const reg = regToNATO(d.reg || "");
-  const flight = flightNormal(d.flight || "");
-  const bay = bayToSpeech(d.bay || "");
+  const reg =
+    regToNATO(
+      d.reg || ""
+    );
+
+  const flight =
+    flightNormal(
+      d.flight || ""
+    );
+
+  const bay =
+    bayToSpeech(
+      d.bay || ""
+    );
+
 
   return {
-    main: `INFORMATION. ${reg}. ${flight}. BAY ${bay}.`,
-    tow: `DESTINATION PARKING BAY AVAILABLE.`
+
+    main:
+      `INFORMATION. ${reg}. ${flight}. BAY ${bay}.`,
+
+    tow:
+      `DESTINATION PARKING BAY AVAILABLE.`
+
   };
+
 }
-function speakChunk(text, rate = 1, pitch = 1){
 
-  return new Promise(resolve => {
 
-    const msg = new SpeechSynthesisUtterance(text);
+/* =========================================================
+   SPEAK CHUNK
+========================================================= */
 
-    msg.lang = "en-US";
-    msg.rate = rate;
-    msg.pitch = pitch;
+function speakChunk(
+  text,
+  rate=1,
+  pitch=1
+){
 
-    msg.onend = () => resolve();
+  return new Promise(resolve=>{
 
-    window.speechSynthesis.speak(msg);
+    const msg =
+      new SpeechSynthesisUtterance(
+        text
+      );
+
+    msg.lang="en-US";
+
+    msg.rate=rate;
+
+    msg.pitch=pitch;
+
+    msg.onend=()=>resolve();
+
+    window.speechSynthesis.speak(
+      msg
+    );
+
   });
+
 }
+
+
+/* =========================================================
+   TONE
+========================================================= */
 
 function getTone(d){
 
-  if(d.status === "TOWING"){
+  if(
+    d.status==="TOWING"
+  ){
+
     return "URGENT";
+
   }
 
-  if(d.remark?.includes("ปลายทางว่าง")){
+  if(
+    d.remark?.includes(
+      "ปลายทางว่าง"
+    )
+  ){
+
     return "INFO";
+
   }
 
   return "NORMAL";
+
 }
 
-function speakChunks(text, rate = 0.7){
 
-  const chunks = text
-    .replace(/\./g, "")   // ลบจุดทิ้ง
-    .split(",")           // ใช้ comma เป็นตัวเว้น
-    .map(t => t.trim())
-    .filter(Boolean);
+/* =========================================================
+   SPEAK CHUNKS
+========================================================= */
 
-  let i = 0;
+function speakChunks(
+  text,
+  rate=0.7
+){
+
+  const chunks =
+    text
+      .replace(/\./g,"")
+      .split(",")
+      .map(
+        t=>t.trim()
+      )
+      .filter(Boolean);
+
+
+  let i=0;
+
 
   function next(){
 
-    if(i >= chunks.length){
-      isSpeaking = false;
+    if(i>=chunks.length){
+
+      isSpeaking=false;
+
       processQueue();
+
       return;
+
     }
 
-    const msg = new SpeechSynthesisUtterance(chunks[i]);
 
-    msg.rate = rate;
-    msg.pitch = 1;
-    msg.lang = "en-US";
+    const msg =
+      new SpeechSynthesisUtterance(
+        chunks[i]
+      );
 
-    msg.onend = () => {
+
+    msg.rate=rate;
+
+    msg.pitch=1;
+
+    msg.lang="en-US";
+
+
+    msg.onend=()=>{
 
       i++;
 
-      // 🔥 หน่วงนิดเดียวให้เหมือน ATC breathing
-      setTimeout(next, 250);
+      setTimeout(
+        next,
+        250
+      );
+
     };
 
-    window.speechSynthesis.speak(msg);
+
+    window.speechSynthesis.speak(
+      msg
+    );
+
   }
 
+
   next();
+
 }
+
+
+/* =========================================================
+   SPEAK ATC
+========================================================= */
 
 function speakATC(text){
 
-  const parts = text.split(".");
+  const parts =
+    text.split(".");
 
-  let i = 0;
+
+  let i=0;
+
 
   function next(){
 
-    if(i >= parts.length){
-      isSpeaking = false;
+    if(i>=parts.length){
+
+      isSpeaking=false;
+
       processQueue();
+
       return;
+
     }
 
-    const msg = new SpeechSynthesisUtterance(parts[i].trim());
 
-    msg.lang = "en-US";
-    msg.rate = 0.65;
-    msg.pitch = 1;
+    const msg =
+      new SpeechSynthesisUtterance(
+        parts[i].trim()
+      );
 
-    msg.onend = () => {
-      setTimeout(() => {
+
+    msg.lang="en-US";
+
+    msg.rate=0.65;
+
+    msg.pitch=1;
+
+
+    msg.onend=()=>{
+
+      setTimeout(()=>{
+
         i++;
+
         next();
-      }, 300); // 👈 ATC pause
+
+      },300);
+
     };
 
-    window.speechSynthesis.speak(msg);
+
+    window.speechSynthesis.speak(
+      msg
+    );
+
   }
 
+
   next();
+
 }
 
-// ======================
-// REALTIME LOOP
-// ======================
-setInterval(() => {
 
-  if(pauseRealtime) return;
+/* =========================================================
+   REALTIME LOOP
+========================================================= */
+
+setInterval(()=>{
+
+  /*
+    ไม่โหลดขณะ EDIT
+  */
+
+  if(pauseRealtime){
+    return;
+  }
+
+  /*
+    ไม่โหลดขณะ REORDER
+  */
+
+  if(isReordering){
+    return;
+  }
 
   load();
 
-}, 1500);
+},1500);
 
-// ======================
-// KEEP AUDIO CONTEXT ALIVE
-// ======================
 
-setInterval(async ()=>{
+/* =========================================================
+   KEEP AUDIO CONTEXT ALIVE
+========================================================= */
 
-  if(!soundEnabled) return;
+setInterval(
+  async ()=>{
 
-  try{
+    if(!soundEnabled){
+      return;
+    }
 
-    await wakeAudio();
+    try{
 
-    // ยิง silent oscillator สั้นๆ กัน browser sleep
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+      await wakeAudio();
 
-    gain.gain.value = 0.0001;
 
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+      const osc =
+        audioCtx.createOscillator();
 
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.02);
+      const gain =
+        audioCtx.createGain();
 
-  }catch(e){
-    console.log(e);
-  }
 
-}, 20000); // ทุก 20 วิ
+      gain.gain.value=0.0001;
 
-setInterval(() => {
-  data.forEach((d, i) => {
+
+      osc.connect(gain);
+
+      gain.connect(
+        audioCtx.destination
+      );
+
+
+      osc.start();
+
+      osc.stop(
+        audioCtx.currentTime+0.02
+      );
+
+
+    }catch(e){
+
+      console.log(e);
+
+    }
+
+  },
+  20000
+);
+
+
+/* =========================================================
+   WARNING / SLOT CHECK
+========================================================= */
+
+setInterval(()=>{
+
+  data.forEach((d,i)=>{
+
     checkWarning(d);
-    checkSlot(d);
-  });
-}, 1000);
 
-let zoomMode = false;
+    checkSlot(d);
+
+  });
+
+},1000);
+
+
+/* =========================================================
+   ZOOM
+========================================================= */
+
+let zoomMode=false;
 
 function toggleZoom(){
 
-  zoomMode = !zoomMode;
+  zoomMode=!zoomMode;
 
-  document.body.classList.toggle("zoom-mode", zoomMode);
+  document.body.classList.toggle(
+    "zoom-mode",
+    zoomMode
+  );
 
-  const btn = document.querySelector('button[onclick="toggleZoom()"]');
+
+  const btn =
+    document.querySelector(
+      'button[onclick="toggleZoom()"]'
+    );
+
 
   if(zoomMode){
-    btn.innerText = "🔍 EXIT ZOOM";
 
-    // optional: full screen
-    if(document.documentElement.requestFullscreen){
-      document.documentElement.requestFullscreen();
+    btn.innerText=
+      "🔍 EXIT ZOOM";
+
+
+    if(
+      document.documentElement
+        .requestFullscreen
+    ){
+
+      document.documentElement
+        .requestFullscreen();
+
     }
 
   }else{
-    btn.innerText = "🔍 ZOOM PLAN";
+
+    btn.innerText=
+      "🔍 ZOOM PLAN";
+
 
     if(document.exitFullscreen){
+
       document.exitFullscreen();
+
     }
+
   }
+
 }
 
-setInterval(() => {
 
-  // ห้าม reload ตอน edit
-  if(editRow) return;
+/* =========================================================
+   AUTO PAGE RELOAD
+========================================================= */
 
-  // ห้าม reload ตอนกำลังพูด
-  if(isSpeaking) return;
+setInterval(()=>{
 
-  // ห้าม reload ถ้ามี queue รอพูด
-  if(speechQueue.length > 0) return;
+  if(editRow){
+    return;
+  }
+
+  if(isReordering){
+    return;
+  }
+
+  if(isSpeaking){
+    return;
+  }
+
+  if(
+    speechQueue.length>0
+  ){
+
+    return;
+
+  }
 
   location.reload();
 
-}, 1000 * 60 * 60 * 4);
+},1000*60*60*4);
+
+
+/* =========================================================
+   ADMIN LOGIN
+========================================================= */
 
 function adminLogin(){
 
-  const pass = prompt("ENTER PASSWORD");
+  const pass =
+    prompt(
+      "ENTER PASSWORD"
+    );
 
-  if(pass === ADMIN_PASSWORD){
 
-    isAdmin = true;
+  if(
+    pass ===
+    ADMIN_PASSWORD
+  ){
 
-    alert("ADMIN MODE ENABLED");
+    isAdmin=true;
+
+    document.body.classList.add(
+      "admin-mode"
+    );
+
+
+    alert(
+      "ADMIN MODE ENABLED"
+    );
+
+
+    /*
+      แสดงปุ่มจัดลำดับ
+    */
+
+    render();
 
   }else{
 
-    alert("WRONG PASSWORD");
+    alert(
+      "WRONG PASSWORD"
+    );
 
   }
+
 }
 
 
+/* =========================================================
+   RESTORE AUDIO / MUTE
+========================================================= */
 
+window.onload=async()=>{
+
+  status.disabled=true;
+
+
+  const btn =
+    document.querySelector(
+      'button[onclick="unlockAudio()"]'
+    );
+
+
+  const muteBtn =
+    document.getElementById(
+      "muteBtn"
+    );
+
+
+  /* =========================
+     RESTORE MUTE
+  ========================= */
+
+  if(
+    localStorage.getItem(
+      "muted"
+    ) === "1"
+  ){
+
+    muted=true;
+
+    muteBtn.innerText=
+      "🔇 MUTED";
+
+  }else{
+
+    muted=false;
+
+    muteBtn.innerText=
+      "🔇 MUTE OFF";
+
+  }
+
+
+  /* =========================
+     RESTORE SOUND
+  ========================= */
+
+  if(
+    localStorage.getItem(
+      "soundEnabled"
+    ) === "1"
+  ){
+
+    soundEnabled=true;
+
+    btn.innerText=
+      "🔊 SOUND ON";
+
+
+    try{
+
+      await audioCtx.resume();
+
+      window.speechSynthesis.resume();
+
+
+      const audio =
+        document.getElementById(
+          "alarm"
+        );
+
+
+      await audio.play();
+
+      audio.pause();
+
+      audio.currentTime=0;
+
+
+    }catch(e){
+
+      console.log(
+        "AUTO SOUND RESTORE FAIL",
+        e
+      );
+
+    }
+
+
+  }else{
+
+    btn.innerText=
+      "🔇 SOUND OFF";
+
+  }
+
+};
+
+
+/* =========================================================
+   FLIGHT TYPE CHANGE
+========================================================= */
+
+flightType.addEventListener(
+  "change",
+  ()=>{
+
+    const type =
+      getFlightType(
+        flight.value
+      );
+
+
+    if(type==="DEP"){
+
+      gate.disabled=false;
+
+      gate.style.opacity="1";
+
+      remark.value=
+        "ปลายทางว่าง :";
+
+    }else{
+
+      gate.value="";
+
+      gate.disabled=true;
+
+      gate.style.opacity="0.5";
+
+      remark.value=
+        "ลากก่อน :";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   FLIGHT INPUT
+========================================================= */
+
+flight.addEventListener(
+  "input",
+  ()=>{
+
+    const type =
+      getFlightType(
+        flight.value
+      );
+
+
+    if(type==="DEP"){
+
+      gate.disabled=false;
+
+      gate.style.opacity="1";
+
+      remark.value=
+        "ปลายทางว่าง :";
+
+    }else{
+
+      gate.value="";
+
+      gate.disabled=true;
+
+      gate.style.opacity="0.5";
+
+      remark.value=
+        "ลากก่อน :";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   AUDIO MUTE STORAGE
+========================================================= */
+
+const originalToggleMute =
+  toggleMute;
+
+
+/*
+  Override เพื่อจำ MUTE
+*/
+
+toggleMute=function(){
+
+  originalToggleMute();
+
+  localStorage.setItem(
+    "muted",
+    muted ? "1" : "0"
+  );
+
+};
 
 </script>
-<audio id="alarm" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
+
+
+<audio
+  id="alarm"
+  src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+  preload="auto">
+</audio>
+
 </body>
-
 </html>
-
-
-
-
-
-
-
