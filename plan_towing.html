@@ -1,4790 +1,10701 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
 
+
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+
 
 <title>SPIDER TOWING CONTROL</title>
 
+
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
 
 <style>
 
+
+
 body{
+
   font-size:18px;
+
 }
+
+
 
 :root{
+
   --bg:#040b16;
+
   --panel:#09111f;
+
   --panel2:#0f172a;
+
   --line:rgba(255,255,255,0.08);
+
   --soft:rgba(255,255,255,0.04);
 
+
+
   --green:#00ff9c;
+
   --blue:#3b82f6;
+
   --yellow:#facc15;
+
   --red:#ef4444;
 
+
+
   --text:#ffffff;
+
   --muted:#94a3b8;
+
 }
+
+
 
 *{
+
   margin:0;
+
   padding:0;
+
   box-sizing:border-box;
+
 }
 
+
+
 body{
+
+
 
   font-family:'Inter',sans-serif;
 
+
+
   background:
+
     radial-gradient(circle at top left,#12304f55,transparent 35%),
+
     radial-gradient(circle at bottom right,#0c7c5944,transparent 35%),
+
     linear-gradient(180deg,#020617,#07111f);
+
+
 
   color:var(--text);
 
+
+
   min-height:100vh;
 
+
+
   overflow-x:hidden;
+
 }
+
+
 
 body::before{
 
+
+
   content:'';
 
+
+
   position:fixed;
+
   inset:0;
 
+
+
   background-image:
+
     linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+
     linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+
+
 
   background-size:40px 40px;
 
+
+
   mask-image:linear-gradient(
+
     to bottom,
+
     rgba(0,0,0,0.7),
+
     transparent
+
   );
 
+
+
   pointer-events:none;
+
 }
 
+
+
 /* =========================
+
    HEADER
+
 ========================= */
+
+
 
 .header{
 
+
+
   position:sticky;
+
   top:0;
+
   z-index:999;
+
+
 
   height:82px;
 
+
+
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
+
 
   padding:0 28px;
 
+
+
   background:rgba(6,12,24,0.78);
+
+
 
   backdrop-filter:blur(14px);
 
+
+
   border-bottom:1px solid rgba(255,255,255,0.06);
 
+
+
   box-shadow:
+
     0 0 30px rgba(0,255,156,0.08),
+
     0 10px 40px rgba(0,0,0,0.35);
+
 }
+
+
 
 .logo-wrap{
 
+
+
   display:flex;
+
   align-items:center;
 
+
+
   gap:16px;
+
 }
+
+
 
 .radar{
 
+
+
   width:50px;
+
   height:50px;
+
+
 
   border-radius:50%;
 
+
+
   position:relative;
+
+
 
   border:2px solid rgba(0,255,156,0.4);
 
+
+
   box-shadow:
+
     0 0 20px rgba(0,255,156,0.25),
+
     inset 0 0 20px rgba(0,255,156,0.15);
+
 }
+
+
 
 .radar::before{
 
+
+
   content:'';
 
+
+
   position:absolute;
+
   inset:6px;
+
+
 
   border-radius:50%;
 
+
+
   border:1px solid rgba(0,255,156,0.2);
+
 }
+
+
 
 .title{
 
+
+
   display:flex;
+
   flex-direction:column;
+
 }
+
+
 
 .title h1{
 
+
+
   font-size:20px;
+
+
 
   letter-spacing:2px;
 
+
+
   font-weight:700;
+
 }
+
+
 
 .title span{
 
+
+
   font-size:11px;
+
+
 
   color:var(--muted);
 
+
+
   letter-spacing:3px;
 
+
+
   margin-top:3px;
+
 }
+
+
 
 .header-right{
 
+
+
   display:flex;
+
   align-items:center;
 
+
+
   gap:18px;
+
 }
+
+
 
 .live{
 
+
+
   display:flex;
+
   align-items:center;
 
+
+
   gap:10px;
+
+
 
   background:rgba(255,255,255,0.04);
 
+
+
   border:1px solid rgba(255,255,255,0.06);
+
+
 
   padding:10px 14px;
 
+
+
   border-radius:14px;
+
 }
+
+
 
 .live-dot{
 
+
+
   width:10px;
+
   height:10px;
 
+
+
   border-radius:50%;
+
+
 
   background:var(--green);
 
+
+
   box-shadow:
+
     0 0 10px var(--green),
+
     0 0 20px var(--green);
 
+
+
   animation:pulse 1.2s infinite;
+
 }
+
+
 
 @keyframes pulse{
 
+
+
   50%{
+
     opacity:0.5;
+
     transform:scale(0.7);
+
   }
 
+
+
 }
+
+
 
 .clock{
 
+
+
   font-size:14px;
 
+
+
   font-weight:600;
+
 }
 
+
+
 /* =========================
+
    MAIN
+
 ========================= */
+
+
 
 .container{
 
+
+
   display:grid;
+
+
 
   grid-template-columns:390px minmax(0,1fr);
 
+
+
   gap:22px;
 
+
+
   padding:22px;
+
 }
+
+
 
 @media(max-width:1100px){
 
+
+
   .container{
+
     grid-template-columns:1fr;
+
   }
 
+
+
 }
+
+
 
 .panel{
 
+
+
   background:
+
     linear-gradient(
+
       180deg,
+
       rgba(255,255,255,0.03),
+
       rgba(255,255,255,0.01)
+
     );
 
+
+
   border:1px solid rgba(255,255,255,0.06);
+
+
 
   border-radius:24px;
 
+
+
   padding:22px;
+
+
 
   backdrop-filter:blur(12px);
 
+
+
   box-shadow:
+
     inset 0 1px 0 rgba(255,255,255,0.04),
+
     0 20px 40px rgba(0,0,0,0.35);
+
+
 
   overflow:hidden;
 
+
+
   position:relative;
+
 }
+
+
 
 .panel::before{
 
+
+
   content:'';
+
+
 
   position:absolute;
 
+
+
   top:0;
+
   left:0;
+
   right:0;
+
+
 
   height:2px;
 
+
+
   background:
+
     linear-gradient(
+
       90deg,
+
       transparent,
+
       var(--green),
+
       transparent
+
     );
+
 }
+
+
 
 .panel-title{
 
+
+
   display:flex;
 
+
+
   align-items:center;
+
+
 
   justify-content:space-between;
 
+
+
   margin-bottom:22px;
+
 }
+
+
 
 .panel-title h3{
 
+
+
   font-size:15px;
 
+
+
   letter-spacing:2px;
+
 }
+
+
 
 .panel-badge{
 
+
+
   font-size:11px;
 
+
+
   color:var(--green);
+
+
 
   padding:6px 10px;
 
+
+
   border-radius:999px;
+
+
 
   background:rgba(0,255,156,0.08);
 
+
+
   border:1px solid rgba(0,255,156,0.18);
+
 }
 
+
+
 /* =========================
+
    FORM
+
 ========================= */
+
+
 
 .form{
 
+
+
   display:flex;
+
   flex-direction:column;
 
+
+
   gap:14px;
+
 }
+
+
 
 .row2{
 
+
+
   display:grid;
+
+
 
   grid-template-columns:1fr 1fr;
 
+
+
   gap:14px;
+
 }
+
+
 
 .field{
 
+
+
   display:flex;
+
   flex-direction:column;
 
+
+
   gap:7px;
+
 }
+
+
 
 .field label{
 
+
+
   font-size:11px;
+
+
 
   color:#6b7280;
 
+
+
   letter-spacing:1px;
+
 }
 
+
+
 input,
+
 select{
+
+
 
   width:100%;
 
+
+
   height:48px;
 
+
+
   border-radius:14px;
+
+
 
   border:1px solid rgba(255,255,255,0.06);
 
+
+
   background:
+
     linear-gradient(
+
       180deg,
+
       rgba(255,255,255,0.04),
+
       rgba(255,255,255,0.02)
+
     );
 
+
+
   padding:0 14px;
+
+
 
   color:#fff;
 
+
+
   font-size:13px;
+
+
 
   outline:none;
 
+
+
   transition:0.25s;
+
 }
+
+
 
 input:focus{
 
+
+
   border-color:rgba(0,255,156,0.5);
 
+
+
   box-shadow:
+
     0 0 0 4px rgba(0,255,156,0.08),
+
     0 0 20px rgba(0,255,156,0.08);
 
+
+
   transform:translateY(-1px);
+
 }
+
+
 
 input::placeholder{
 
+
+
   color:rgba(255,255,255,0.25);
+
 }
+
+
 
 input:disabled{
 
+
+
   opacity:0.5;
 
+
+
   cursor:not-allowed;
+
 }
 
+
+
 /* =========================
+
    BUTTONS
+
 ========================= */
+
+
 
 .buttons{
 
+
+
   display:flex;
+
+
 
   gap:10px;
 
+
+
   margin-top:8px;
+
 }
+
+
 
 button{
 
+
+
   border:none;
+
+
 
   border-radius:14px;
 
+
+
   cursor:pointer;
 
+
+
   font-weight:700;
+
+
 
   height:46px;
 
+
+
   transition:0.25s;
+
 }
+
+
 
 button:hover{
 
+
+
   transform:translateY(-2px);
+
 }
+
+
 
 .save{
 
+
+
   flex:1;
 
+
+
   background:
+
     linear-gradient(
+
       135deg,
+
       #00ff9c,
+
       #00d084
+
     );
+
+
 
   color:#00130b;
 
+
+
   box-shadow:
+
     0 10px 25px rgba(0,255,156,0.2);
+
 }
+
+
 
 .update{
 
+
+
   flex:1;
 
+
+
   background:
+
     linear-gradient(
+
       135deg,
+
       #f59e0b,
+
       #ffcb52
+
     );
 
+
+
   color:#000;
+
 }
+
+
 
 .clear{
 
+
+
   width:120px;
+
+
 
   background:rgba(239,68,68,0.15);
 
+
+
   color:#ff8d8d;
 
+
+
   border:1px solid rgba(239,68,68,0.2);
+
 }
 
+
+
 /* =========================
+
    TABLE
+
 ========================= */
+
+
 
 .table-wrap{
 
+
+
   overflow:auto;
 
+
+
   border-radius:18px;
+
 }
+
+
 
 table{
 
+
+
   width:100%;
+
+
 
   min-width:unset;
 
+
+
   border-collapse:separate;
 
+
+
   border-spacing:0 5px;
+
 }
+
+
 
 thead th{
 
+
+
   color:#64748b;
 
+
+
   font-size:11px;
+
+
 
   font-weight:600;
 
+
+
   letter-spacing:1px;
+
+
 
   text-transform:uppercase;
 
+
+
   padding:0 12px 10px;
+
 }
+
+
 
 tbody tr{
 
+
+
   background:rgba(255,255,255,0.03);
 
+
+
   transition:
+
     transform 0.2s,
+
     background 0.2s,
+
     box-shadow 0.2s;
 
+
+
   cursor:default;
+
 }
+
+
 
 tbody tr:hover{
 
+
+
   transform:scale(1.004);
+
+
 
   background:rgba(255,255,255,0.05);
 
+
+
   box-shadow:
+
     0 0 0 1px rgba(255,255,255,0.05),
+
     0 10px 20px rgba(0,0,0,0.3);
+
 }
+
+
 
 tbody td{
 
+
+
   padding:14px 12px;
+
+
 
   text-align:center;
 
+
+
   font-size:13px;
+
+
 
   border-top:1px solid rgba(255,255,255,0.03);
 
+
+
   border-bottom:1px solid rgba(255,255,255,0.03);
+
 }
+
+
 
 tbody td:first-child{
 
+
+
   border-left:1px solid rgba(255,255,255,0.03);
 
+
+
   border-radius:14px 0 0 14px;
+
 }
+
+
 
 tbody td:last-child{
 
+
+
   border-right:1px solid rgba(255,255,255,0.03);
 
+
+
   border-radius:0 14px 14px 0;
+
 }
 
+
+
 /* =========================
+
    DRAG HANDLE
+
 ========================= */
+
+
 
 .drag-cell{
 
+
+
   width:48px;
 
+
+
   padding-left:8px !important;
+
   padding-right:8px !important;
+
 }
+
+
 
 .drag-handle{
 
+
+
   width:34px;
+
   height:34px;
+
+
 
   display:inline-flex;
 
+
+
   align-items:center;
+
   justify-content:center;
 
+
+
   border-radius:10px;
+
+
 
   background:rgba(59,130,246,0.10);
 
+
+
   border:1px solid rgba(59,130,246,0.18);
 
+
+
   color:#7cc2ff;
+
+
 
   cursor:grab;
 
+
+
   user-select:none;
+
+
 
   font-size:17px;
 
+
+
   transition:0.2s;
+
 }
+
+
 
 .drag-handle:hover{
 
+
+
   background:rgba(59,130,246,0.20);
 
+
+
   box-shadow:
+
     0 0 15px rgba(59,130,246,0.2);
 
+
+
   transform:none;
+
 }
+
+
 
 .drag-handle:active{
 
+
+
   cursor:grabbing;
+
 }
+
+
 
 body:not(.admin-mode) .drag-handle{
 
+
+
   opacity:0.25;
 
+
+
   cursor:not-allowed;
+
 }
+
+
 
 body:not(.admin-mode) .reorder-btn{
 
+
+
   opacity:0.25;
 
+
+
   cursor:not-allowed;
+
 }
 
+
+
 /* =========================
+
    DRAGGING
+
 ========================= */
+
+
 
 tr.dragging{
 
+
+
   opacity:0.35;
+
+
 
   transform:scale(0.98);
 
+
+
   background:rgba(59,130,246,0.15) !important;
+
 }
+
+
 
 tr.drag-over{
 
+
+
   box-shadow:
+
     0 -3px 0 var(--green),
+
     0 0 20px rgba(0,255,156,0.18);
+
 }
 
+
+
 /* =========================
-   REORDER BUTTONS
+
+   DRAG ONLY
+
 ========================= */
+
+
 
 .reorder-area{
 
+
+
   display:flex;
 
-  flex-direction:column;
-
-  gap:4px;
-
   align-items:center;
+
+  justify-content:center;
+
 }
+
+
 
 .reorder-btn{
 
-  width:30px;
+  display:none !important;
 
-  height:25px;
-
-  min-width:30px;
-
-  border-radius:8px;
-
-  background:rgba(255,255,255,0.05);
-
-  border:1px solid rgba(255,255,255,0.08);
-
-  color:#cbd5e1;
-
-  font-size:12px;
-
-  line-height:1;
-
-  padding:0;
-
-  cursor:pointer;
-
-  transition:0.2s;
 }
 
-.reorder-btn:hover{
 
-  background:rgba(0,255,156,0.14);
-
-  border-color:rgba(0,255,156,0.25);
-
-  color:var(--green);
-
-  transform:none;
-}
 
 /* =========================
+
    STATUS
+
 ========================= */
+
+
 
 .status{
 
+
+
   display:inline-flex;
+
+
 
   align-items:center;
 
+
+
   justify-content:center;
+
+
 
   min-width:95px;
 
+
+
   height:34px;
+
+
 
   border-radius:999px;
 
+
+
   font-size:12px;
+
+
 
   font-weight:700;
 
+
+
   letter-spacing:1px;
+
+
 
   cursor:pointer;
 
+
+
   transition:0.2s;
+
 }
+
+
 
 .status:hover{
 
+
+
   transform:scale(1.05);
+
 }
+
+
 
 .waiting{
 
+
+
   background:rgba(250,204,21,0.12);
+
+
 
   color:var(--yellow);
 
+
+
   border:1px solid rgba(250,204,21,0.18);
+
 }
+
+
 
 .towing{
 
+
+
   background:rgba(250,204,21,0.12);
+
+
 
   color:#ffd54a;
 
+
+
   border:1px solid rgba(250,204,21,0.25);
 
+
+
   animation:towStrobe 0.9s infinite;
+
 }
+
+
 
 .done{
 
+
+
   background:rgba(0,255,156,0.12);
+
+
 
   color:var(--green);
 
+
+
   border:1px solid rgba(0,255,156,0.18);
+
 }
 
+
+
 /* =========================
+
    ACTION
+
 ========================= */
+
+
 
 .action-area{
 
+
+
   display:flex;
+
+
 
   gap:6px;
 
+
+
   justify-content:center;
+
 }
+
+
 
 .action-btn{
 
+
+
   border:none;
+
+
 
   border-radius:10px;
 
+
+
   height:34px;
+
+
 
   min-width:60px;
 
+
+
   font-size:11px;
+
+
 
   font-weight:700;
 
+
+
   cursor:pointer;
+
 }
+
+
 
 .edit{
 
+
+
   background:rgba(245,158,11,0.18);
+
+
 
   color:#ffd27b;
 
+
+
   border:1px solid rgba(245,158,11,0.2);
+
 }
+
+
 
 .del{
 
+
+
   background:rgba(239,68,68,0.15);
+
+
 
   color:#ff8d8d;
 
+
+
   border:1px solid rgba(239,68,68,0.2);
+
 }
 
+
+
 /* =========================
+
    TAGS
+
 ========================= */
+
+
 
 .apx-tag{
 
+
+
   display:inline-block;
+
+
 
   padding:6px 12px;
 
+
+
   border-radius:999px;
+
+
 
   background:rgba(59,130,246,0.15);
 
+
+
   border:1px solid rgba(59,130,246,0.25);
+
+
 
   color:#7cc2ff;
 
+
+
   font-size:11px;
+
+
 
   font-weight:700;
 
+
+
   letter-spacing:1px;
+
 }
+
+
 
 .flight-type{
 
+
+
   display:inline-flex;
 
+
+
   align-items:center;
+
+
 
   justify-content:center;
 
+
+
   min-width:70px;
+
+
 
   height:30px;
 
+
+
   border-radius:999px;
+
+
 
   font-size:11px;
 
+
+
   font-weight:700;
 
+
+
   letter-spacing:1px;
+
 }
+
+
 
 .dep{
 
+
+
   background:rgba(0,255,156,0.12);
+
+
 
   color:#00ff9c;
 
+
+
   border:1px solid rgba(0,255,156,0.2);
+
 }
+
+
 
 .arv{
 
+
+
   background:rgba(239,68,68,0.12);
+
+
 
   color:#ff5c5c;
 
+
+
   border:1px solid rgba(239,68,68,0.25);
+
 }
 
+
+
 /* =========================
+
    ROW STATUS
+
 ========================= */
+
+
 
 .dep-row{
 
+
+
   background:
+
     linear-gradient(
+
       90deg,
+
       rgba(0,255,156,0.12),
+
       rgba(0,0,0,0.15)
+
     );
 
+
+
   box-shadow:
+
     inset 0 0 25px rgba(0,255,156,0.08);
+
 }
+
+
 
 .arv-row{
 
+
+
   background:
+
     linear-gradient(
+
       90deg,
+
       rgba(239,68,68,0.14),
+
       rgba(255,255,255,0.03)
+
     );
+
 }
+
+
 
 .towing-row{
 
+
+
   background:
+
     linear-gradient(
+
       90deg,
+
       rgba(250,204,21,0.18),
+
       rgba(255,255,255,0.03)
+
     );
+
 }
+
+
 
 .done-row{
 
+
+
   background:
+
     linear-gradient(
+
       90deg,
+
       rgba(0,255,156,0.18),
+
       rgba(255,255,255,0.03)
+
     );
 
+
+
   filter:brightness(1.1);
+
 }
+
+
 
 @keyframes towStrobe{
 
+
+
   0%,100%{
+
+
 
     opacity:1;
 
+
+
     box-shadow:
+
       0 0 10px rgba(250,204,21,0.3);
+
   }
 
+
+
   50%{
+
+
 
     opacity:0.35;
 
+
+
     box-shadow:
+
       0 0 25px rgba(250,204,21,0.8);
+
   }
 
+
+
 }
+
+
 
 .scheduled-text{
 
+
+
   color:#3b82f6;
+
+
 
   font-weight:800;
 
+
+
   text-shadow:
+
     0 0 10px rgba(59,130,246,0.6);
+
 }
+
+
 
 .scheduled-box{
 
+
+
   display:inline-block;
+
+
 
   padding:4px 10px;
 
+
+
   border-radius:8px;
+
+
 
   border:1px solid rgba(0,255,156,0.6);
 
+
+
   background:rgba(0,255,156,0.08);
+
+
 
   color:#00ff9c;
 
+
+
   font-weight:800;
 
+
+
   box-shadow:
+
     0 0 12px rgba(0,255,156,0.15);
+
 }
+
+
 
 .warning-row{
 
+
+
   animation:warningBlink 0.8s infinite;
+
 }
+
+
 
 @keyframes warningBlink{
 
+
+
   0%,100%{
+
+
 
     background:rgba(239,68,68,0.12);
 
+
+
     box-shadow:
+
       0 0 10px rgba(239,68,68,0.2);
+
   }
 
+
+
   50%{
+
+
 
     background:rgba(239,68,68,0.35);
 
+
+
     box-shadow:
+
       0 0 25px rgba(239,68,68,0.6);
+
   }
 
+
+
 }
+
+
 
 .slot-row{
 
+
+
   animation:slotBlink 0.8s infinite;
+
 }
+
+
 
 @keyframes slotBlink{
 
+
+
   0%,100%{
+
+
 
     background:rgba(0,255,156,0.12);
 
+
+
     box-shadow:
+
       0 0 10px rgba(0,255,156,0.2);
+
   }
+
+
 
   50%{
 
+
+
     background:rgba(0,255,156,0.35);
 
+
+
     box-shadow:
+
       0 0 25px rgba(0,255,156,0.6);
+
   }
+
+
 
 }
 
+
+
 /* =========================
+
    SOUND
+
 ========================= */
+
+
 
 .sound-btn{
 
+
+
   height:38px;
+
+
 
   padding:0 14px;
 
+
+
   border-radius:12px;
+
+
 
   border:1px solid rgba(0,255,156,0.25);
 
+
+
   background:rgba(0,255,156,0.08);
+
+
 
   color:var(--green);
 
+
+
   font-size:12px;
+
+
 
   font-weight:700;
 
+
+
   letter-spacing:1px;
+
+
 
   cursor:pointer;
 
+
+
   transition:0.25s;
 
+
+
   box-shadow:
+
     0 0 15px rgba(0,255,156,0.1);
+
 }
+
+
 
 .sound-btn:hover{
 
+
+
   transform:translateY(-2px);
+
+
 
   background:rgba(0,255,156,0.15);
 
+
+
   box-shadow:
+
     0 0 25px rgba(0,255,156,0.25);
+
 }
 
+
+
 /* =========================
+
    ADMIN MODE
+
 ========================= */
+
+
 
 .admin-indicator{
 
+
+
   display:none;
 
+
+
   align-items:center;
+
+
 
   gap:7px;
 
+
+
   padding:7px 11px;
+
+
 
   border-radius:999px;
 
+
+
   color:var(--green);
+
+
 
   background:rgba(0,255,156,0.08);
 
+
+
   border:1px solid rgba(0,255,156,0.2);
+
+
 
   font-size:10px;
 
+
+
   font-weight:700;
 
+
+
   letter-spacing:1px;
+
 }
+
+
 
 body.admin-mode .admin-indicator{
 
+
+
   display:flex;
+
 }
+
+
 
 body.admin-mode .drag-handle{
 
+
+
   opacity:1;
+
 }
 
+
+
 /* =========================
+
    ZOOM MODE
+
 ========================= */
+
+
 
 html{
 
+
+
   zoom:100%;
+
 }
+
+
 
 body.zoom-mode .container{
 
+
+
   grid-template-columns:1fr !important;
+
 }
+
+
 
 body.zoom-mode .container .panel:first-child{
 
+
+
   display:none;
+
 }
+
+
 
 body.zoom-mode .container .panel:last-child{
 
+
+
   width:100%;
 
+
+
   transform:scale(1.05);
+
 }
+
+
 
 body.zoom-mode table{
 
+
+
   font-size:18px;
 
+
+
   table-layout:fixed;
+
 }
+
+
 
 body.zoom-mode tbody td{
 
+
+
   padding:18px 14px;
+
 }
+
+
 
 body.zoom-mode .panel-title h3{
 
+
+
   font-size:20px;
+
 }
 
+
+
 body.zoom-mode .status{
+
+
 
   min-width:120px;
 
+
+
   height:42px;
 
+
+
   font-size:14px;
+
 }
 
+
+
 body.zoom-mode .action-btn{
+
+
 
   height:40px;
 
+
+
   min-width:80px;
 
+
+
   font-size:12px;
+
 }
+
+
 
 body.zoom-mode .title h1{
 
+
+
   font-size:28px;
+
 }
+
+
 
 body.zoom-mode .title span{
 
+
+
   font-size:13px;
+
 }
+
+
 
 body.zoom-mode .clock{
 
+
+
   font-size:18px;
+
 }
+
+
 
 body.zoom-mode .live{
 
+
+
   padding:12px 16px;
 
+
+
   font-size:14px;
+
 }
 
+
+
 body.zoom-mode input,
+
 body.zoom-mode select{
+
+
 
   height:56px;
 
+
+
   font-size:16px;
+
 }
+
+
 
 body.zoom-mode tbody td{
 
+
+
   padding:20px 16px;
+
 }
+
+
 
 body.zoom-mode .status{
 
+
+
   min-width:140px;
+
+
 
   height:48px;
 
+
+
   font-size:16px;
+
 }
+
+
 
 body.zoom-mode button{
 
+
+
   height:52px;
 
+
+
   font-size:14px;
+
 }
+
+
 
 body.zoom-mode .action-btn{
 
+
+
   height:44px;
+
+
 
   min-width:90px;
 
+
+
   font-size:13px;
+
 }
 
+
+
 /* =========================
+
    HIDE LAST ACTION COLUMN
+
    IN ZOOM
+
 ========================= */
+
+
 
 body.zoom-mode th:last-child,
+
 body.zoom-mode td:last-child{
 
+
+
   display:none;
+
 }
 
+
+
 /* =========================
-   MOBILE
+
+   PRINT PLAN
+
 ========================= */
+
+
+
+/* =========================
+
+   PREMIUM PRINT PLAN
+
+========================= */
+
+
+
+.print-btn{
+
+  background:rgba(255,255,255,0.08);
+
+  border-color:rgba(255,255,255,0.16);
+
+  color:#ffffff;
+
+}
+
+
+
+.print-btn:hover{
+
+  background:rgba(255,255,255,0.14);
+
+  border-color:rgba(255,255,255,0.28);
+
+  box-shadow:0 8px 22px rgba(0,0,0,0.22);
+
+}
+
+
+
+/* PRINT AREA */
+
+#printArea{
+
+  display:none;
+
+}
+
+
+
+
+
+/* =========================================================
+
+   PREMIUM A4 PRINT
+
+========================================================= */
+
+
+
+@media print{
+
+
+
+  @page{
+
+    size:A4 landscape;
+
+    margin:7mm;
+
+  }
+
+
+
+  html,
+
+  body{
+
+
+
+    width:100%;
+
+    min-height:0;
+
+
+
+    margin:0;
+
+    padding:0;
+
+
+
+    background:#fff !important;
+
+    color:#111 !important;
+
+
+
+    overflow:visible !important;
+
+
+
+    zoom:1 !important;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     HIDE WEB UI
+
+  ========================================= */
+
+
+
+  body::before,
+
+  .header,
+
+  .container,
+
+  .reorder-saving{
+
+
+
+    display:none !important;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     PRINT AREA
+
+  ========================================= */
+
+
+
+  #printArea{
+
+
+
+    display:block !important;
+
+
+
+    width:100%;
+
+
+
+    background:#fff;
+
+
+
+    color:#111;
+
+
+
+    font-family:
+
+      "Inter",
+
+      Arial,
+
+      "Segoe UI",
+
+      sans-serif;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     REPORT HEADER
+
+  ========================================= */
+
+
+
+  .print-header{
+
+
+
+    display:flex;
+
+
+
+    align-items:flex-end;
+
+
+
+    justify-content:space-between;
+
+
+
+    gap:20px;
+
+
+
+    margin:0 0 10px 0;
+
+
+
+    padding:
+
+      0
+
+      4px
+
+      9px
+
+      4px;
+
+
+
+    border-bottom:
+
+      3px solid #111;
+
+
+
+    position:relative;
+
+  }
+
+
+
+
+
+  .print-header::after{
+
+
+
+    content:"";
+
+
+
+    position:absolute;
+
+
+
+    left:0;
+
+    bottom:-6px;
+
+
+
+    width:90px;
+
+    height:3px;
+
+
+
+    background:#111;
+
+
+
+  }
+
+
+
+
+
+  .print-title{
+
+
+
+    font-size:26px;
+
+
+
+    line-height:1;
+
+
+
+    font-weight:900;
+
+
+
+    letter-spacing:1px;
+
+
+
+    color:#111;
+
+  }
+
+
+
+
+
+  .print-meta{
+
+
+
+    text-align:right;
+
+
+
+    font-size:11px;
+
+
+
+    line-height:1.45;
+
+
+
+    color:#333;
+
+
+
+    font-weight:700;
+
+
+
+    white-space:nowrap;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     TABLE
+
+  ========================================= */
+
+
+
+  .print-table{
+
+
+
+    width:100%;
+
+
+
+    border-collapse:collapse;
+
+
+
+    table-layout:fixed;
+
+
+
+    background:#fff;
+
+
+
+    border:
+
+      2px solid #111;
+
+
+
+    font-weight:700;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     TABLE HEADER
+
+  ========================================= */
+
+
+
+  .print-table th{
+
+
+
+    background:#1f2937 !important;
+
+
+
+    color:#fff !important;
+
+
+
+    border:
+
+      1px solid #111;
+
+
+
+    padding:
+
+      7px
+
+      6px;
+
+
+
+    font-size:12px;
+
+
+
+    line-height:1.1;
+
+
+
+    font-weight:900;
+
+
+
+    text-align:center;
+
+
+
+    white-space:nowrap;
+
+
+
+    letter-spacing:.5px;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     TABLE BODY
+
+  ========================================= */
+
+
+
+  .print-table td{
+
+
+
+    border:
+
+      1px solid #9ca3af;
+
+
+
+    padding:
+
+      6px
+
+      7px;
+
+
+
+    font-size:12px;
+
+
+
+    line-height:1.2;
+
+
+
+    color:#111 !important;
+
+
+
+    background:#fff !important;
+
+
+
+    font-weight:700;
+
+
+
+    vertical-align:middle;
+
+
+
+    overflow-wrap:anywhere;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     ZEBRA
+
+  ========================================= */
+
+
+
+  .print-table tbody tr:nth-child(even) td{
+
+
+
+    background:#f3f4f6 !important;
+
+  }
+
+
+
+
+
+  .print-table tbody tr:nth-child(odd) td{
+
+
+
+    background:#fff !important;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     ALIGNMENT
+
+  ========================================= */
+
+
+
+  .print-table .center{
+
+
+
+    text-align:center;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     IMPORTANT DATA
+
+  ========================================= */
+
+
+
+  .print-table .type{
+
+
+
+    font-weight:900;
+
+
+
+    letter-spacing:.5px;
+
+  }
+
+
+
+
+
+  .print-table .dep-text{
+
+
+
+    color:#087a3d !important;
+
+
+
+    font-weight:900 !important;
+
+  }
+
+
+
+
+
+  .print-table .arv-text{
+
+
+
+    color:#c62828 !important;
+
+
+
+    font-weight:900 !important;
+
+  }
+
+
+
+
+
+  .print-table .status-text{
+
+
+
+    font-weight:900;
+
+  }
+
+
+
+
+
+  .print-table .waiting-text{
+
+
+
+    color:#9a6700 !important;
+
+
+
+    font-weight:900 !important;
+
+  }
+
+
+
+
+
+  .print-table .towing-text{
+
+
+
+    color:#a15c00 !important;
+
+
+
+    font-weight:900 !important;
+
+  }
+
+
+
+
+
+  .print-table .done-text{
+
+
+
+    color:#087a3d !important;
+
+
+
+    font-weight:900 !important;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     FOOTER
+
+  ========================================= */
+
+
+
+  .print-footer{
+
+
+
+    display:flex;
+
+
+
+    justify-content:space-between;
+
+
+
+    margin-top:7px;
+
+
+
+    padding:
+
+      6px
+
+      4px
+
+      0;
+
+
+
+    border-top:
+
+      2px solid #9ca3af;
+
+
+
+    font-size:10px;
+
+
+
+    color:#333;
+
+
+
+    font-weight:800;
+
+
+
+    letter-spacing:.4px;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     KEEP ROW TOGETHER
+
+  ========================================= */
+
+
+
+  .print-table tr{
+
+
+
+    break-inside:avoid;
+
+
+
+    page-break-inside:avoid;
+
+  }
+
+
+
+
+
+  /* =========================================
+
+     MANY ROWS
+
+     ลดขนาดลงเล็กน้อยแบบเป็นขั้น
+
+  ========================================= */
+
+
+
+  #printArea.compact .print-title{
+
+
+
+    font-size:23px;
+
+  }
+
+
+
+
+
+  #printArea.compact .print-table th{
+
+
+
+    padding:
+
+      5px
+
+      5px;
+
+
+
+    font-size:10.5px;
+
+  }
+
+
+
+
+
+  #printArea.compact .print-table td{
+
+
+
+    padding:
+
+      4px
+
+      5px;
+
+
+
+    font-size:10.5px;
+
+
+
+    line-height:1.1;
+
+  }
+
+
+
+
+
+  #printArea.ultra-compact .print-title{
+
+
+
+    font-size:21px;
+
+  }
+
+
+
+
+
+  #printArea.ultra-compact .print-table th{
+
+
+
+    padding:
+
+      3px
+
+      4px;
+
+
+
+    font-size:9px;
+
+  }
+
+
+
+
+
+  #printArea.ultra-compact .print-table td{
+
+
+
+    padding:
+
+      3px
+
+      4px;
+
+
+
+    font-size:9px;
+
+
+
+    line-height:1.05;
+
+  }
+
+
+
+
+
+  #printArea.ultra-compact .print-footer{
+
+
+
+    font-size:8px;
+
+  }
+
+
+
+}
+
+
+
+/* =========================
+
+   MOBILE
+
+========================= */
+
+
 
 @media(max-width:900px){
 
+
+
   .header{
+
+
 
     height:auto;
 
+
+
     min-height:82px;
+
+
 
     padding:14px;
 
+
+
     gap:12px;
 
+
+
     flex-wrap:wrap;
+
   }
+
+
 
   .header-right{
 
+
+
     gap:7px;
+
+
 
     flex-wrap:wrap;
 
+
+
     justify-content:flex-end;
+
   }
+
+
 
   .live{
 
+
+
     display:none;
+
   }
+
+
 
   .row2{
 
+
+
     grid-template-columns:1fr;
+
   }
+
+
 
 }
 
+
+
 /* =========================
+
    REORDER SAVING
+
 ========================= */
+
+
 
 .reorder-saving{
 
+
+
   position:fixed;
+
+
 
   top:100px;
 
+
+
   right:24px;
+
+
 
   z-index:5000;
 
+
+
   display:none;
+
+
 
   align-items:center;
 
+
+
   gap:10px;
+
+
 
   padding:12px 16px;
 
+
+
   border-radius:14px;
+
+
 
   background:rgba(4,11,22,0.92);
 
+
+
   border:1px solid rgba(0,255,156,0.25);
+
+
 
   color:var(--green);
 
+
+
   box-shadow:
+
     0 10px 35px rgba(0,0,0,0.4),
+
     0 0 20px rgba(0,255,156,0.12);
+
+
 
   font-size:12px;
 
+
+
   font-weight:700;
+
 }
+
+
 
 .reorder-saving.show{
 
+
+
   display:flex;
+
 }
+
+
 
 .spinner{
 
+
+
   width:16px;
+
   height:16px;
+
+
 
   border-radius:50%;
 
+
+
   border:2px solid rgba(255,255,255,0.15);
+
+
 
   border-top-color:var(--green);
 
+
+
   animation:spin 0.7s linear infinite;
+
 }
+
+
 
 @keyframes spin{
 
+
+
   to{
+
     transform:rotate(360deg);
+
   }
 
+
+
 }
+
+
 
 </style>
 
+
+
 </head>
+
+
 
 <body>
 
+
+
 <!-- =========================
+
      HEADER
+
 ========================= -->
+
+
 
 <div class="header">
 
+
+
   <div class="logo-wrap">
+
+
 
     <div class="radar"></div>
 
+
+
     <div class="title">
+
+
 
       <h1>SPIDER TOWING CONTROL</h1>
 
+
+
       <span>TOWING MANAGEMENT SYSTEM</span>
+
+
 
     </div>
 
+
+
   </div>
+
+
 
   <div class="header-right">
 
+
+
     <div class="live">
+
+
 
       <div class="live-dot"></div>
 
+
+
       <div>LIVE SYSTEM</div>
 
+
+
     </div>
+
+
 
     <div class="clock" id="clock"></div>
 
+
+
     <div class="admin-indicator">
+
       🔐 ADMIN MODE
+
     </div>
 
+
+
     <button
+
       class="sound-btn"
+
       onclick="unlockAudio()">
+
+
 
       🔊 ENABLE SOUND
 
+
+
     </button>
 
+
+
     <button
+
       class="sound-btn"
+
       onclick="toggleMute()"
+
       id="muteBtn">
+
+
 
       🔇 MUTE OFF
 
+
+
     </button>
 
+
+
     <button
+
       class="sound-btn"
+
       onclick="toggleZoom()">
+
+
 
       🔍 ZOOM PLAN
 
+
+
     </button>
 
+
+
     <button
+
+      class="sound-btn print-btn"
+
+      onclick="printPlan()">
+
+
+
+      🖨️ PRINT PLAN
+
+
+
+    </button>
+
+
+
+    <button
+
       class="sound-btn"
+
       onclick="adminLogin()">
+
+
 
       🔐 LOGIN
 
+
+
     </button>
+
+
 
   </div>
 
+
+
 </div>
 
+
+
 <!-- =========================
+
      REORDER SAVING INDICATOR
+
 ========================= -->
 
+
+
 <div
+
   id="reorderSaving"
+
   class="reorder-saving">
+
+
 
   <div class="spinner"></div>
 
+
+
   SAVING NEW ORDER...
+
+
 
 </div>
 
+
+
 <!-- =========================
+
      MAIN
+
 ========================= -->
+
+
 
 <div class="container">
 
+
+
   <!-- =========================
+
        FLIGHT INPUT
+
   ========================= -->
+
+
 
   <div class="panel">
 
+
+
     <div class="panel-title">
+
+
 
       <h3>FLIGHT INPUT</h3>
 
+
+
       <div class="panel-badge">
+
         OPS ACTIVE
+
       </div>
+
+
 
     </div>
 
+
+
     <div class="form">
+
+
 
       <div class="row2">
 
+
+
         <div class="field">
+
+
 
           <label>AIRCRAFT REG</label>
 
+
+
           <input
+
             id="reg"
+
             placeholder="HS-XXX">
+
+
 
         </div>
 
+
+
         <div class="field">
+
+
 
           <label>FLIGHT</label>
 
+
+
           <input
+
             id="flight"
+
             placeholder="TG101">
+
+
 
         </div>
 
+
+
         <div class="field">
+
+
 
           <label>TYPE</label>
 
+
+
           <select id="flightType">
 
+
+
             <option value="AUTO">
+
               AUTO DETECT
+
             </option>
+
+
 
             <option value="DEP">
+
               DEP
+
             </option>
 
+
+
             <option value="ARV">
+
               ARV
+
             </option>
+
+
 
           </select>
 
+
+
         </div>
 
+
+
       </div>
+
+
 
       <div class="row2">
 
+
+
         <div class="field">
+
+
 
           <label>TIME</label>
 
+
+
           <input
+
             id="time"
+
             type="text"
+
             placeholder="10:30">
 
+
+
         </div>
+
+
 
         <div class="field">
 
+
+
           <label>A/C@GATE</label>
 
+
+
           <input
+
             id="gate"
+
             placeholder="BEFORE DEP 2 HR.">
+
+
 
         </div>
 
+
+
       </div>
 
+
+
       <div class="field">
+
+
 
         <label>BAY</label>
 
+
+
         <input
+
           id="bay"
+
           placeholder="BAY 25">
 
+
+
       </div>
+
+
 
       <div class="field">
 
+
+
         <label>REMARK</label>
 
+
+
         <input
+
           id="remark"
+
           placeholder="OPS NOTE">
 
+
+
       </div>
+
+
 
       <!-- HIDDEN STATUS -->
 
+
+
       <select
+
         id="status"
+
         style="display:none;">
 
+
+
         <option value="WAITING">
+
           WAITING
+
         </option>
+
+
 
         <option value="TOWING">
+
           TOWING
+
         </option>
 
+
+
         <option value="DONE">
+
           DONE
+
         </option>
+
+
 
       </select>
 
+
+
       <div class="buttons">
 
+
+
         <button
+
           id="saveBtn"
+
           class="save"
+
           onclick="addRow()">
+
+
 
           + ADD FLIGHT
 
+
+
         </button>
 
+
+
         <button
+
           class="clear"
+
           onclick="clearForm()">
+
+
 
           CLEAR
 
+
+
         </button>
 
+
+
       </div>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+  <!-- =========================
+
+       PLAN TOWING
+
+  ========================= -->
+
+
+
+  <div class="panel">
+
+
+
+    <div class="panel-title">
+
+
+
+      <h3>PLAN TOWING</h3>
+
+
+
+      <div class="panel-badge">
+
+        REALTIME
+
+      </div>
+
+
+
+    </div>
+
+
+
+    <div class="table-wrap">
+
+
+
+      <table>
+
+
+
+        <thead>
+
+
+
+          <tr>
+
+
+
+            <!-- NEW -->
+
+            <th>MOVE</th>
+
+
+
+            <th>No</th>
+
+
+
+            <th>Reg</th>
+
+
+
+            <th>Flight</th>
+
+
+
+            <th>Type</th>
+
+
+
+            <th>Time</th>
+
+
+
+            <th>A/C@Gate</th>
+
+
+
+            <th>Bay</th>
+
+
+
+            <th>Status</th>
+
+
+
+            <th>Remark</th>
+
+
+
+            <th>Action</th>
+
+
+
+          </tr>
+
+
+
+        </thead>
+
+
+
+        <tbody id="tb"></tbody>
+
+
+
+      </table>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+</div>
+
+
+
+<!-- =========================
+
+     PRINT AREA
+
+========================= -->
+
+
+
+<div id="printArea">
+
+  <div class="print-header">
+
+    <div class="print-title">PLAN TOWING</div>
+
+    <div class="print-meta">
+
+      <div id="printDate"></div>
+
+      <div id="printCount"></div>
 
     </div>
 
   </div>
 
-  <!-- =========================
-       PLAN TOWING
-  ========================= -->
 
-  <div class="panel">
 
-    <div class="panel-title">
+  <table class="print-table">
 
-      <h3>PLAN TOWING</h3>
+    <colgroup>
 
-      <div class="panel-badge">
-        REALTIME
-      </div>
+      <col style="width:4%">
 
-    </div>
+      <col style="width:11%">
 
-    <div class="table-wrap">
+      <col style="width:9%">
 
-      <table>
+      <col style="width:7%">
 
-        <thead>
+      <col style="width:9%">
 
-          <tr>
+      <col style="width:13%">
 
-            <!-- NEW -->
-            <th>MOVE</th>
+      <col style="width:10%">
 
-            <th>No</th>
+      <col style="width:37%">
 
-            <th>Reg</th>
+    </colgroup>
 
-            <th>Flight</th>
+    <thead>
 
-            <th>Type</th>
+      <tr>
 
-            <th>Time</th>
+        <th>NO</th>
 
-            <th>A/C@Gate</th>
+        <th>REG</th>
 
-            <th>Bay</th>
+        <th>FLIGHT</th>
 
-            <th>Status</th>
+        <th>TYPE</th>
 
-            <th>Remark</th>
+        <th>TIME</th>
 
-            <th>Action</th>
+        <th>A/C@GATE</th>
 
-          </tr>
+        <th>BAY</th>
 
-        </thead>
+        <th>REMARK</th>
 
-        <tbody id="tb"></tbody>
+      </tr>
 
-      </table>
+    </thead>
 
-    </div>
+    <tbody id="printTb"></tbody>
+
+  </table>
+
+
+
+  <div class="print-footer">
+
+    <span>SPIDER TOWING CONTROL</span>
+
+    <span>PLAN TOWING</span>
 
   </div>
 
 </div>
 
+
+
 <script>
 
+
+
 /* =========================================================
+
    AUDIO
+
 ========================================================= */
 
+
+
 const audioCtx =
+
   new (
+
     window.AudioContext ||
+
     window.webkitAudioContext
+
   )();
 
+
+
 /* =========================
+
    KEEP AUDIO ALIVE
+
 ========================= */
+
+
 
 async function wakeAudio(){
 
+
+
   try{
+
+
 
     if(audioCtx.state === "suspended"){
 
+
+
       await audioCtx.resume();
+
+
 
     }
 
+
+
     window.speechSynthesis.resume();
+
+
 
   }catch(e){
 
+
+
     console.log(
+
       "wakeAudio error",
+
       e
+
     );
+
+
 
   }
 
+
+
 }
+
+
 
 let soundEnabled = false;
 
+
+
 let muted = false;
 
+
+
 let speechQueue = [];
+
+
 
 let isSpeaking = false;
 
 
+
+
+
 /* =========================================================
+
    IMPORTANT
+
    =========================
+
    PUT YOUR APPS SCRIPT WEB APP URL HERE
+
 ========================================================= */
 
+
+
 const API =
+
   "https://script.google.com/macros/s/AKfycbwJ8UtGaUrzS_cqK9_7WnBIJsaPjD5GLyrHieLRAYFGAEtEf5357goVgi7IIkpdCv9tpw/exec";
 
 
+
+
+
 /* =========================================================
+
    SYSTEM VARIABLES
+
 ========================================================= */
+
+
 
 let pauseRealtime = false;
 
+
+
 let isReordering = false;
+
+
 
 let data = [];
 
+
+
 let editRow = null;
+
+
 
 let isAdmin = false;
 
+
+
 const ADMIN_PASSWORD =
+
   "spider123";
 
+
+
 let speakCountMap = {};
+
+
 
 const MAX_SPEAK = 1;
 
 
+
+
+
 /* =========================================================
+
    DEP FLIGHT LIST
+
 ========================================================= */
+
+
 
 const DEP_LIST = [
 
+
+
 "002",
+
 "004",
+
 "008",
+
 "020",
+
 "028",
+
 "040",
+
 "042",
+
 "044",
+
 "046",
+
 "101",
+
 "102",
+
 "104",
+
 "106",
+
 "110",
+
 "120",
+
 "130",
+
 "132",
+
 "136",
+
 "165",
+
 "221",
+
 "222",
+
 "242",
+
 "250",
+
 "260",
+
 "264",
+
 "268",
+
 "284",
+
 "286",
+
 "290",
+
 "292",
+
 "302",
+
 "304",
+
 "310",
+
 "314",
+
 "316",
+
 "318",
+
 "320",
+
 "322",
+
 "324",
+
 "326",
+
 "327",
+
 "328",
+
 "330",
+
 "332",
+
 "336",
+
 "338",
+
 "340",
+
 "342",
+
 "344",
+
 "345",
+
 "349",
+
 "352",
+
 "402",
+
 "404",
+
 "408",
+
 "410",
+
 "414",
+
 "416",
+
 "418",
+
 "426",
+
 "432",
+
 "434",
+
 "436",
+
 "462",
+
 "466",
+
 "471",
+
 "476",
+
 "482",
+
 "504",
+
 "551",
+
 "557",
+
 "561",
+
 "565",
+
 "571",
+
 "575",
+
 "585",
+
 "587",
+
 "589",
+
 "601",
+
 "603",
+
 "607",
+
 "613",
+
 "615",
+
 "619",
+
 "621",
+
 "623",
+
 "625",
+
 "628",
+
 "631",
+
 "633",
+
 "635",
+
 "636",
+
 "639",
+
 "640",
+
 "643",
+
 "645",
+
 "646",
+
 "647",
+
 "649",
+
 "653",
+
 "657",
+
 "659",
+
 "661",
+
 "665",
+
 "669",
+
 "671",
+
 "673",
+
 "677",
+
 "683",
+
 "901",
+
 "911",
+
 "917",
+
 "921",
+
 "923",
+
 "925",
+
 "931",
+
 "935",
+
 "941",
+
 "951",
+
 "955",
+
 "961",
+
 "971",
+
 "936"
+
+
 
 ];
 
 
+
+
+
 /* =========================================================
+
    ARV FLIGHT LIST
+
 ========================================================= */
+
+
 
 const ARV_LIST = [
 
+
+
 "003",
+
 "005",
+
 "009",
+
 "021",
+
 "029",
+
 "041",
+
 "043",
+
 "045",
+
 "047",
+
 "103",
+
 "105",
+
 "107",
+
 "111",
+
 "121",
+
 "131",
+
 "133",
+
 "137",
+
 "165",
+
 "202",
+
 "204",
+
 "206",
+
 "212",
+
 "216",
+
 "218",
+
 "242",
+
 "250",
+
 "260",
+
 "264",
+
 "268",
+
 "284",
+
 "286",
+
 "290",
+
 "292",
+
 "302",
+
 "304",
+
 "310",
+
 "314",
+
 "316",
+
 "318",
+
 "320",
+
 "322",
+
 "324",
+
 "326",
+
 "330",
+
 "332",
+
 "336",
+
 "338",
+
 "340",
+
 "342",
+
 "344",
+
 "346",
+
 "350",
+
 "352",
+
 "402",
+
 "404",
+
 "408",
+
 "410",
+
 "414",
+
 "416",
+
 "418",
+
 "426",
+
 "432",
+
 "436",
+
 "440",
+
 "462",
+
 "466",
+
 "472",
+
 "476",
+
 "482",
+
 "484",
+
 "504",
+
 "551",
+
 "557",
+
 "561",
+
 "565",
+
 "571",
+
 "575",
+
 "585",
+
 "587",
+
 "589",
+
 "601",
+
 "603",
+
 "607",
+
 "613",
+
 "615",
+
 "619",
+
 "621",
+
 "623",
+
 "625",
+
 "629",
+
 "631",
+
 "633",
+
 "635",
+
 "637",
+
 "639",
+
 "641",
+
 "643",
+
 "645",
+
 "649",
+
 "653",
+
 "657",
+
 "659",
+
 "661",
+
 "663",
+
 "665",
+
 "669",
+
 "671",
+
 "673",
+
 "675",
+
 "677",
+
 "683",
+
 "901",
+
 "911",
+
 "917",
+
 "921",
+
 "923",
+
 "925",
+
 "931",
+
 "935",
+
 "951",
+
 "955",
+
 "961",
+
 "971",
+
 "941",
+
 "646",
+
 "647",
+
 "222",
+
 "327",
+
 "328",
+
 "222",
+
 "937"
+
+
 
 ];
 
 
+
+
+
 /* =========================================================
+
    GET FLIGHT TYPE
+
 ========================================================= */
+
+
 
 function getFlightType(flight){
 
+
+
   if(flightType.value === "DEP"){
+
     return "DEP";
+
   }
+
+
 
   if(flightType.value === "ARV"){
+
     return "ARV";
+
   }
+
+
 
   if(!flight){
+
     return "DEP";
+
   }
+
+
 
   const clean =
+
     String(flight)
+
       .toUpperCase()
+
       .replace("TG","")
+
       .trim();
 
+
+
   if(ARV_LIST.includes(clean)){
+
     return "ARV";
+
   }
 
+
+
   return "DEP";
+
 }
 
 
+
+
+
 /* =========================================================
+
    SPEECH LOCK
+
 ========================================================= */
 
+
+
 let lastSpeakMap = {};
+
+
 
 const SPEAK_LOCK = 15000;
 
 
+
+
+
 /* =========================================================
+
    CLOCK
+
 ========================================================= */
+
+
 
 setInterval(()=>{
 
+
+
   clock.innerText =
+
     new Date().toLocaleTimeString();
+
+
 
 },1000);
 
 
+
+
+
 /* =========================================================
+
    FORMAT
+
 ========================================================= */
+
+
 
 function fmt(v){
 
+
+
   return (
+
     v === "" ||
+
     v === null ||
+
     v === undefined
+
   )
+
   ? "-"
+
   : v;
 
+
+
 }
+
+
+
 
 
 /* =========================================================
+
    LOAD
+
 ========================================================= */
+
+
 
 async function load(){
 
+
+
   /*
+
     IMPORTANT:
+
     ห้าม load ระหว่าง reorder
+
   */
 
+
+
   if(isReordering){
+
     return;
+
   }
+
+
 
   try{
 
+
+
     const res =
+
       await fetch(API);
 
+
+
     const newData =
+
       await res.json();
 
+
+
     const hash =
+
       JSON.stringify(newData);
+
+
 
     lastDataHash = hash;
 
+
+
     data = newData;
+
+
 
     render();
 
+
+
   }catch(e){
+
+
 
     console.log(e);
 
+
+
   }
+
+
 
 }
 
+
+
 let lastDataHash = "";
+
+
 
 load();
 
 
+
+
+
 /* =========================================================
+
    EDIT
+
 ========================================================= */
+
+
 
 function edit(i){
 
+
+
   if(!isAdmin){
+
+
 
     alert("NO PERMISSION");
 
+
+
     return;
 
+
+
   }
+
+
 
   pauseRealtime = true;
 
+
+
   let d = data[i];
+
+
 
   editRow = d.row;
 
+
+
   reg.value = d.reg;
+
+
 
   flight.value = d.flight;
 
+
+
   time.value = d.time;
 
+
+
   gate.value =
+
     d.ac_gate ||
+
     d.gate ||
+
     "";
+
+
 
   bay.value = d.bay;
 
+
+
   remark.value = d.remark;
+
+
 
   status.value = d.status;
 
+
+
   status.disabled = false;
+
+
 
   saveBtn.innerText = "UPDATE";
 
+
+
   saveBtn.className = "update";
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    DELETE
+
 ========================================================= */
+
+
 
 async function del(i){
 
+
+
   if(!isAdmin){
+
+
 
     alert("NO PERMISSION");
 
+
+
     return;
 
+
+
   }
+
+
 
   if(
+
     !confirm(
+
       "Delete this flight?"
+
     )
+
   ){
+
+
 
     return;
 
+
+
   }
+
+
 
   await fetch(API,{
 
+
+
     method:"POST",
+
+
 
     body:JSON.stringify({
 
+
+
       type:"delete",
+
+
 
       row:data[i].row
 
+
+
     })
+
+
 
   });
 
+
+
   load();
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    ADD / UPDATE
+
 ========================================================= */
+
+
 
 async function addRow(){
 
+
+
   if(!isAdmin){
+
+
 
     alert("NO PERMISSION");
 
+
+
     return;
+
+
 
   }
 
+
+
   let currentData =
+
     data.find(
+
       x => x.row === editRow
+
     );
+
+
 
   const row = {
 
+
+
     reg:reg.value,
+
+
 
     flight:flight.value,
 
+
+
     time:String(time.value),
+
+
 
     ac_gate:gate.value,
 
+
+
     bay:bay.value,
+
+
 
     remark:remark.value,
 
+
+
     status:
+
       editRow
+
       ? (
+
           status.value ||
+
           currentData.status
+
         )
+
       : "WAITING"
+
+
 
   };
 
 
+
+
+
   await fetch(API,{
+
+
 
     method:"POST",
 
+
+
     body:JSON.stringify(
+
+
 
       editRow
 
+
+
       ? {
+
+
 
           type:"update",
 
+
+
           row:editRow,
+
+
 
           ...row
 
+
+
         }
+
+
 
       : row
 
+
+
     )
 
+
+
   });
+
+
+
 
 
   pauseRealtime = false;
 
+
+
   load();
+
+
 
   clearForm();
 
+
+
 }
 
 
+
+
+
 /* =========================================================
+
    STATUS
+
 ========================================================= */
+
+
 
 function toggleStatus(i){
 
+
+
   if(
+
     editRow !== data[i].row
+
   ){
 
+
+
     alert(
+
       "Please press EDIT first"
+
     );
+
+
 
     return;
 
+
+
   }
 
+
+
   const states = [
+
     "WAITING",
+
     "TOWING",
+
     "DONE"
+
   ];
 
+
+
   let current =
+
     status.value ||
+
     data[i].status;
 
+
+
   let next =
+
     states[
+
       (
+
         states.indexOf(current)+1
+
       ) % 3
+
     ];
+
+
 
   data[i].status = next;
 
+
+
   status.value = next;
 
+
+
   render();
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    RENDER
+
 ========================================================= */
+
+
 
 function render(){
 
+
+
   tb.innerHTML = "";
+
+
 
   data.forEach((d,i)=>{
 
+
+
     let warning =
+
       checkWarning(d);
 
+
+
     let slot =
+
       checkSlot(d);
+
+
 
     tb.innerHTML += `
 
+
+
       <tr
+
         data-index="${i}"
+
         data-row="${d.row}"
+
         class="
+
           ${getFlightType(d.flight) === 'DEP'
+
             ? 'dep-row'
+
             : 'arv-row'}
 
+
+
           ${d.status === 'TOWING'
+
             ? 'towing-row'
+
             : ''}
+
+
 
           ${d.status === 'DONE'
+
             ? 'done-row'
+
             : ''}
+
+
 
           ${warning
+
             ? 'warning-row'
+
             : ''}
 
+
+
           ${slot
+
             ? 'slot-row'
+
             : ''}
+
         "
+
       >
+
+
 
         <!-- MOVE -->
 
+
+
         <td class="drag-cell">
+
+
 
           <div class="reorder-area">
 
-            <button
-              class="reorder-btn"
-              onclick="moveUp(${i})"
-              title="MOVE UP">
 
-              ▲
-
-            </button>
 
             <span
+
               class="drag-handle"
+
               draggable="true"
+
               title="${
+
                 isAdmin
+
                 ? 'DRAG TO REORDER'
+
                 : 'ADMIN ONLY'
+
               }">
+
+
 
               ☷
 
+
+
             </span>
 
-            <button
-              class="reorder-btn"
-              onclick="moveDown(${i})"
-              title="MOVE DOWN">
 
-              ▼
-
-            </button>
 
           </div>
 
+
+
         </td>
+
+
+
 
 
         <!-- NO -->
 
+
+
         <td>
+
           ${i+1}
+
         </td>
+
+
+
 
 
         <!-- REG -->
 
+
+
         <td>
+
           ${fmt(d.reg)}
+
         </td>
+
+
+
 
 
         <!-- FLIGHT -->
 
+
+
         <td>
+
           ${fmt(d.flight)}
+
         </td>
+
+
+
 
 
         <!-- TYPE -->
 
+
+
         <td>
 
+
+
           <span
+
             class="
+
               flight-type
+
               ${getFlightType(d.flight) === 'DEP'
+
                 ? 'dep'
+
                 : 'arv'}
+
             "
+
           >
+
+
 
             ${getFlightType(d.flight)}
 
+
+
           </span>
 
+
+
         </td>
+
+
+
 
 
         <!-- TIME -->
 
+
+
         <td>
+
           ${fmt(d.time)}
+
         </td>
+
+
+
 
 
         <!-- GATE -->
 
+
+
         <td>
 
+
+
           ${
+
             d.ac_gate &&
+
             d.ac_gate !== ""
+
+
 
             ?
 
+
+
             `<span class="apx-tag">
+
               APX ${d.ac_gate}
+
             </span>`
+
+
 
             :
 
+
+
             "-"
+
           }
 
+
+
         </td>
+
+
+
 
 
         <!-- BAY -->
 
+
+
         <td>
+
           ${fmt(d.bay)}
+
         </td>
+
+
+
 
 
         <!-- STATUS -->
 
+
+
         <td
+
           onclick="toggleStatus(${i})"
+
         >
 
+
+
           <span
+
             class="
+
               status
+
               ${cls(d.status)}
+
             "
+
           >
+
+
 
             ${fmt(d.status)}
 
+
+
           </span>
 
+
+
         </td>
+
+
+
 
 
         <!-- REMARK -->
 
+
+
         <td>
 
+
+
           ${
+
             isScheduled(d)
+
+
 
             ?
 
+
+
             `<span class="scheduled-box">
+
               ${fmt(d.remark)}
+
             </span>`
+
+
 
             :
 
+
+
             fmt(d.remark)
+
           }
+
+
 
           <br>
 
+
+
           ${
+
             warning
+
+
 
             ?
 
+
+
             `<span
+
               style="
+
                 color:#ff3b3b;
+
                 font-weight:800
+
               "
+
             >
+
+
 
               ⚠ ${warning}
 
+
+
             </span>`
+
+
 
             :
 
+
+
             ""
+
           }
 
+
+
           ${
+
             slot
+
+
 
             ?
 
+
+
             `<span
+
               style="
+
                 color:#00ff9c;
+
                 font-weight:800
+
               "
+
             >
+
+
 
               ${slot}
 
+
+
             </span>`
+
+
 
             :
 
+
+
             ""
+
           }
 
+
+
         </td>
+
+
+
 
 
         <!-- ACTION -->
 
+
+
         <td>
+
+
 
           <div class="action-area">
 
+
+
             <button
+
               class="action-btn edit"
+
               onclick="edit(${i})"
+
             >
+
+
 
               EDIT
 
+
+
             </button>
 
+
+
             <button
+
               class="action-btn del"
+
               onclick="del(${i})"
+
             >
+
+
 
               DELETE
 
+
+
             </button>
+
+
 
           </div>
 
+
+
         </td>
+
+
 
       </tr>
 
+
+
     `;
+
+
 
   });
 
+
+
   setupDragAndDrop();
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    STATUS CLASS
+
 ========================================================= */
+
+
 
 function cls(s){
 
+
+
   if(s=="WAITING"){
+
     return "waiting";
+
   }
 
+
+
   if(s=="TOWING"){
+
     return "towing";
+
   }
+
+
 
   return "done";
 
+
+
 }
 
 
+
+
+
 /* =========================================================
+
    CLEAR FORM
+
 ========================================================= */
+
+
 
 function clearForm(){
 
+
+
   reg.value="";
+
+
 
   flight.value="";
 
+
+
   time.value="";
+
+
 
   gate.value="";
 
+
+
   bay.value="";
+
+
 
   remark.value="";
 
+
+
   status.value="WAITING";
+
+
 
   status.disabled=true;
 
+
+
   editRow=null;
 
+
+
   saveBtn.innerText=
+
     "+ ADD FLIGHT";
 
+
+
   saveBtn.className=
+
     "save";
+
+
 
   pauseRealtime=false;
 
+
+
 }
 
 
+
+
+
 /* =========================================================
+
    UPDATE UI
+
 ========================================================= */
+
+
 
 function updateRowUI(i,status){
 
+
+
   const el =
+
     document.querySelectorAll(
+
       "tbody tr"
+
     )[i];
 
+
+
   if(!el){
+
     return;
+
   }
 
+
+
   el.children[8].innerHTML =
+
     `<span class="status ${cls(status)}">
+
       ${status}
+
     </span>`;
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    DRAG & DROP VARIABLES
+
 ========================================================= */
+
+
 
 let draggedIndex = null;
 
 
+
+
+
 /* =========================================================
+
    SETUP DRAG
+
 ========================================================= */
+
+
 
 function setupDragAndDrop(){
 
+
+
   const handles =
+
     document.querySelectorAll(
+
       ".drag-handle"
+
     );
 
+
+
   const rows =
+
     document.querySelectorAll(
+
       "#tb tr"
+
     );
+
+
+
 
 
   /* =========================
+
      HANDLE DRAG START
+
   ========================= */
+
+
 
   handles.forEach(handle=>{
 
+
+
     handle.addEventListener(
+
       "dragstart",
+
       function(e){
 
+
+
         if(!isAdmin){
+
+
 
           e.preventDefault();
 
+
+
           alert(
+
             "NO PERMISSION"
+
           );
+
+
 
           return;
 
+
+
         }
+
+
 
         isReordering = true;
 
+
+
         const row =
+
           this.closest("tr");
 
+
+
         draggedIndex =
+
           Number(
+
             row.dataset.index
+
           );
 
+
+
         row.classList.add(
+
           "dragging"
+
         );
+
+
 
         e.dataTransfer.effectAllowed =
+
           "move";
 
+
+
         e.dataTransfer.setData(
+
           "text/plain",
+
           String(draggedIndex)
+
         );
 
+
+
       }
+
     );
+
+
+
 
 
     handle.addEventListener(
+
       "dragend",
+
       function(){
 
+
+
         document
+
           .querySelectorAll(
+
             "#tb tr"
+
           )
+
           .forEach(row=>{
 
-            row.classList.remove(
-              "dragging"
-            );
+
 
             row.classList.remove(
-              "drag-over"
+
+              "dragging"
+
             );
+
+
+
+            row.classList.remove(
+
+              "drag-over"
+
+            );
+
+
 
           });
 
+
+
         draggedIndex = null;
 
+
+
       }
+
     );
 
+
+
   });
+
+
+
 
 
   /* =========================
+
      DRAG OVER ROW
+
   ========================= */
+
+
 
   rows.forEach(row=>{
 
+
+
     row.addEventListener(
+
       "dragover",
+
       function(e){
 
+
+
         if(!isAdmin){
+
           return;
+
         }
 
+
+
         e.preventDefault();
+
+
 
         e.dataTransfer.dropEffect =
+
           "move";
 
+
+
         this.classList.add(
+
           "drag-over"
+
         );
 
+
+
       }
+
     );
 
 
+
+
+
     row.addEventListener(
+
       "dragleave",
+
       function(){
 
+
+
         this.classList.remove(
+
           "drag-over"
+
         );
 
+
+
       }
+
     );
 
 
+
+
+
     row.addEventListener(
+
       "drop",
+
       async function(e){
+
+
 
         if(!isAdmin){
 
+
+
           return;
+
+
 
         }
 
+
+
         e.preventDefault();
 
+
+
         this.classList.remove(
+
           "drag-over"
+
         );
 
+
+
         const fromIndex =
+
           draggedIndex;
 
+
+
         const toIndex =
+
           Number(
+
             this.dataset.index
+
           );
 
 
+
+
+
         if(
+
           fromIndex === null ||
+
           fromIndex === toIndex
+
         ){
+
+
 
           isReordering=false;
 
+
+
           return;
+
+
 
         }
 
 
+
+
+
         await reorderData(
+
           fromIndex,
+
           toIndex
+
         );
 
+
+
       }
+
     );
+
+
 
   });
 
-}
 
-
-/* =========================================================
-   MOVE UP
-========================================================= */
-
-async function moveUp(i){
-
-  if(!isAdmin){
-
-    alert("NO PERMISSION");
-
-    return;
-
-  }
-
-  if(i <= 0){
-
-    return;
-
-  }
-
-  await reorderData(
-    i,
-    i - 1
-  );
 
 }
 
 
-/* =========================================================
-   MOVE DOWN
-========================================================= */
 
-async function moveDown(i){
-
-  if(!isAdmin){
-
-    alert("NO PERMISSION");
-
-    return;
-
-  }
-
-  if(
-    i >= data.length - 1
-  ){
-
-    return;
-
-  }
-
-  await reorderData(
-    i,
-    i + 1
-  );
-
-}
 
 
 /* =========================================================
+
    REORDER DATA
+
 ========================================================= */
+
+
 
 async function reorderData(
+
   fromIndex,
+
   toIndex
+
 ){
+
+
 
   if(!isAdmin){
 
+
+
     alert(
+
       "NO PERMISSION"
+
     );
 
+
+
     return;
+
+
 
   }
 
 
+
+
+
   if(
+
     fromIndex === toIndex
+
   ){
+
+
 
     isReordering=false;
 
+
+
     return;
 
+
+
   }
+
+
+
 
 
   isReordering=true;
 
+
+
   pauseRealtime=true;
 
 
+
+
+
   /* =========================
+
      COPY ARRAY
+
   ========================= */
 
+
+
   const newData =
+
     [...data];
 
 
+
+
+
   /* =========================
+
      MOVE ITEM
+
   ========================= */
 
+
+
   const moved =
+
     newData.splice(
+
       fromIndex,
+
       1
+
     )[0];
 
 
+
+
+
   newData.splice(
+
     toIndex,
+
     0,
+
     moved
+
   );
 
 
+
+
+
   /* =========================
+
      UPDATE LOCAL UI
+
   ========================= */
 
+
+
   data = newData;
+
+
 
   render();
 
 
+
+
+
   /* =========================
+
      BUILD ORDER
+
   ========================= */
 
+
+
   const orders =
+
     data.map(
+
       (item,index)=>({
+
+
 
         row:Number(item.row),
 
+
+
         order:index + 1
 
+
+
       })
+
     );
 
 
+
+
+
   /* =========================
+
      SHOW SAVING
+
   ========================= */
+
+
 
   showReorderSaving();
 
 
+
+
+
   try{
 
+
+
     const response =
+
       await fetch(API,{
+
+
 
         method:"POST",
 
+
+
         body:JSON.stringify({
+
+
 
           type:"reorder",
 
+
+
           orders:orders
 
+
+
         })
+
+
 
       });
 
 
+
+
+
     const result =
+
       await response.json();
 
 
+
+
+
     if(
+
       result.status !==
+
       "reordered"
+
     ){
 
+
+
       throw new Error(
+
         result.message ||
+
         "REORDER FAILED"
+
       );
+
+
 
     }
 
 
+
+
+
     /*
+
       รอ Apps Script flush
+
       แล้วโหลดกลับมาเพื่อยืนยัน
+
     */
 
+
+
     await new Promise(
+
       resolve =>
+
         setTimeout(
+
           resolve,
+
           300
+
         )
+
     );
+
+
+
 
 
     isReordering=false;
 
+
+
     pauseRealtime=false;
+
+
 
     hideReorderSaving();
 
+
+
     await load();
+
+
+
 
 
   }catch(error){
 
+
+
     console.error(
+
       "REORDER ERROR:",
+
       error
+
     );
+
+
+
 
 
     alert(
+
       "REORDER FAILED\n\n" +
+
       error.message
+
     );
+
+
+
 
 
     /*
+
       โหลดข้อมูลจริงกลับมา
+
     */
+
+
 
     isReordering=false;
 
+
+
     pauseRealtime=false;
+
+
 
     hideReorderSaving();
 
+
+
     await load();
 
+
+
   }
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    REORDER SAVING UI
+
 ========================================================= */
+
+
 
 function showReorderSaving(){
 
+
+
   const el =
+
     document.getElementById(
+
       "reorderSaving"
+
     );
+
+
 
   if(el){
 
+
+
     el.classList.add(
+
       "show"
+
     );
+
+
 
   }
 
+
+
 }
+
+
 
 function hideReorderSaving(){
 
+
+
   const el =
+
     document.getElementById(
+
       "reorderSaving"
+
     );
+
+
 
   if(el){
 
+
+
     el.classList.remove(
+
       "show"
+
     );
 
+
+
   }
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    WARNING
+
 ========================================================= */
+
+
 
 let warnedMap = {};
 
+
+
 function checkWarning(d){
 
+
+
   if(isScheduled(d)){
+
     return "";
+
   }
+
+
 
   if(!d.remark){
+
     return "";
+
   }
+
+
 
   const match =
+
     d.remark.match(
+
       /(\d{2}:\d{2})/
+
     );
 
+
+
   if(!match){
+
     return "";
+
   }
 
+
+
   const limit =
+
     match[1];
 
+
+
   const now =
+
     new Date()
+
       .toTimeString()
+
       .slice(0,5);
+
+
 
   if(now > limit){
 
+
+
     if(!warnedMap[d.row]){
+
+
 
       warnedMap[d.row]=true;
 
+
+
       queueSpeak(
+
         buildTowSpeakText(d),
+
         d.reg + "-tow"
+
       );
 
+
+
     }
+
+
 
     return "WARNING";
 
+
+
   }
 
+
+
   return "";
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    ALARM
+
 ========================================================= */
+
+
 
 function playAlarm(d){
 
+
+
   if(!soundEnabled){
+
     return;
+
   }
 
+
+
   const key =
+
     d.reg + "-warn";
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    SLOT
+
 ========================================================= */
+
+
 
 let lastAlarmTime=0;
 
+
+
 let slotWarnedMap={};
+
+
 
 function checkSlot(d){
 
+
+
   if(isScheduled(d)){
+
     return "";
+
   }
+
+
 
   if(!d.remark){
+
     return "";
+
   }
+
+
 
   if(
+
     !d.remark.includes(
+
       "ปลายทางว่าง"
+
     )
+
   ){
 
+
+
     return "";
 
+
+
   }
+
+
 
   const match =
+
     d.remark.match(
+
       /(\d{2}:\d{2})/
+
     );
 
+
+
   if(!match){
+
     return "";
+
   }
 
+
+
   const limit =
+
     match[1];
 
+
+
   const now =
+
     new Date()
+
       .toTimeString()
+
       .slice(0,5);
+
+
 
   if(now >= limit){
 
+
+
     if(!slotWarnedMap[d.row]){
+
+
 
       slotWarnedMap[d.row]=true;
 
+
+
       const key =
+
         d.reg + "-slot";
 
+
+
       queueSpeak(
+
         buildSlotSpeakText(d),
+
         key
+
       );
+
+
 
     }
 
+
+
     return "SLOT AVAILABLE";
 
+
+
   }
+
+
 
   return "";
 
+
+
 }
 
 
+
+
+
 /* =========================================================
+
    UNLOCK AUDIO
+
 ========================================================= */
+
+
 
 function unlockAudio(){
 
+
+
   soundEnabled=true;
 
+
+
   localStorage.setItem(
+
     "soundEnabled",
+
     "1"
+
   );
 
+
+
   const btn =
+
     document.querySelector(
+
       'button[onclick="unlockAudio()"]'
+
     );
 
+
+
   btn.innerText =
+
     "🔊 SOUND ON";
+
+
 
   audioCtx.resume();
 
+
+
   window.speechSynthesis.resume();
 
+
+
   const audio =
+
     document.getElementById(
+
       "alarm"
+
     );
 
+
+
   audio.play()
+
     .then(()=>{
+
+
 
       audio.pause();
 
+
+
       audio.currentTime=0;
 
+
+
     })
+
     .catch(()=>{});
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    MUTE
+
 ========================================================= */
+
+
 
 function toggleMute(){
 
+
+
   muted=!muted;
 
+
+
   const btn =
+
     document.getElementById(
+
       "muteBtn"
+
     );
 
+
+
   if(muted){
+
+
 
     window.speechSynthesis.cancel();
 
+
+
     btn.innerText =
+
       "🔇 MUTED";
+
+
 
   }else{
 
+
+
     btn.innerText =
+
       "🔇 MUTE OFF";
 
+
+
   }
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    SCHEDULE
+
 ========================================================= */
+
+
 
 function isScheduled(d){
 
+
+
   if(!d.remark){
+
     return false;
+
   }
 
+
+
   return (
+
     d.remark.includes(
+
       "นัดลาก"
+
     ) ||
+
     d.remark.includes(
+
       "นัด"
+
     )
+
   );
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    SOUND
+
 ========================================================= */
+
+
 
 function canPlaySound(d){
 
+
+
   if(!soundEnabled){
+
     return false;
+
   }
 
+
+
   if(isScheduled(d)){
+
     return false;
+
   }
+
+
 
   return true;
 
+
+
 }
+
+
 
 function speak(text){
 
+
+
   if(!soundEnabled){
+
     return;
+
   }
 
+
+
   const msg =
+
     new SpeechSynthesisUtterance(
+
       text
+
     );
+
+
 
   msg.lang="en-US";
 
+
+
   msg.rate=1;
+
+
 
   msg.pitch=1;
 
+
+
   window.speechSynthesis.speak(
+
     msg
+
   );
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    SPEECH QUEUE
+
 ========================================================= */
 
+
+
 async function queueSpeak(
+
   text,
+
   key
+
 ){
 
+
+
   if(muted){
+
     return;
+
   }
 
+
+
   if(!soundEnabled){
+
     return;
+
   }
+
+
 
   await wakeAudio();
 
+
+
   const now =
+
     Date.now();
 
+
+
   if(
+
     lastSpeakMap[key] &&
+
     now-lastSpeakMap[key] <
+
       SPEAK_LOCK
+
   ){
+
+
 
     return;
 
+
+
   }
 
+
+
   if(
+
     !speakCountMap[key]
+
   ){
+
+
 
     speakCountMap[key]=0;
 
+
+
   }
 
+
+
   if(
+
     speakCountMap[key] >=
+
       MAX_SPEAK
+
   ){
+
+
 
     return;
 
+
+
   }
+
+
 
   lastSpeakMap[key]=now;
 
+
+
   speakCountMap[key]++;
+
+
 
   speechQueue.push({
 
+
+
     text:text,
+
+
 
     key:key
 
+
+
   });
 
+
+
   processQueue();
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    PROCESS SPEECH
+
 ========================================================= */
+
+
 
 async function processQueue(){
 
+
+
   if(isSpeaking){
+
     return;
+
   }
+
+
 
   if(
+
     speechQueue.length===0
+
   ){
+
+
 
     return;
 
+
+
   }
+
+
 
   isSpeaking=true;
 
+
+
   const item =
+
     speechQueue.shift();
+
+
 
   window.speechSynthesis.cancel();
 
 
+
+
+
   const msg1 =
+
     new SpeechSynthesisUtterance(
+
       item.text.main
+
     );
 
+
+
   msg1.lang="en-US";
+
+
 
   msg1.rate=0.75;
 
 
+
+
+
   const msg2 =
+
     new SpeechSynthesisUtterance(
+
       item.text.tow
+
     );
 
+
+
   msg2.lang="en-US";
+
+
 
   msg2.rate=0.65;
 
 
+
+
+
   msg1.onend=()=>{
+
+
 
     setTimeout(()=>{
 
+
+
       window.speechSynthesis.cancel();
 
+
+
       window.speechSynthesis.speak(
+
         msg2
+
       );
+
+
 
     },300);
 
+
+
   };
+
+
+
 
 
   msg2.onend=()=>{
 
+
+
     isSpeaking=false;
 
+
+
     processQueue();
+
+
 
   };
 
 
+
+
+
   const needBeep =
+
     item.text.main.startsWith(
+
       "ATTENTION"
+
     ) ||
+
     item.text.main.startsWith(
+
       "INFORMATION"
+
     );
+
+
+
 
 
   if(needBeep){
 
+
+
     playWarningBeep()
+
       .then(()=>{
+
+
 
         setTimeout(()=>{
 
+
+
           window.speechSynthesis.cancel();
 
+
+
           window.speechSynthesis.speak(
+
             msg1
+
           );
+
+
 
         },3000);
 
+
+
       });
+
+
 
   }else{
 
+
+
     window.speechSynthesis.speak(
+
       msg1
+
     );
 
+
+
   }
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    NATO
+
 ========================================================= */
+
+
 
 function regToNATO(str){
 
+
+
   const map={
 
+
+
     A:"ALPHA",
+
     B:"BRAVO",
+
     C:"CHARLIE",
+
     D:"DELTA",
+
     E:"ECHO",
+
     F:"FOXTROT",
+
     G:"GOLF",
+
     H:"HOTEL",
+
     I:"INDIA",
+
     J:"JULIETT",
+
     K:"KILO",
+
     L:"LIMA",
+
     M:"MIKE",
+
     N:"NOVEMBER",
+
     O:"OSCAR",
+
     P:"PAPA",
+
     Q:"QUEBEC",
+
     R:"ROMEO",
+
     S:"SIERRA",
+
     T:"TANGO",
+
     U:"UNIFORM",
+
     V:"VICTOR",
+
     W:"WHISKEY",
+
     X:"X-RAY",
+
     Y:"YANKEE",
+
     Z:"ZULU",
 
+
+
     0:"ZERO",
+
     1:"ONE",
+
     2:"TWO",
+
     3:"THREE",
+
     4:"FOUR",
+
     5:"FIVE",
+
     6:"SIX",
+
     7:"SEVEN",
+
     8:"EIGHT",
+
     9:"NINE",
+
+
 
     "-":"-"
 
+
+
   };
 
+
+
   return str
+
     .toUpperCase()
+
     .split("")
+
     .map(
+
       c=>map[c] || c
+
     )
+
     .join(" ");
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    FLIGHT SPEECH
+
 ========================================================= */
+
+
 
 function flightNormal(str){
 
+
+
   return String(str || "")
+
     .toUpperCase()
+
     .replace(/TG/g,"T G")
+
     .replace(/-/g," ")
+
     .split("")
+
     .map(c=>{
 
+
+
       if(/[0-9]/.test(c)){
+
         return c;
+
       }
+
+
 
       return c;
 
+
+
     })
+
     .join(" ");
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    BAY NATO
+
 ========================================================= */
+
+
 
 function bayToNATO(str){
 
+
+
   if(!str){
+
     return "";
+
   }
+
+
 
   const numMap={
 
+
+
     0:"ZERO",
+
     1:"ONE",
+
     2:"TWO",
+
     3:"THREE",
+
     4:"FOUR",
+
     5:"FIVE",
+
     6:"SIX",
+
     7:"SEVEN",
+
     8:"EIGHT",
+
     9:"NINE"
 
+
+
   };
+
+
 
   const letterMap={
 
+
+
     A:"ALPHA",
+
     B:"BRAVO",
+
     C:"CHARLIE",
+
     D:"DELTA",
+
     E:"ECHO",
+
     F:"FOXTROT",
+
     G:"GOLF",
+
     H:"HOTEL",
+
     I:"INDIA",
+
     J:"JULIETT",
+
     K:"KILO",
+
     L:"LIMA",
+
     M:"MIKE",
+
     N:"NOVEMBER",
+
     O:"OSCAR",
+
     P:"PAPA",
+
     Q:"QUEBEC",
+
     R:"ROMEO",
+
     S:"SIERRA",
+
     T:"TANGO",
+
     U:"UNIFORM",
+
     V:"VICTOR",
+
     W:"WHISKEY",
+
     X:"X-RAY",
+
     Y:"YANKEE",
+
     Z:"ZULU"
+
+
 
   };
 
+
+
   return String(str)
+
     .toUpperCase()
+
     .replace(/-/g," TOW ")
+
     .split("")
+
     .map(c=>{
 
+
+
       if(/[0-9]/.test(c)){
+
         return numMap[c];
+
       }
 
+
+
       if(/[A-Z]/.test(c)){
+
         return letterMap[c] || c;
+
       }
+
+
 
       return "";
 
+
+
     })
+
     .join(" ")
+
     .replace(/\s+/g," ")
+
     .trim();
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    BAY SPEECH
+
 ========================================================= */
+
+
 
 function bayToSpeech(input){
 
+
+
   if(!input){
+
     return "";
+
   }
 
+
+
   let str =
+
     String(input)
+
       .toUpperCase()
+
       .trim()
+
       .replace(/\s+/g,"");
+
+
+
 
 
   const hangarMap={
 
+
+
     "H1C":"HANGAR ONE CENTER",
+
     "H1L":"HANGAR ONE LEFT",
+
     "H1R":"HANGAR ONE RIGHT",
+
     "H1":"HANGAR ONE",
 
+
+
     "H2":"HANGAR TWO",
+
     "H2C":"HANGAR TWO CENTER",
+
     "H2L":"HANGAR TWO LEFT",
+
     "H2R":"HANGAR TWO RIGHT",
 
+
+
     "H3":"HANGAR THREE",
+
     "H3C":"HANGAR THREE CENTER",
+
     "H3L":"HANGAR THREE LEFT",
+
     "H3R":"HANGAR THREE RIGHT"
 
+
+
   };
+
+
+
 
 
   const letterMap={
 
+
+
     A:"ALPHA",
+
     B:"BRAVO",
+
     C:"CHARLIE",
+
     D:"DELTA",
+
     E:"ECHO",
+
     F:"FOXTROT",
+
     G:"GOLF",
+
     H:"HOTEL",
+
     I:"INDIA",
+
     J:"JULIETT",
+
     K:"KILO",
+
     L:"LIMA",
+
     M:"MIKE",
+
     N:"NOVEMBER",
+
     O:"OSCAR",
+
     P:"PAPA",
+
     Q:"QUEBEC",
+
     R:"ROMEO",
+
     S:"SIERRA",
+
     T:"TANGO",
+
     U:"UNIFORM",
+
     V:"VICTOR",
+
     W:"WHISKEY",
+
     X:"X-RAY",
+
     Y:"YANKEE",
+
     Z:"ZULU",
 
+
+
     0:"ZERO",
+
     1:"ONE",
+
     2:"TWO",
+
     3:"THREE",
+
     4:"FOUR",
+
     5:"FIVE",
+
     6:"SIX",
+
     7:"SEVEN",
+
     8:"EIGHT",
+
     9:"NINE"
+
+
 
   };
 
 
+
+
+
   const parts =
+
     str.split("-");
 
 
+
+
+
   const spoken =
+
     parts.map(part=>{
 
+
+
       if(hangarMap[part]){
+
         return hangarMap[part];
+
       }
 
 
+
+
+
       const match =
+
         part.match(
+
           /^([A-Z])(\d+)$/
+
         );
+
+
+
 
 
       if(match){
 
+
+
         const letter =
+
           letterMap[match[1]] ||
+
           match[1];
 
+
+
         const numbers =
+
           match[2]
+
             .split("")
+
             .map(
+
               n=>letterMap[n] || n
+
             )
+
             .join(" ");
 
+
+
         return (
+
           `${letter} ${numbers}`
+
         );
+
+
 
       }
 
 
+
+
+
       return part
+
         .split("")
+
         .map(
+
           c=>letterMap[c] || c
+
         )
+
         .join(" ");
+
+
 
     });
 
 
+
+
+
   if(
+
     spoken.length===2
+
   ){
 
+
+
     return (
+
       `${spoken[0]} TOW TO ${spoken[1]}`
+
     );
 
+
+
   }
+
+
+
 
 
   if(
+
     spoken.length===3
+
   ){
 
+
+
     return (
+
       `${spoken[0]} TOW TO ${spoken[1]} ${spoken[2]}`
+
     );
 
+
+
   }
+
+
+
 
 
   return spoken.join(
+
     " TOW TO "
+
   );
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    WARNING BEEP
+
 ========================================================= */
+
+
 
 function playWarningBeep(){
 
+
+
   if(!soundEnabled){
+
+
 
     return Promise.resolve();
 
+
+
   }
+
+
 
   return new Promise(resolve=>{
 
+
+
     const osc =
+
       audioCtx.createOscillator();
 
+
+
     const gain =
+
       audioCtx.createGain();
+
+
+
 
 
     osc.type="triangle";
 
 
+
+
+
     osc.frequency.setValueAtTime(
+
       420,
+
       audioCtx.currentTime
+
     );
+
+
+
 
 
     osc.connect(gain);
 
+
+
     gain.connect(
+
       audioCtx.destination
+
     );
 
 
+
+
+
     gain.gain.setValueAtTime(
+
       0.001,
+
       audioCtx.currentTime
+
     );
+
+
+
 
 
     gain.gain.exponentialRampToValueAtTime(
+
       0.6,
+
       audioCtx.currentTime+0.15
+
     );
+
+
+
 
 
     gain.gain.setValueAtTime(
+
       0.6,
+
       audioCtx.currentTime+2.6
+
     );
+
+
+
 
 
     gain.gain.exponentialRampToValueAtTime(
+
       0.001,
+
       audioCtx.currentTime+3
+
     );
+
+
+
 
 
     osc.start();
 
 
+
+
+
     osc.stop(
+
       audioCtx.currentTime+3
+
     );
+
+
+
 
 
     osc.onended=()=>{
 
+
+
       resolve();
+
+
 
     };
 
+
+
   });
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    BUILD SPEECH
+
 ========================================================= */
+
+
 
 function buildTowSpeakText(d){
 
+
+
   const tone =
+
     getTone(d);
 
+
+
   const reg =
+
     regToNATO(
+
       d.reg || ""
+
     );
+
+
 
   const flight =
+
     flightNormal(
+
       d.flight || ""
+
     );
 
+
+
   const bay =
+
     bayToSpeech(
+
       d.bay || ""
+
     );
+
+
+
 
 
   if(tone==="URGENT"){
 
+
+
     return {
 
+
+
       main:
+
         `ATTENTION. ${reg}. ${flight}. BAY ${bay}.`,
 
+
+
       tow:
+
         `NEED TO TOW IMMEDIATELY.`
+
+
 
     };
 
+
+
   }
+
+
+
 
 
   if(tone==="INFO"){
 
+
+
     return {
 
+
+
       main:
+
         `INFORMATION. ${reg}. ${flight}. BAY ${bay}.`,
 
+
+
       tow:
+
         `THE DESTINATION PARKING BAY AVAILABLE.`
 
+
+
     };
+
+
 
   }
 
 
+
+
+
   return {
 
+
+
     main:
+
       `ATTENTION. ${reg}. ${flight}. BAY ${bay}.`,
 
+
+
     tow:
+
       `MUST BE TOWED IMMEDIATELY.`
 
+
+
   };
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    SLOT SPEECH
+
 ========================================================= */
+
+
 
 function buildSlotSpeakText(d){
 
+
+
   const reg =
+
     regToNATO(
+
       d.reg || ""
+
     );
+
+
 
   const flight =
+
     flightNormal(
+
       d.flight || ""
+
     );
 
+
+
   const bay =
+
     bayToSpeech(
+
       d.bay || ""
+
     );
+
+
+
 
 
   return {
 
+
+
     main:
+
       `INFORMATION. ${reg}. ${flight}. BAY ${bay}.`,
 
+
+
     tow:
+
       `DESTINATION PARKING BAY AVAILABLE.`
+
+
 
   };
 
+
+
 }
 
 
+
+
+
 /* =========================================================
+
    SPEAK CHUNK
+
 ========================================================= */
 
+
+
 function speakChunk(
+
   text,
+
   rate=1,
+
   pitch=1
+
 ){
+
+
 
   return new Promise(resolve=>{
 
+
+
     const msg =
+
       new SpeechSynthesisUtterance(
+
         text
+
       );
+
+
 
     msg.lang="en-US";
 
+
+
     msg.rate=rate;
+
+
 
     msg.pitch=pitch;
 
+
+
     msg.onend=()=>resolve();
 
+
+
     window.speechSynthesis.speak(
+
       msg
+
     );
+
+
 
   });
 
+
+
 }
 
 
+
+
+
 /* =========================================================
+
    TONE
+
 ========================================================= */
+
+
 
 function getTone(d){
 
+
+
   if(
+
     d.status==="TOWING"
+
   ){
+
+
 
     return "URGENT";
 
+
+
   }
 
+
+
   if(
+
     d.remark?.includes(
+
       "ปลายทางว่าง"
+
     )
+
   ){
+
+
 
     return "INFO";
 
+
+
   }
 
+
+
   return "NORMAL";
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    SPEAK CHUNKS
+
 ========================================================= */
 
+
+
 function speakChunks(
+
   text,
+
   rate=0.7
+
 ){
 
+
+
   const chunks =
+
     text
+
       .replace(/\./g,"")
+
       .split(",")
+
       .map(
+
         t=>t.trim()
+
       )
+
       .filter(Boolean);
+
+
+
 
 
   let i=0;
 
 
+
+
+
   function next(){
+
+
 
     if(i>=chunks.length){
 
+
+
       isSpeaking=false;
+
+
 
       processQueue();
 
+
+
       return;
+
+
 
     }
 
 
+
+
+
     const msg =
+
       new SpeechSynthesisUtterance(
+
         chunks[i]
+
       );
+
+
+
 
 
     msg.rate=rate;
 
+
+
     msg.pitch=1;
+
+
 
     msg.lang="en-US";
 
 
+
+
+
     msg.onend=()=>{
+
+
 
       i++;
 
+
+
       setTimeout(
+
         next,
+
         250
+
       );
+
+
 
     };
 
 
+
+
+
     window.speechSynthesis.speak(
+
       msg
+
     );
+
+
 
   }
 
 
+
+
+
   next();
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    SPEAK ATC
+
 ========================================================= */
+
+
 
 function speakATC(text){
 
+
+
   const parts =
+
     text.split(".");
+
+
+
 
 
   let i=0;
 
 
+
+
+
   function next(){
+
+
 
     if(i>=parts.length){
 
+
+
       isSpeaking=false;
+
+
 
       processQueue();
 
+
+
       return;
+
+
 
     }
 
 
+
+
+
     const msg =
+
       new SpeechSynthesisUtterance(
+
         parts[i].trim()
+
       );
+
+
+
 
 
     msg.lang="en-US";
 
+
+
     msg.rate=0.65;
+
+
 
     msg.pitch=1;
 
 
+
+
+
     msg.onend=()=>{
+
+
 
       setTimeout(()=>{
 
+
+
         i++;
+
+
 
         next();
 
+
+
       },300);
+
+
 
     };
 
 
+
+
+
     window.speechSynthesis.speak(
+
       msg
+
     );
 
+
+
   }
+
+
+
 
 
   next();
 
+
+
 }
 
 
+
+
+
 /* =========================================================
-   REALTIME LOOP
+
+   PRINT PLAN
+
 ========================================================= */
+
+
+
+function printEscape(value){
+
+
+
+  return String(
+
+    value === null ||
+
+    value === undefined ||
+
+    value === ""
+
+      ? "-"
+
+      : value
+
+  )
+
+  .replace(/&/g,"&amp;")
+
+  .replace(/</g,"&lt;")
+
+  .replace(/>/g,"&gt;")
+
+  .replace(/"/g,"&quot;")
+
+  .replace(/'/g,"&#039;");
+
+
+
+}
+
+
+
+
+
+function printPlan(){
+
+
+
+  if(!Array.isArray(data)){
+
+    return;
+
+  }
+
+
+
+  const printArea =
+
+    document.getElementById("printArea");
+
+
+
+  const printTb =
+
+    document.getElementById("printTb");
+
+
+
+  const printDate =
+
+    document.getElementById("printDate");
+
+
+
+  const printCount =
+
+    document.getElementById("printCount");
+
+
+
+  if(!printArea || !printTb){
+
+    return;
+
+  }
+
+
+
+  /*
+
+    PRINT ONLY REAL TABLE DATA.
+
+    MOVE / EDIT / DELETE controls are intentionally excluded.
+
+  */
+
+
+
+  printTb.innerHTML =
+
+    data.map((d,i)=>{
+
+
+
+      const type =
+
+        getFlightType(d.flight);
+
+
+
+      const typeClass =
+
+        type === "DEP"
+
+          ? "dep-text"
+
+          : "arv-text";
+
+
+
+      const status =
+
+        String(d.status || "WAITING");
+
+
+
+      const statusClass =
+
+        status === "DONE"
+
+          ? "done-text"
+
+          : status === "TOWING"
+
+            ? "towing-text"
+
+            : "waiting-text";
+
+
+
+      const gate =
+
+        d.ac_gate !== undefined &&
+
+        d.ac_gate !== null &&
+
+        String(d.ac_gate).trim() !== ""
+
+          ? `APX ${printEscape(d.ac_gate)}`
+
+          : "-";
+
+
+
+      let remark =
+
+        d.remark === null ||
+
+        d.remark === undefined ||
+
+        d.remark === ""
+
+          ? "-"
+
+          : printEscape(d.remark);
+
+
+
+      /*
+
+        Keep the same warning / slot information
+
+        that appears in the live table.
+
+      */
+
+
+
+      const warning =
+
+        checkWarning(d);
+
+
+
+      const slot =
+
+        checkSlot(d);
+
+
+
+      if(warning){
+
+
+
+        remark +=
+
+          `<br><strong style="color:#c62828">⚠ ${printEscape(warning)}</strong>`;
+
+
+
+      }
+
+
+
+      if(slot){
+
+
+
+        remark +=
+
+          `<br><strong style="color:#087a3d">${printEscape(slot)}</strong>`;
+
+
+
+      }
+
+
+
+      return `
+
+        <tr>
+
+          <td class="center">${i+1}</td>
+
+          <td class="center">${printEscape(d.reg)}</td>
+
+          <td class="center">${printEscape(d.flight)}</td>
+
+          <td class="center type ${typeClass}">${type}</td>
+
+          <td class="center">${printEscape(d.time)}</td>
+
+          <td class="center">${gate}</td>
+
+          <td class="center">${printEscape(d.bay)}</td>
+
+          <td>${remark}</td>
+
+        </tr>
+
+      `;
+
+
+
+    }).join("");
+
+
+
+  const now =
+
+    new Date();
+
+
+
+  printDate.innerText =
+
+    now.toLocaleDateString(
+
+      "en-GB",
+
+      {
+
+        day:"2-digit",
+
+        month:"short",
+
+        year:"numeric"
+
+      }
+
+    ) +
+
+    "  " +
+
+    now.toLocaleTimeString(
+
+      "en-GB",
+
+      {
+
+        hour:"2-digit",
+
+        minute:"2-digit"
+
+      }
+
+    );
+
+
+
+  printCount.innerText =
+
+    `${data.length} FLIGHT${data.length === 1 ? "" : "S"}`;
+
+
+
+  /*
+
+    Automatically compact the print layout when there
+
+    are many rows, so the complete table is designed
+
+    to fit on one A4 landscape page.
+
+  */
+
+
+
+  printArea.classList.remove(
+
+    "compact",
+
+    "ultra-compact"
+
+  );
+
+
+
+  if(data.length > 18){
+
+    printArea.classList.add("compact");
+
+  }
+
+
+
+  if(data.length > 30){
+
+    printArea.classList.add("ultra-compact");
+
+  }
+
+
+
+  /*
+
+    Give the browser a moment to apply the print DOM
+
+    before opening the native print dialog.
+
+  */
+
+
+
+  setTimeout(()=>{
+
+
+
+    window.print();
+
+
+
+  },80);
+
+
+
+}
+
+
+
+
+
+/* =========================================================
+
+   REALTIME LOOP
+
+========================================================= */
+
+
 
 setInterval(()=>{
 
+
+
   /*
+
     ไม่โหลดขณะ EDIT
+
   */
+
+
 
   if(pauseRealtime){
+
     return;
+
   }
+
+
 
   /*
+
     ไม่โหลดขณะ REORDER
+
   */
 
+
+
   if(isReordering){
+
     return;
+
   }
 
+
+
   load();
+
+
 
 },1500);
 
 
+
+
+
 /* =========================================================
+
    KEEP AUDIO CONTEXT ALIVE
+
 ========================================================= */
 
+
+
 setInterval(
+
   async ()=>{
 
+
+
     if(!soundEnabled){
+
       return;
+
     }
 
+
+
     try{
+
+
 
       await wakeAudio();
 
 
+
+
+
       const osc =
+
         audioCtx.createOscillator();
 
+
+
       const gain =
+
         audioCtx.createGain();
+
+
+
 
 
       gain.gain.value=0.0001;
 
 
+
+
+
       osc.connect(gain);
 
+
+
       gain.connect(
+
         audioCtx.destination
+
       );
+
+
+
 
 
       osc.start();
 
+
+
       osc.stop(
+
         audioCtx.currentTime+0.02
+
       );
+
+
+
 
 
     }catch(e){
 
+
+
       console.log(e);
+
+
 
     }
 
+
+
   },
+
   20000
+
 );
 
 
+
+
+
 /* =========================================================
+
    WARNING / SLOT CHECK
+
 ========================================================= */
+
+
 
 setInterval(()=>{
 
+
+
   data.forEach((d,i)=>{
+
+
 
     checkWarning(d);
 
+
+
     checkSlot(d);
 
+
+
   });
+
+
 
 },1000);
 
 
+
+
+
 /* =========================================================
+
    ZOOM
+
 ========================================================= */
+
+
 
 let zoomMode=false;
 
+
+
 function toggleZoom(){
+
+
 
   zoomMode=!zoomMode;
 
+
+
   document.body.classList.toggle(
+
     "zoom-mode",
+
     zoomMode
+
   );
 
 
+
+
+
   const btn =
+
     document.querySelector(
+
       'button[onclick="toggleZoom()"]'
+
     );
+
+
+
 
 
   if(zoomMode){
 
+
+
     btn.innerText=
+
       "🔍 EXIT ZOOM";
 
 
+
+
+
     if(
-      document.documentElement
-        .requestFullscreen
-    ){
 
       document.documentElement
+
+        .requestFullscreen
+
+    ){
+
+
+
+      document.documentElement
+
         .requestFullscreen();
+
+
 
     }
 
+
+
   }else{
 
+
+
     btn.innerText=
+
       "🔍 ZOOM PLAN";
+
+
+
 
 
     if(document.exitFullscreen){
 
+
+
       document.exitFullscreen();
+
+
 
     }
 
+
+
   }
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    AUTO PAGE RELOAD
+
 ========================================================= */
+
+
 
 setInterval(()=>{
 
+
+
   if(editRow){
+
     return;
+
   }
+
+
 
   if(isReordering){
+
     return;
+
   }
+
+
 
   if(isSpeaking){
+
     return;
+
   }
+
+
 
   if(
+
     speechQueue.length>0
+
   ){
+
+
 
     return;
 
+
+
   }
 
+
+
   location.reload();
+
+
 
 },1000*60*60*4);
 
 
+
+
+
 /* =========================================================
+
    ADMIN LOGIN
+
 ========================================================= */
+
+
 
 function adminLogin(){
 
+
+
   const pass =
+
     prompt(
+
       "ENTER PASSWORD"
+
     );
+
+
+
 
 
   if(
+
     pass ===
+
     ADMIN_PASSWORD
+
   ){
+
+
 
     isAdmin=true;
 
+
+
     document.body.classList.add(
+
       "admin-mode"
+
     );
+
+
+
 
 
     alert(
+
       "ADMIN MODE ENABLED"
+
     );
+
+
+
 
 
     /*
+
       แสดงปุ่มจัดลำดับ
+
     */
+
+
 
     render();
 
+
+
   }else{
 
+
+
     alert(
+
       "WRONG PASSWORD"
+
     );
 
+
+
   }
+
+
 
 }
 
 
+
+
+
 /* =========================================================
+
    RESTORE AUDIO / MUTE
+
 ========================================================= */
 
+
+
 window.onload=async()=>{
+
+
 
   status.disabled=true;
 
 
+
+
+
   const btn =
+
     document.querySelector(
+
       'button[onclick="unlockAudio()"]'
+
     );
+
+
+
 
 
   const muteBtn =
+
     document.getElementById(
+
       "muteBtn"
+
     );
 
 
+
+
+
   /* =========================
+
      RESTORE MUTE
+
   ========================= */
 
+
+
   if(
+
     localStorage.getItem(
+
       "muted"
+
     ) === "1"
+
   ){
+
+
 
     muted=true;
 
+
+
     muteBtn.innerText=
+
       "🔇 MUTED";
+
+
 
   }else{
 
+
+
     muted=false;
 
+
+
     muteBtn.innerText=
+
       "🔇 MUTE OFF";
+
+
 
   }
 
 
+
+
+
   /* =========================
+
      RESTORE SOUND
+
   ========================= */
 
+
+
   if(
+
     localStorage.getItem(
+
       "soundEnabled"
+
     ) === "1"
+
   ){
+
+
 
     soundEnabled=true;
 
+
+
     btn.innerText=
+
       "🔊 SOUND ON";
+
+
+
 
 
     try{
 
+
+
       await audioCtx.resume();
+
+
 
       window.speechSynthesis.resume();
 
 
+
+
+
       const audio =
+
         document.getElementById(
+
           "alarm"
+
         );
+
+
+
 
 
       await audio.play();
 
+
+
       audio.pause();
+
+
 
       audio.currentTime=0;
 
 
+
+
+
     }catch(e){
 
+
+
       console.log(
+
         "AUTO SOUND RESTORE FAIL",
+
         e
+
       );
 
+
+
     }
+
+
+
 
 
   }else{
 
+
+
     btn.innerText=
+
       "🔇 SOUND OFF";
 
+
+
   }
+
+
 
 };
 
 
+
+
+
 /* =========================================================
+
    FLIGHT TYPE CHANGE
+
 ========================================================= */
+
+
 
 flightType.addEventListener(
+
   "change",
+
   ()=>{
 
+
+
     const type =
+
       getFlightType(
+
         flight.value
+
       );
+
+
+
 
 
     if(type==="DEP"){
 
+
+
       gate.disabled=false;
+
+
 
       gate.style.opacity="1";
 
+
+
       remark.value=
+
         "ปลายทางว่าง :";
+
+
 
     }else{
 
+
+
       gate.value="";
+
+
 
       gate.disabled=true;
 
+
+
       gate.style.opacity="0.5";
 
+
+
       remark.value=
+
         "ลากก่อน :";
+
+
 
     }
 
+
+
   }
+
 );
 
 
+
+
+
 /* =========================================================
+
    FLIGHT INPUT
+
 ========================================================= */
+
+
 
 flight.addEventListener(
+
   "input",
+
   ()=>{
 
+
+
     const type =
+
       getFlightType(
+
         flight.value
+
       );
+
+
+
 
 
     if(type==="DEP"){
 
+
+
       gate.disabled=false;
+
+
 
       gate.style.opacity="1";
 
+
+
       remark.value=
+
         "ปลายทางว่าง :";
+
+
 
     }else{
 
+
+
       gate.value="";
+
+
 
       gate.disabled=true;
 
+
+
       gate.style.opacity="0.5";
 
+
+
       remark.value=
+
         "ลากก่อน :";
+
+
 
     }
 
+
+
   }
+
 );
 
 
+
+
+
 /* =========================================================
+
    AUDIO MUTE STORAGE
+
 ========================================================= */
 
+
+
 const originalToggleMute =
+
   toggleMute;
 
 
+
+
+
 /*
+
   Override เพื่อจำ MUTE
+
 */
+
+
 
 toggleMute=function(){
 
+
+
   originalToggleMute();
 
+
+
   localStorage.setItem(
+
     "muted",
+
     muted ? "1" : "0"
+
   );
 
+
+
 };
+
+
 
 </script>
 
 
+
+
+
 <audio
+
   id="alarm"
+
   src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+
   preload="auto">
+
 </audio>
 
+
+
 </body>
+
 </html>
