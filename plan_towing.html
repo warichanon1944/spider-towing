@@ -1084,7 +1084,6 @@ tbody tr:hover{
 
 
 
-  transform:scale(1.004);
 
 
 
@@ -2770,18 +2769,6 @@ body.zoom-mode td:last-child{
     -webkit-print-color-adjust:exact !important;
     print-color-adjust:exact !important;
   }
-
-.print-table tbody tr.appointment-row td{
-
-    background:#dcfce7 !important;
-
-    color:#111111 !important;
-
-    border-color:#86efac !important;
-
-    -webkit-print-color-adjust:exact !important;
-    print-color-adjust:exact !important;
-}
 
 
   /* =======================================================
@@ -9563,19 +9550,6 @@ function printPlan(){
           ? "-"
 
           : printEscape(d.remark);
-const isAppointment =
-
-  String(d.remark || "")
-
-    .includes("นัด");
-
-const rowClass =
-
-  isAppointment
-
-    ? "appointment-row"
-
-    : "";
 
 
 
@@ -9630,7 +9604,7 @@ const rowClass =
 
 
 return `
-  <tr class="${rowClass}">
+  <tr>
 
     <td class="center">
       ${i+1}
