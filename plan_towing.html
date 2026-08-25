@@ -2770,6 +2770,24 @@ body.zoom-mode td:last-child{
     print-color-adjust:exact !important;
   }
 
+/* =======================================================
+   SCHEDULE / นัด ROW
+   ถ้า REMARK มีคำว่า "นัด"
+   ให้ทั้ง ROW เป็นสีเขียวอ่อน
+======================================================= */
+
+.print-table tbody tr.appointment-row td{
+
+    background:#dcfce7 !important;
+
+    color:#111111 !important;
+
+    border-color:#86efac !important;
+
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+}
+
 
   /* =======================================================
      CENTER
@@ -9551,6 +9569,20 @@ function printPlan(){
 
           : printEscape(d.remark);
 
+const isAppointment =
+
+  String(d.remark || "")
+
+    .includes("นัด");
+
+const rowClass =
+
+  isAppointment
+
+    ? "appointment-row"
+
+    : "";
+
 
 
       /*
@@ -9604,7 +9636,7 @@ function printPlan(){
 
 
 return `
-  <tr>
+  <tr class="${rowClass}">
 
     <td class="center">
       ${i+1}
