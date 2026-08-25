@@ -2491,10 +2491,10 @@ body.zoom-mode td:last-child{
      PAGE
   ======================================================= */
 
-@page{ 
-  size:A4 landscape; 
-  margin:4mm 5mm 4mm 5mm; 
-}
+  @page{ 
+    size:A4 landscape; 
+    margin:7mm; 
+  }
 
 
   /* =======================================================
@@ -2688,63 +2688,65 @@ body.zoom-mode td:last-child{
      TABLE HEADER
   ======================================================= */
 
-.print-table th{
+  .print-table th{
 
-  background:#1f2937 !important;
-  color:#ffffff !important;
+    background:#1f2937 !important;
+    color:#ffffff !important;
 
-  border:1px solid #111111 !important;
+    border:1px solid #111111 !important;
 
-  padding:
-    6px
-    6px !important;
+    padding:
+      9px
+      7px !important;
 
-  font-size:12.5px !important;
+    font-size:14px !important;
 
-  line-height:1.05 !important;
+    line-height:1.1 !important;
 
-  font-weight:900 !important;
+    font-weight:900 !important;
 
-  text-align:center !important;
-  vertical-align:middle !important;
+    text-align:center !important;
+    vertical-align:middle !important;
 
-  white-space:nowrap !important;
+    white-space:nowrap !important;
 
-  letter-spacing:.4px !important;
+    letter-spacing:.5px !important;
 
-  box-sizing:border-box !important;
+    box-sizing:border-box !important;
 
-  -webkit-print-color-adjust:exact !important;
-  print-color-adjust:exact !important;
-}
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
 
 
   /* =======================================================
      TABLE BODY
   ======================================================= */
 
-.print-table td{
+  .print-table td{
 
-  border:1px solid #9ca3af !important;
+    border:1px solid #9ca3af !important;
 
-  padding:3px 5px !important;
+    padding:
+      8px
+      8px !important;
 
-  font-size:11.5px !important;
+    font-size:14px !important;
 
-  line-height:1 !important;
+    line-height:1.2 !important;
 
-  color:#111111 !important;
+    color:#111111 !important;
 
-  background:#ffffff !important;
+    background:#ffffff !important;
 
-  font-weight:800 !important;
+    font-weight:800 !important;
 
-  vertical-align:middle !important;
+    vertical-align:middle !important;
 
-  overflow-wrap:anywhere !important;
+    overflow-wrap:anywhere !important;
 
-  box-sizing:border-box !important;
-}
+    box-sizing:border-box !important;
+  }
 
 
   /* =======================================================
@@ -2820,60 +2822,62 @@ body.zoom-mode td:last-child{
      BASE STYLE
   ======================================================= */
 
-.print-table .dep-text,
-.print-table .arv-text,
-.print-table .apx-text{
+  .print-table .dep-text,
+  .print-table .arv-text,
+  .print-table .apx-text{
 
-  display:inline-flex !important;
+    display:inline-flex !important;
 
-  align-items:center !important;
-  justify-content:center !important;
+    align-items:center !important;
+    justify-content:center !important;
 
-  width:27px !important;
-  height:27px !important;
+    flex:none !important;
 
-  min-width:27px !important;
-  min-height:27px !important;
+    width:34px !important;
+    height:34px !important;
 
-  max-width:27px !important;
-  max-height:27px !important;
+    min-width:34px !important;
+    min-height:34px !important;
 
-  padding:0 !important;
-  margin:0 !important;
+    max-width:34px !important;
+    max-height:34px !important;
 
-  border-radius:50% !important;
+    padding:0 !important;
+    margin:0 !important;
 
-  box-sizing:border-box !important;
+    border-radius:50% !important;
 
-  color:#ffffff !important;
+    box-sizing:border-box !important;
 
-  font-size:9px !important;
+    color:#ffffff !important;
 
-  font-weight:900 !important;
+    font-size:12px !important;
 
-  line-height:27px !important;
+    font-weight:900 !important;
 
-  text-align:center !important;
-  vertical-align:middle !important;
+    line-height:34px !important;
 
-  white-space:nowrap !important;
-  overflow:hidden !important;
+    text-align:center !important;
+    vertical-align:middle !important;
 
-  opacity:1 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
 
-  position:relative !important;
+    opacity:1 !important;
 
-  top:0 !important;
-  left:0 !important;
+    position:relative !important;
 
-  transform:none !important;
+    top:0 !important;
+    left:0 !important;
 
-  box-shadow:none !important;
-  outline:none !important;
+    transform:none !important;
 
-  -webkit-print-color-adjust:exact !important;
-  print-color-adjust:exact !important;
-}
+    box-shadow:none !important;
+    outline:none !important;
+
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
 
 
   /* =======================================================
@@ -3077,50 +3081,55 @@ body.zoom-mode td:last-child{
   }
 
 
-#printArea.compact .print-table th{
+  #printArea.compact .print-table th{
 
-  padding:4px 4px !important;
+    padding:
+      7px
+      6px !important;
 
-  font-size:11.5px !important;
+    font-size:12.5px !important;
 
-  line-height:1 !important;
+    font-weight:900 !important;
+  }
 
-  font-weight:900 !important;
-}
 
-#printArea.compact .print-table td{
+  #printArea.compact .print-table td{
 
-  padding:2px 4px !important;
+    padding:
+      6px
+      6px !important;
 
-  font-size:10.5px !important;
+    font-size:12.5px !important;
 
-  line-height:1 !important;
+    line-height:1.1 !important;
 
-  font-weight:800 !important;
-}
+    font-weight:800 !important;
+  }
 
 
   /* =======================================================
      COMPACT DEP / ARV / APX
   ======================================================= */
 
-#printArea.compact .print-table .dep-text,
-#printArea.compact .print-table .arv-text,
-#printArea.compact .print-table .apx-text{
+  #printArea.compact .print-table .dep-text,
+  #printArea.compact .print-table .arv-text,
+  #printArea.compact .print-table .apx-text{
 
-  width:26px !important;
-  height:26px !important;
+    width:30px !important;
+    height:30px !important;
 
-  min-width:26px !important;
-  min-height:26px !important;
+    min-width:30px !important;
+    min-height:30px !important;
 
-  max-width:26px !important;
-  max-height:26px !important;
+    max-width:30px !important;
+    max-height:30px !important;
 
-  font-size:9px !important;
+    font-size:10px !important;
 
-  line-height:26px !important;
-}
+    font-weight:900 !important;
+
+    line-height:30px !important;
+  }
 
 
   /* =======================================================
@@ -9742,17 +9751,19 @@ return `
 
 
 
-if(data.length > 14){
+  if(data.length > 18){
 
-  printArea.classList.add("compact");
+    printArea.classList.add("compact");
 
-}
+  }
 
-if(data.length > 25){
 
-  printArea.classList.add("ultra-compact");
 
-}
+  if(data.length > 30){
+
+    printArea.classList.add("ultra-compact");
+
+  }
 
 
 
@@ -10645,7 +10656,6 @@ toggleMute=function(){
 
 
 };
-
 
 
 
