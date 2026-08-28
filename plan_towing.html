@@ -5294,23 +5294,13 @@ function edit(i){
 
 async function del(i){
 
-
-
   if(!isAdmin){
-
-
 
     alert("NO PERMISSION");
 
-
-
     return;
 
-
-
   }
-
-
 
   if(
 
@@ -5322,51 +5312,92 @@ async function del(i){
 
   ){
 
-
-
     return;
-
-
 
   }
 
+  // จำลำดับปัจจุบันก่อนลบ
+  const deleteRow =
+    Number(data[i].row);
+
+  const remainingOrder = 
+    data 
+      .filter(item => 
+        Number(item.row) !== deleteRow 
+      ) 
+      .map(item => 
+        Number(item.row) 
+      );
+
+  pauseRealtime = true;
 
 
   await fetch(API,{
 
-
-
     method:"POST",
-
-
 
     body:JSON.stringify({
 
-
-
       type:"delete",
 
-
-
-      row:data[i].row
-
-
+      row:deleteRow
 
     })
 
-
-
   });
 
+  // รอให้ DELETE เสร็จจริง
+  await new Promise(
+    resolve =>
+      setTimeout(
+        resolve,
+        300
+      )
+  );
 
+  // รักษาลำดับที่เกิดจาก DRAG
+  if(remainingOrder.length > 0){
 
-  load();
+    const orders =
+      remainingOrder.map(
+        (row,index)=>({
 
+          row:row,
 
+          order:index + 1
+
+        })
+      );
+
+    await fetch(API,{
+
+      method:"POST",
+
+      body:JSON.stringify({
+
+        type:"reorder",
+
+        orders:orders
+
+      })
+
+    });
+
+  }
+
+// ลบรายการออกจากข้อมูลบนหน้าจอทันที
+data =
+  data.filter(
+    item =>
+      Number(item.row) !== deleteRow
+  );
+
+// แสดงลำดับเดิมที่ผ่านการ DRAG
+render();
+
+pauseRealtime = false;
 
 }
-
-
 
 
 
@@ -6315,6 +6346,8 @@ function updateRowUI(i,status){
 
 
 let draggedIndex = null;
+
+let savedOrderBeforeDelete = [];
 
 
 
