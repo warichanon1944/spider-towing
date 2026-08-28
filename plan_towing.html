@@ -3277,6 +3277,16 @@ body.zoom-mode td:first-child{
     print-color-adjust:exact !important;
   }
 
+
+
+.print-table tbody td.h-bay-cell{
+  background:#fff3a3 !important;
+  background-color:#fff3a3 !important;
+  color:#000000 !important;
+  font-weight:900 !important;
+
+  -webkit-print-color-adjust:exact !important;
+  print-color-adjust:exact !important;
 }
 
 
@@ -3488,6 +3498,13 @@ body.zoom-mode td:first-child{
 
 
 
+}
+
+
+.h-bay-cell{
+  background:#fff3a3 !important;
+  color:#000000 !important;
+  font-weight:700 !important;
 }
 
 
@@ -9594,6 +9611,17 @@ const rowClass =
 
     : "";
 
+const bayValue =
+  String(d.bay || "").trim().toUpperCase();
+
+const isHBay =
+  bayValue.includes("H");
+
+const bayClass =
+  isHBay
+    ? "h-bay-cell"
+    : "";
+
 
 
       /*
@@ -9675,9 +9703,9 @@ return `
       ${gate}
     </td>
 
-    <td class="center">
-      ${printEscape(d.bay)}
-    </td>
+<td class="center ${bayClass}" style="${isHBay ? 'background:#fff3a3 !important;color:#000 !important;font-weight:900 !important;' : ''}">
+  ${printEscape(d.bay)}
+</td>
 
     <td>
       ${remark}
