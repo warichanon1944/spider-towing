@@ -5810,6 +5810,14 @@ function calculateAPX(){
     return;
   }
 
+  // ถ้า A/C @ GATE มีค่าอยู่แล้ว
+  // ห้าม AUTO เขียนทับ
+  if(
+    String(gate.value || "").trim() !== ""
+  ){
+    return;
+  }
+
   const timeText =
     String(time.value || "")
       .trim()
