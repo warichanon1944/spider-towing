@@ -5406,10 +5406,63 @@ pauseRealtime = false;
    ADD / UPDATE
 
 ========================================================= */
+function calculateAPX(){
 
+  // ต้องเป็น DEP เท่านั้น
+  const type =
+    getFlightType(
+      flight.value
+    );
+
+  if(type !== "DEP"){
+    return;
+  }
+
+  const timeText =
+    String(time.value || "")
+      .trim()
+      .toUpperCase();
+
+  // รองรับ:
+  // STD 10:00
+  // STD 1000
+  // STD 10.00
+  // STD10:00
+  // STD1000
+  const match =
+    timeText.match(
+      /STD\s*(\d{1,2})[:.]?(\d{2})/
+    );
+
+  if(!match){
+    return;
+  }
+
+  let hour =
+    Number(match[1]);
+
+  const minute =
+    Number(match[2]);
+
+  // STD - 2 ชั่วโมง
+  hour -= 2;
+
+  // ข้ามวัน
+  if(hour < 0){
+    hour += 24;
+  }
+
+  // AUTO ใส่ A/C@GATE
+  gate.value =
+    String(hour).padStart(2,"0") +
+    ":" +
+    String(minute).padStart(2,"0");
+
+}
 
 
 async function addRow(){
+
 
 
 
@@ -5427,7 +5480,7 @@ async function addRow(){
 
   }
 
-
+calculateAPX();
 
   let currentData =
 
@@ -10692,6 +10745,19 @@ flight.addEventListener(
 
 );
 
+time.addEventListener(
+  "input",
+  ()=>{
+    calculateAPX();
+  }
+);
+
+gate.addEventListener(
+  "blur",
+  ()=>{
+    calculateAPX();
+  }
+);
 
 
 
