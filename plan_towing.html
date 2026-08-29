@@ -5296,109 +5296,334 @@ async function del(i){
 
   if(!isAdmin){
 
-    alert("NO PERMISSION");
+    alert(
+      "NO PERMISSION"
+    );
 
     return;
 
   }
 
+
+  /* -----------------------------------------
+     CHECK INDEX
+  ----------------------------------------- */
+
   if(
+    !Array.isArray(data) ||
+    i < 0 ||
+    i >= data.length ||
+    !data[i]
+  ){
 
+    alert(
+      "INVALID ROW"
+    );
+
+    return;
+
+  }
+
+
+  /* -----------------------------------------
+     GET TARGET
+     
+     ใช้ข้อมูลจาก data ปัจจุบัน
+     ก่อน load ใหม่
+  ----------------------------------------- */
+
+  const target =
+
+    data[i];
+
+
+  const sheetRow =
+
+    Number(
+
+      target.row
+
+    );
+
+
+  if(
+    !Number.isInteger(sheetRow) ||
+    sheetRow < 2
+  ){
+
+    alert(
+      "INVALID SHEET ROW"
+    );
+
+    return;
+
+  }
+
+
+  /* -----------------------------------------
+     CONFIRM
+  ----------------------------------------- */
+
+  if(
     !confirm(
-
       "Delete this flight?"
-
     )
-
   ){
 
     return;
 
   }
 
-  // จำลำดับปัจจุบันก่อนลบ
-  const deleteRow =
-    Number(data[i].row);
 
-  const remainingOrder = 
-    data 
-      .filter(item => 
-        Number(item.row) !== deleteRow 
-      ) 
-      .map(item => 
-        Number(item.row) 
-      );
+  /* -----------------------------------------
+     IMPORTANT
+     
+     ยกเลิก REORDER TIMER ที่อาจค้างอยู่
+     
+     ป้องกัน:
+     
+     DRAG
+       ↓
+     รอ 2 วิ
+       ↓
+     กด DEL ก่อนครบ 2 วิ
+       ↓
+     REORDER ยิงหลัง DEL
+     
+     ซึ่งอาจทำให้ ORDER เพี้ยน
+  ----------------------------------------- */
+
+  if(
+    window.reorderTimer
+  ){
+
+    clearTimeout(
+
+      window.reorderTimer
+
+    );
+
+    window.reorderTimer =
+
+      null;
+
+  }
+
+
+  /* -----------------------------------------
+     LOCK REORDER
+  ----------------------------------------- */
+
+  isReordering = true;
 
   pauseRealtime = true;
 
 
-  await fetch(API,{
+  /* -----------------------------------------
+     LOCK DELETE BUTTONS
+  ----------------------------------------- */
 
-    method:"POST",
+  const buttons =
 
-    body:JSON.stringify({
+    document.querySelectorAll(
 
-      type:"delete",
+      ".action-btn.del"
 
-      row:deleteRow
+    );
 
-    })
 
-  });
+  buttons.forEach(
 
-  // รอให้ DELETE เสร็จจริง
-  await new Promise(
-    resolve =>
-      setTimeout(
-        resolve,
-        300
-      )
+    btn=>{
+
+      btn.disabled = true;
+
+    }
+
   );
 
-  // รักษาลำดับที่เกิดจาก DRAG
-  if(remainingOrder.length > 0){
 
-    const orders =
-      remainingOrder.map(
-        (row,index)=>({
+  try{
 
-          row:row,
 
-          order:index + 1
+    /* -----------------------------------------
+       DELETE FROM GOOGLE SHEET
+    ----------------------------------------- */
 
-        })
+    const response =
+
+      await fetch(
+
+        API,
+
+        {
+
+          method:"POST",
+
+          body:
+
+            JSON.stringify({
+
+              type:"delete",
+
+              row:sheetRow
+
+            })
+
+        }
+
       );
 
-    await fetch(API,{
 
-      method:"POST",
+    /* -----------------------------------------
+       CHECK HTTP
+    ----------------------------------------- */
 
-      body:JSON.stringify({
+    if(
 
-        type:"reorder",
+      !response.ok
 
-        orders:orders
+    ){
 
-      })
+      throw new Error(
 
-    });
+        "DELETE FAILED : HTTP " +
+
+        response.status
+
+      );
+
+    }
+
+
+    /* -----------------------------------------
+       READ RESPONSE
+    ----------------------------------------- */
+
+    const result =
+
+      await response.json();
+
+
+    console.log(
+
+      "DELETE RESPONSE:",
+
+      result
+
+    );
+
+
+    /* -----------------------------------------
+       CHECK DELETE RESULT
+    ----------------------------------------- */
+
+    if(
+
+      result.status &&
+
+      result.status !== "deleted"
+
+    ){
+
+      throw new Error(
+
+        result.message ||
+
+        "DELETE FAILED"
+
+      );
+
+    }
+
+
+    /* -----------------------------------------
+       WAIT FOR GOOGLE SHEET
+    ----------------------------------------- */
+
+    await new Promise(
+
+      resolve =>
+
+        setTimeout(
+
+          resolve,
+
+          500
+
+        )
+
+    );
+
+
+    /* -----------------------------------------
+       CLEAR LOCAL DATA
+       
+       สำคัญมาก
+       
+       ไม่ให้ข้อมูลเก่าค้างระหว่าง load
+    ----------------------------------------- */
+
+    data = [];
+
+
+    render();
+
+
+    /* -----------------------------------------
+       LOAD FRESH DATA
+    ----------------------------------------- */
+
+    await load();
+
+
+  }catch(error){
+
+
+    console.error(
+
+      "DELETE ERROR:",
+
+      error
+
+    );
+
+
+    alert(
+
+      "DELETE FAILED\n\n" +
+
+      error.message
+
+    );
+
+
+  }finally{
+
+
+    /* -----------------------------------------
+       UNLOCK
+    ----------------------------------------- */
+
+    isReordering = false;
+
+    pauseRealtime = false;
+
+
+    buttons.forEach(
+
+      btn=>{
+
+        btn.disabled = false;
+
+      }
+
+    );
+
 
   }
 
-// ลบรายการออกจากข้อมูลบนหน้าจอทันที
-data =
-  data.filter(
-    item =>
-      Number(item.row) !== deleteRow
-  );
-
-// แสดงลำดับเดิมที่ผ่านการ DRAG
-render();
-
-pauseRealtime = false;
-
 }
-
 
 
 /* =========================================================
