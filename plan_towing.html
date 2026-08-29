@@ -3509,6 +3509,120 @@ body.zoom-mode td:first-child{
 }
 
 
+#deleteLoading{
+
+  position:fixed;
+
+  top:50%;
+
+  left:50%;
+
+  transform:translate(
+    -50%,
+    -50%
+  );
+
+  z-index:99999;
+
+  display:none;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:12px;
+
+  padding:22px 28px;
+
+  border-radius:16px;
+
+  background:rgba(
+    15,
+    23,
+    42,
+    0.96
+  );
+
+  border:1px solid rgba(
+    255,
+    255,
+    255,
+    0.12
+  );
+
+  box-shadow:
+    0 20px 60px
+    rgba(
+      0,
+      0,
+      0,
+      0.45
+    );
+
+}
+
+
+#deleteLoading.show{
+
+  display:flex;
+
+}
+
+
+.delete-loading-spinner{
+
+  width:34px;
+
+  height:34px;
+
+  border:4px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.18
+    );
+
+  border-top-color:#ffffff;
+
+  border-radius:50%;
+
+  animation:
+    deleteSpin
+    0.8s
+    linear
+    infinite;
+
+}
+
+
+.delete-loading-text{
+
+  color:#ffffff;
+
+  font-size:13px;
+
+  font-weight:800;
+
+  letter-spacing:1px;
+
+}
+
+
+@keyframes deleteSpin{
+
+  to{
+
+    transform:rotate(
+      360deg
+    );
+
+  }
+
+}
+
 
 </style>
 
@@ -5326,10 +5440,7 @@ async function del(i){
 
 
   /* -----------------------------------------
-     GET TARGET
-     
-     ใช้ข้อมูลจาก data ปัจจุบัน
-     ก่อน load ใหม่
+     GET REAL SHEET ROW
   ----------------------------------------- */
 
   const target =
@@ -5376,21 +5487,7 @@ async function del(i){
 
 
   /* -----------------------------------------
-     IMPORTANT
-     
-     ยกเลิก REORDER TIMER ที่อาจค้างอยู่
-     
-     ป้องกัน:
-     
-     DRAG
-       ↓
-     รอ 2 วิ
-       ↓
-     กด DEL ก่อนครบ 2 วิ
-       ↓
-     REORDER ยิงหลัง DEL
-     
-     ซึ่งอาจทำให้ ORDER เพี้ยน
+     CANCEL PENDING REORDER TIMER
   ----------------------------------------- */
 
   if(
@@ -5403,20 +5500,16 @@ async function del(i){
 
     );
 
-    window.reorderTimer =
-
-      null;
+    window.reorderTimer = null;
 
   }
 
 
   /* -----------------------------------------
-     LOCK REORDER
+     SHOW DELETE LOADING
   ----------------------------------------- */
 
-  isReordering = true;
-
-  pauseRealtime = true;
+  showDeleteLoading();
 
 
   /* -----------------------------------------
@@ -5447,7 +5540,7 @@ async function del(i){
 
 
     /* -----------------------------------------
-       DELETE FROM GOOGLE SHEET
+       DELETE
     ----------------------------------------- */
 
     const response =
@@ -5480,9 +5573,7 @@ async function del(i){
     ----------------------------------------- */
 
     if(
-
       !response.ok
-
     ){
 
       throw new Error(
@@ -5515,7 +5606,7 @@ async function del(i){
 
 
     /* -----------------------------------------
-       CHECK DELETE RESULT
+       CHECK RESULT
     ----------------------------------------- */
 
     if(
@@ -5538,7 +5629,7 @@ async function del(i){
 
 
     /* -----------------------------------------
-       WAIT FOR GOOGLE SHEET
+       WAIT FOR SHEET
     ----------------------------------------- */
 
     await new Promise(
@@ -5557,21 +5648,10 @@ async function del(i){
 
 
     /* -----------------------------------------
-       CLEAR LOCAL DATA
-       
-       สำคัญมาก
-       
-       ไม่ให้ข้อมูลเก่าค้างระหว่าง load
-    ----------------------------------------- */
-
-    data = [];
-
-
-    render();
-
-
-    /* -----------------------------------------
        LOAD FRESH DATA
+       
+       ตารางเดิมยังอยู่
+       ไม่มีการเคลียร์หน้าจอ
     ----------------------------------------- */
 
     await load();
@@ -5602,13 +5682,15 @@ async function del(i){
 
 
     /* -----------------------------------------
-       UNLOCK
+       HIDE DELETE LOADING
     ----------------------------------------- */
 
-    isReordering = false;
+    hideDeleteLoading();
 
-    pauseRealtime = false;
 
+    /* -----------------------------------------
+       UNLOCK DELETE BUTTONS
+    ----------------------------------------- */
 
     buttons.forEach(
 
@@ -5620,6 +5702,91 @@ async function del(i){
 
     );
 
+  }
+
+}
+
+
+/* =========================================================
+   DELETE LOADING
+========================================================= */
+
+function showDeleteLoading(){
+
+  let el =
+
+    document.getElementById(
+
+      "deleteLoading"
+
+    );
+
+
+  if(!el){
+
+    el =
+
+      document.createElement(
+
+        "div"
+
+      );
+
+
+    el.id =
+
+      "deleteLoading";
+
+
+    el.innerHTML = `
+
+      <div class="delete-loading-spinner"></div>
+
+      <div class="delete-loading-text">
+
+        DELETING...
+
+      </div>
+
+    `;
+
+
+    document.body.appendChild(
+
+      el
+
+    );
+
+  }
+
+
+  el.classList.add(
+
+    "show"
+
+  );
+
+}
+
+
+function hideDeleteLoading(){
+
+  const el =
+
+    document.getElementById(
+
+      "deleteLoading"
+
+    );
+
+
+  if(el){
+
+    el.classList.remove(
+
+      "show"
+
+    );
 
   }
 
