@@ -5307,23 +5307,52 @@ setInterval(()=>{
 
 function fmt(v){
 
+  if(!v){
+    return "";
+  }
 
+  const str = String(v).trim();
+
+  const match =
+    str.match(/^(\d{1,2}):(\d{2})$/);
+
+  if(!match){
+    return str;
+  }
 
   return (
+    String(match[1]).padStart(2, "0") +
+    ":" +
+    match[2]
+  );
 
+}
+
+function fmtTime(v){
+
+  if(
     v === "" ||
-
     v === null ||
-
     v === undefined
+  ){
+    return "-";
+  }
 
-  )
+  const str =
+    String(v).trim();
 
-  ? "-"
+  const match =
+    str.match(/^(\d{1,2}):(\d{2})$/);
 
-  : v;
+  if(!match){
+    return str;
+  }
 
-
+  return (
+    String(match[1]).padStart(2,"0") +
+    ":" +
+    match[2]
+  );
 
 }
 
@@ -6829,7 +6858,7 @@ function render(){
 
             `<span class="apx-tag">
 
-              APX ${d.ac_gate}
+              APX ${fmtTime(d.ac_gate)}
 
             </span>`
 
@@ -10553,7 +10582,7 @@ function printPlan(){
 
         String(d.ac_gate).trim() !== ""
 
-          ? `APX ${printEscape(d.ac_gate)}`
+          ? `APX ${printEscape(fmtTime(d.ac_gate))}`
 
           : "-";
 
