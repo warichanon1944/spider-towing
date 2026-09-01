@@ -3508,6 +3508,72 @@ body.zoom-mode td:first-child{
   font-weight:700 !important;
 }
 
+.t-bay-cell{
+  background:#bae6fd !important;
+  background-color:#bae6fd !important;
+  color:#000000 !important;
+  font-weight:900 !important;
+  -webkit-print-color-adjust:exact !important;
+  print-color-adjust:exact !important;
+}
+
+
+#addUpdateLoading{
+  position:fixed;
+
+  top:50%;
+  left:50%;
+
+  transform:translate(
+    -50%,
+    -50%
+  );
+
+  z-index:99999;
+
+  display:none;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:12px;
+
+  padding:22px 28px;
+
+  border-radius:16px;
+
+  background:rgba(
+    15,
+    23,
+    42,
+    0.96
+  );
+
+  border:1px solid rgba(
+    255,
+    255,
+    255,
+    0.12
+  );
+
+  box-shadow:
+    0 20px 60px
+    rgba(
+      0,
+      0,
+      0,
+      0.45
+    );
+}
+
+
+#addUpdateLoading.show{
+  display:flex;
+}
+
 
 #deleteLoading{
 
@@ -3622,6 +3688,8 @@ body.zoom-mode td:first-child{
   }
 
 }
+
+
 
 
 </style>
@@ -5770,6 +5838,108 @@ function showDeleteLoading(){
 
 }
 
+function showAddUpdateLoading(text){
+
+  let el =
+
+    document.getElementById(
+
+      "addUpdateLoading"
+
+    );
+
+
+  if(!el){
+
+    el =
+
+      document.createElement(
+
+        "div"
+
+      );
+
+
+    el.id =
+
+      "addUpdateLoading";
+
+
+    el.innerHTML = `
+
+      <div class="delete-loading-spinner"></div>
+
+      <div class="delete-loading-text">
+
+        ${text}
+
+      </div>
+
+    `;
+
+
+    document.body.appendChild(
+
+      el
+
+    );
+
+  }
+
+  else{
+
+    const textEl =
+
+      el.querySelector(
+
+        ".delete-loading-text"
+
+      );
+
+
+    if(textEl){
+
+      textEl.textContent =
+
+        text;
+
+    }
+
+  }
+
+
+  el.classList.add(
+
+    "show"
+
+  );
+
+}
+
+
+function hideAddUpdateLoading(){
+
+  const el =
+
+    document.getElementById(
+
+      "addUpdateLoading"
+
+    );
+
+
+  if(el){
+
+    el.classList.remove(
+
+      "show"
+
+    );
+
+  }
+
+}
+
 
 function hideDeleteLoading(){
 
@@ -5884,6 +6054,16 @@ async function addRow(){
 
 calculateAPX();
 
+  if(editRow){
+
+    showAddUpdateLoading("UPDATING...");
+
+  }else{
+
+    showAddUpdateLoading("ADDING...");
+
+  }
+
   let currentData =
 
     data.find(
@@ -5996,15 +6176,11 @@ calculateAPX();
 
   pauseRealtime = false;
 
-
-
   load();
-
-
 
   clearForm();
 
-
+  hideAddUpdateLoading();
 
 }
 
@@ -10116,10 +10292,22 @@ const bayValue =
 const isHBay =
   bayValue.includes("H");
 
+const isTBay =
+  bayValue.includes("T");
+
 const bayClass =
   isHBay
     ? "h-bay-cell"
-    : "";
+    : isTBay
+      ? "t-bay-cell"
+      : "";
+
+const bayStyle =
+  isHBay
+    ? "background:#fff3a3 !important;color:#000 !important;font-weight:900 !important;"
+    : isTBay
+      ? "background:#bae6fd !important;color:#000 !important;font-weight:900 !important;"
+      : "";
 
 
 
@@ -10202,7 +10390,7 @@ return `
       ${gate}
     </td>
 
-<td class="center ${bayClass}" style="${isHBay ? 'background:#fff3a3 !important;color:#000 !important;font-weight:900 !important;' : ''}">
+<td class="center ${bayClass}" style="${bayStyle}">
   ${printEscape(d.bay)}
 </td>
 
