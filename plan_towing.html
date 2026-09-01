@@ -353,55 +353,49 @@ body::before{
 
 
 
+/* =========================================================
+   LIVE SYSTEM
+========================================================= */
+
 .live{
-
-
 
   display:flex;
 
   align-items:center;
 
-
-
   gap:10px;
-
-
 
   background:rgba(255,255,255,0.04);
 
-
-
   border:1px solid rgba(255,255,255,0.12);
-
-
 
   padding:10px 14px;
 
-
-
   border-radius:14px;
+
+  cursor:pointer;
+
+  user-select:none;
+
+  transition:
+    all 0.25s ease;
 
 }
 
 
+/* =========================================================
+   LIVE DOT
+========================================================= */
 
 .live-dot{
-
-
 
   width:10px;
 
   height:10px;
 
-
-
   border-radius:50%;
 
-
-
   background:var(--green);
-
-
 
   box-shadow:
 
@@ -409,17 +403,46 @@ body::before{
 
     0 0 20px var(--green);
 
-
-
   animation:pulse 1.2s infinite;
 
 }
 
 
+/* =========================================================
+   MANUAL MODE
+========================================================= */
+
+.live.manual{
+
+  border-color:
+    rgba(255,60,60,0.45);
+
+  background:
+    rgba(255,40,40,0.08);
+
+  color:#ff4d4d;
+
+}
+
+
+.live.manual .live-dot{
+
+  background:#ff3b3b;
+
+  box-shadow:
+
+    0 0 10px #ff3b3b,
+
+    0 0 20px #ff3b3b;
+
+}
+
+
+/* =========================================================
+   PULSE
+========================================================= */
 
 @keyframes pulse{
-
-
 
   50%{
 
@@ -428,8 +451,6 @@ body::before{
     transform:scale(0.7);
 
   }
-
-
 
 }
 
@@ -690,21 +711,33 @@ body::before{
 
 }
 
-.panel-badge::before{
 
-  content:"";
+/* =========================================================
+   REALTIME - MANUAL MODE
+========================================================= */
 
-  width:6px;
+.panel-badge.manual{
+  color:#ff4d4d;
+}
 
-  height:6px;
+.panel-badge.manual::before{
+  background:#ff3b3b;
+  box-shadow:
+    0 0 8px #ff3b3b;
+}
 
-  border-radius:50%;
 
-  background:var(--green);
+/* =========================================================
+   REALTIME DOT - MANUAL
+========================================================= */
+
+.panel-badge.manual::before{
+
+  background:#ff3b3b;
 
   box-shadow:
     0 0 8px
-    var(--green);
+    #ff3b3b;
 
 }
 
@@ -3762,19 +3795,24 @@ body.zoom-mode td:first-child{
 
 
 
-    <div class="live">
+   <div
+  class="live"
+  id="liveSystem"
+  onclick="toggleSystemMode()"
+>
 
+  <div
+    class="live-dot"
+    id="liveDot"
+  ></div>
 
+  <div
+    id="liveText"
+  >
+    LIVE SYSTEM
+  </div>
 
-      <div class="live-dot"></div>
-
-
-
-      <div>LIVE SYSTEM</div>
-
-
-
-    </div>
+</div>
 
 
 
@@ -3940,11 +3978,14 @@ body.zoom-mode td:first-child{
 
 
 
-      <div class="panel-badge">
+<div
+  class="panel-badge"
+  id="realtimeBadge"
+>
 
-        OPS ACTIVE
+  REALTIME
 
-      </div>
+</div>
 
 
 
@@ -4236,31 +4277,21 @@ body.zoom-mode td:first-child{
 
 
 
-  <div class="panel">
+<div class="panel">
 
+  <div class="panel-title">
 
+    <h3>PLAN TOWING</h3>
 
-    <div class="panel-title">
+    <div class="panel-badge">
 
-
-
-      <h3>PLAN TOWING</h3>
-
-
-
-      <div class="panel-badge">
-
-        REALTIME
-
-      </div>
-
-
+      REALTIME
 
     </div>
 
+  </div>
 
-
-    <div class="table-wrap">
+  <div class="table-wrap">
 
 
 
@@ -5296,31 +5327,54 @@ function fmt(v){
 
 }
 
+/* =========================================================
+   SYSTEM MODE
+   MANUAL / ONLINE
+========================================================= */
 
+let systemMode = "ONLINE";
+
+
+function isManualMode(){
+
+  return systemMode === "MANUAL";
+
+}
+
+
+function isOnlineMode(){
+
+  return systemMode === "ONLINE";
+
+}
 
 
 
 /* =========================================================
-
    LOAD
-
+   ONLINE ONLY
 ========================================================= */
-
-
 
 async function load(){
 
+  /* =======================================================
+     ห้าม LOAD ตอน MANUAL
+  ======================================================= */
+
+  if(isManualMode()){
+
+    console.log(
+      "[MANUAL] Skip Google Sheet load"
+    );
+
+    return;
+
+  }
 
 
-  /*
-
-    IMPORTANT:
-
-    ห้าม load ระหว่าง reorder
-
-  */
-
-
+  /* =======================================================
+     ห้าม LOAD ระหว่าง REORDER
+  ======================================================= */
 
   if(isReordering){
 
@@ -5329,183 +5383,252 @@ async function load(){
   }
 
 
-
   try{
 
+    console.log(
+      "[ONLINE] Loading data from Google Sheet..."
+    );
 
 
     const res =
-
       await fetch(API);
 
 
+    if(!res.ok){
+
+      throw new Error(
+        "HTTP " +
+        res.status
+      );
+
+    }
+
 
     const newData =
-
       await res.json();
 
 
+    if(!Array.isArray(newData)){
+
+      throw new Error(
+        "Invalid data"
+      );
+
+    }
+
 
     const hash =
-
       JSON.stringify(newData);
 
 
+    lastDataHash =
+      hash;
 
-    lastDataHash = hash;
 
-
-
-    data = newData;
-
+    data =
+      newData;
 
 
     render();
 
 
+    console.log(
+      "[ONLINE] Load complete:",
+      data.length,
+      "records"
+    );
+
 
   }catch(e){
 
-
-
-    console.log(e);
-
-
+    console.log(
+      "[ONLINE] Load failed:",
+      e
+    );
 
   }
 
-
-
 }
-
 
 
 let lastDataHash = "";
 
 
-
 load();
 
-
-
-
-
 /* =========================================================
-
-   EDIT
-
+   LIVE SYSTEM BUTTON
 ========================================================= */
 
+function toggleSystemMode(){
 
+  if(systemMode === "ONLINE"){
 
-function edit(i){
+    const confirmManual = confirm(
 
+      "⚠️ เปลี่ยนเป็น MANUAL MODE?\n\n" +
 
+      "ระบบจะหยุดการโหลดข้อมูลจาก DATA ชั่วคราว\n\n" +
 
-  if(!isAdmin){
+      "แต่ยังสามารถ ADD / EDIT / POST งานได้ตามปกติ\n\n" +
 
+      "ต้องการเปลี่ยนเป็น MANUAL MODE หรือไม่?"
 
+    );
 
-    alert("NO PERMISSION");
+    if(!confirmManual){
+      return;
+    }
 
+    systemMode = "MANUAL";
 
+    updateLiveSystemUI();
+
+    console.log(
+      "[SYSTEM] Mode: MANUAL"
+    );
 
     return;
-
-
-
   }
 
 
+  if(systemMode === "MANUAL"){
 
-  pauseRealtime = true;
+    const confirmOnline = confirm(
 
+      "🌐 กลับเป็น ONLINE SYSTEM?\n\n" +
 
+      "ระบบจะกลับมาโหลดข้อมูลจาก DATA\n\n" +
 
-  let d = data[i];
+      "ต้องการกลับเป็น ONLINE หรือไม่?"
 
+    );
 
+    if(!confirmOnline){
+      return;
+    }
 
-  editRow = d.row;
+    systemMode = "ONLINE";
 
+    updateLiveSystemUI();
 
+    console.log(
+      "[SYSTEM] Mode: ONLINE"
+    );
 
-  reg.value = d.reg;
+    load();
 
-
-
-  flight.value = d.flight;
-
-
-
-  time.value = d.time;
-
-
-
-  gate.value =
-
-    d.ac_gate ||
-
-    d.gate ||
-
-    "";
-
-
-
-  bay.value = d.bay;
-
-
-
-  remark.value = d.remark;
-
-
-
-  status.value = d.status;
-
-
-
-  status.disabled = false;
-
-
-
-  saveBtn.innerText = "UPDATE";
-
-
-
-  saveBtn.className = "update";
-
-
+  }
 
 }
 
 
+/* =========================================================
+   UPDATE LIVE SYSTEM UI
+========================================================= */
+
+function updateLiveSystemUI(){
+
+  const live =
+    document.getElementById("liveSystem");
+
+  const text =
+    document.getElementById("liveText");
+
+  const realtimeBadges =
+    document.querySelectorAll(
+      ".panel-badge"
+    );
+
+
+  /* =======================================================
+     ONLINE
+  ======================================================= */
+
+  if(systemMode === "ONLINE"){
+
+    if(live){
+
+      live.classList.remove(
+        "manual"
+      );
+
+    }
+
+    if(text){
+
+      text.textContent =
+        "LIVE SYSTEM";
+
+    }
+
+
+    realtimeBadges.forEach(
+      badge => {
+
+        badge.classList.remove(
+          "manual"
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     MANUAL
+  ======================================================= */
+
+  if(systemMode === "MANUAL"){
+
+    if(live){
+
+      live.classList.add(
+        "manual"
+      );
+
+    }
+
+    if(text){
+
+      text.textContent =
+        "MANUAL MODE";
+
+    }
+
+
+    realtimeBadges.forEach(
+      badge => {
+
+        badge.classList.add(
+          "manual"
+        );
+
+      }
+    );
+
+  }
+
+ }
 
 
 
 /* =========================================================
-
-   DELETE
-
+   EDIT
+   ONLINE / MANUAL
 ========================================================= */
 
-
-
-async function del(i){
+function edit(i){
 
   if(!isAdmin){
 
-    alert(
-      "NO PERMISSION"
-    );
+    alert("NO PERMISSION");
 
     return;
 
   }
 
-
-  /* -----------------------------------------
-     CHECK INDEX
-  ----------------------------------------- */
 
   if(
     !Array.isArray(data) ||
@@ -5514,50 +5637,109 @@ async function del(i){
     !data[i]
   ){
 
-    alert(
-      "INVALID ROW"
-    );
+    alert("INVALID ROW");
 
     return;
 
   }
 
 
-  /* -----------------------------------------
-     GET REAL SHEET ROW
-  ----------------------------------------- */
+  pauseRealtime = true;
 
-  const target =
 
+  const d =
     data[i];
 
 
-  const sheetRow =
-
-    Number(
-
-      target.row
-
-    );
+  editRow =
+    d.row;
 
 
-  if(
-    !Number.isInteger(sheetRow) ||
-    sheetRow < 2
-  ){
+  reg.value =
+    d.reg || "";
 
-    alert(
-      "INVALID SHEET ROW"
-    );
+
+  flight.value =
+    d.flight || "";
+
+
+  time.value =
+    d.time || "";
+
+
+  gate.value =
+    d.ac_gate ||
+    d.gate ||
+    "";
+
+
+  bay.value =
+    d.bay || "";
+
+
+  remark.value =
+    d.remark || "";
+
+
+  status.value =
+    d.status ||
+    "WAITING";
+
+
+  status.disabled =
+    false;
+
+
+  saveBtn.innerText =
+    "UPDATE";
+
+
+  saveBtn.className =
+    "update";
+
+
+  console.log(
+    "[EDIT]",
+    editRow
+  );
+
+}
+
+
+/* =========================================================
+   DELETE
+   ONLINE = GOOGLE SHEET
+   MANUAL = LOCAL PAGE DATA
+========================================================= */
+
+async function del(i){
+
+  if(!isAdmin){
+
+    alert("NO PERMISSION");
 
     return;
 
   }
 
 
-  /* -----------------------------------------
-     CONFIRM
-  ----------------------------------------- */
+  if(
+    !Array.isArray(data) ||
+    i < 0 ||
+    i >= data.length ||
+    !data[i]
+  ){
+
+    alert("INVALID ROW");
+
+    return;
+
+  }
+
+
+  const target =
+    data[i];
+
 
   if(
     !confirm(
@@ -5570,65 +5752,100 @@ async function del(i){
   }
 
 
-  /* -----------------------------------------
-     CANCEL PENDING REORDER TIMER
-  ----------------------------------------- */
+  /* =======================================================
+     CANCEL REORDER TIMER
+  ======================================================= */
 
   if(
     window.reorderTimer
   ){
 
     clearTimeout(
-
       window.reorderTimer
-
     );
 
-    window.reorderTimer = null;
+    window.reorderTimer =
+      null;
 
   }
 
 
-  /* -----------------------------------------
-     SHOW DELETE LOADING
-  ----------------------------------------- */
-
   showDeleteLoading();
 
 
-  /* -----------------------------------------
-     LOCK DELETE BUTTONS
-  ----------------------------------------- */
-
   const buttons =
-
     document.querySelectorAll(
-
       ".action-btn.del"
-
     );
 
 
   buttons.forEach(
+    btn => {
 
-    btn=>{
-
-      btn.disabled = true;
+      btn.disabled =
+        true;
 
     }
-
   );
 
 
   try{
 
+    /* =====================================================
+       MANUAL
+       ไม่ยิง GOOGLE SHEET
+    ===================================================== */
 
-    /* -----------------------------------------
-       DELETE
-    ----------------------------------------- */
+    if(isManualMode()){
+
+      const deletedRow =
+        target.row;
+
+
+      data.splice(
+        i,
+        1
+      );
+
+
+      render();
+
+
+      console.log(
+        "[MANUAL] DELETE:",
+        deletedRow
+      );
+
+
+      return;
+
+    }
+
+
+    /* =====================================================
+       ONLINE
+       ยิง GOOGLE SHEET
+    ===================================================== */
+
+    const sheetRow =
+      Number(
+        target.row
+      );
+
+
+    if(
+      !Number.isInteger(sheetRow) ||
+      sheetRow < 2
+    ){
+
+      throw new Error(
+        "INVALID SHEET ROW"
+      );
+
+    }
+
 
     const response =
-
       await fetch(
 
         API,
@@ -5638,12 +5855,13 @@ async function del(i){
           method:"POST",
 
           body:
-
             JSON.stringify({
 
-              type:"delete",
+              type:
+                "delete",
 
-              row:sheetRow
+              row:
+                sheetRow
 
             })
 
@@ -5652,18 +5870,11 @@ async function del(i){
       );
 
 
-    /* -----------------------------------------
-       CHECK HTTP
-    ----------------------------------------- */
-
-    if(
-      !response.ok
-    ){
+    if(!response.ok){
 
       throw new Error(
 
         "DELETE FAILED : HTTP " +
-
         response.status
 
       );
@@ -5671,40 +5882,24 @@ async function del(i){
     }
 
 
-    /* -----------------------------------------
-       READ RESPONSE
-    ----------------------------------------- */
-
     const result =
-
       await response.json();
 
 
     console.log(
-
       "DELETE RESPONSE:",
-
       result
-
     );
 
 
-    /* -----------------------------------------
-       CHECK RESULT
-    ----------------------------------------- */
-
     if(
-
       result.status &&
-
       result.status !== "deleted"
-
     ){
 
       throw new Error(
 
         result.message ||
-
         "DELETE FAILED"
 
       );
@@ -5712,84 +5907,49 @@ async function del(i){
     }
 
 
-    /* -----------------------------------------
-       WAIT FOR SHEET
-    ----------------------------------------- */
-
     await new Promise(
-
       resolve =>
-
         setTimeout(
-
           resolve,
-
           500
-
         )
-
     );
 
-
-    /* -----------------------------------------
-       LOAD FRESH DATA
-       
-       ตารางเดิมยังอยู่
-       ไม่มีการเคลียร์หน้าจอ
-    ----------------------------------------- */
 
     await load();
 
 
   }catch(error){
 
-
     console.error(
-
       "DELETE ERROR:",
-
       error
-
     );
 
 
     alert(
-
       "DELETE FAILED\n\n" +
-
       error.message
-
     );
 
 
   }finally{
 
-
-    /* -----------------------------------------
-       HIDE DELETE LOADING
-    ----------------------------------------- */
-
     hideDeleteLoading();
 
 
-    /* -----------------------------------------
-       UNLOCK DELETE BUTTONS
-    ----------------------------------------- */
-
     buttons.forEach(
+      btn => {
 
-      btn=>{
-
-        btn.disabled = false;
+        btn.disabled =
+          false;
 
       }
-
     );
 
   }
 
 }
-
 
 /* =========================================================
    DELETE LOADING
@@ -6047,154 +6207,270 @@ function calculateAPX(){
 }
 
 
+/* =========================================================
+   ADD / UPDATE ROW
+   ONLINE  = POST TO GOOGLE SHEET
+   MANUAL  = SAVE TO LOCAL PAGE DATA ONLY
+========================================================= */
+
 async function addRow(){
-
-
-
 
   if(!isAdmin){
 
-
-
     alert("NO PERMISSION");
-
-
 
     return;
 
-
-
   }
 
-calculateAPX();
+
+  calculateAPX();
+
 
   if(editRow){
 
-    showAddUpdateLoading("UPDATING...");
+    showAddUpdateLoading(
+      "UPDATING..."
+    );
 
   }else{
 
-    showAddUpdateLoading("SAVING...");
+    showAddUpdateLoading(
+      "SAVING..."
+    );
 
   }
 
-  let currentData =
 
-    data.find(
+  try{
 
-      x => x.row === editRow
+    /* =====================================================
+       FIND CURRENT DATA
+    ===================================================== */
 
-    );
-
-
-
-  const row = {
-
-
-
-    reg:reg.value,
-
-
-
-    flight:flight.value,
-
-
-
-    time:String(time.value),
-
-
-
-    ac_gate:gate.value,
-
-
-
-    bay:bay.value,
-
-
-
-    remark:remark.value,
-
-
-
-    status:
-
+    const currentData =
       editRow
-
-      ? (
-
-          status.value ||
-
-          currentData.status
-
-        )
-
-      : "WAITING"
+        ? data.find(
+            x => x.row === editRow
+          )
+        : null;
 
 
+    /* =====================================================
+       ROW DATA
+    ===================================================== */
 
-  };
+    const row = {
+
+      reg:
+        reg.value,
+
+      flight:
+        flight.value,
+
+      time:
+        String(time.value),
+
+      ac_gate:
+        gate.value,
+
+      bay:
+        bay.value,
+
+      remark:
+        remark.value,
+
+      status:
+
+        editRow
+
+          ? (
+              status.value ||
+              (
+                currentData
+                  ? currentData.status
+                  : "WAITING"
+              )
+            )
+
+          : "WAITING"
+
+    };
 
 
+    /* =====================================================
+       MANUAL MODE
+       ไม่ติดต่อ Google Sheet
+    ===================================================== */
+
+    if(isManualMode()){
+
+      /* ===================================================
+         UPDATE
+      =================================================== */
+
+      if(editRow){
+
+        const index =
+          data.findIndex(
+            x => x.row === editRow
+          );
 
 
+        if(index === -1){
 
-  await fetch(API,{
-
-
-
-    method:"POST",
-
-
-
-    body:JSON.stringify(
-
-
-
-      editRow
-
-
-
-      ? {
-
-
-
-          type:"update",
-
-
-
-          row:editRow,
-
-
-
-          ...row
-
-
+          throw new Error(
+            "Record not found"
+          );
 
         }
 
 
+        data[index] = {
 
-      : row
+          ...data[index],
 
+          ...row
 
-
-    )
-
-
-
-  });
+        };
 
 
+        console.log(
+          "[MANUAL] UPDATE:",
+          editRow
+        );
+
+      }
 
 
+      /* ===================================================
+         ADD
+      =================================================== */
 
-  pauseRealtime = false;
+      else{
 
-  load();
+        const localRow = {
 
-  clearForm();
+          ...row,
 
-  hideAddUpdateLoading();
+          row:
+            "MANUAL-" +
+            Date.now()
+
+        };
+
+
+        data.push(
+          localRow
+        );
+
+
+        console.log(
+          "[MANUAL] ADD:",
+          localRow.row
+        );
+
+      }
+
+
+      /* ===================================================
+         UPDATE SCREEN
+      =================================================== */
+
+      render();
+
+
+      pauseRealtime =
+        false;
+
+
+      clearForm();
+
+
+      return;
+
+    }
+
+
+    /* =====================================================
+       ONLINE MODE
+       POST TO GOOGLE SHEET
+    ===================================================== */
+
+    const response =
+      await fetch(API,{
+
+        method:"POST",
+
+        body:
+          JSON.stringify(
+
+            editRow
+
+              ? {
+
+                  type:
+                    "update",
+
+                  row:
+                    editRow,
+
+                  ...row
+
+                }
+
+              : row
+
+          )
+
+      });
+
+
+    if(!response.ok){
+
+      throw new Error(
+
+        "HTTP " +
+        response.status
+
+      );
+
+    }
+
+
+    console.log(
+      "[ONLINE] Save success"
+    );
+
+
+    pauseRealtime =
+      false;
+
+
+    await load();
+
+
+    clearForm();
+
+
+  }catch(e){
+
+    console.log(
+      "[ADD / UPDATE] Save failed:",
+      e
+    );
+
+
+    alert(
+      "SAVE FAILED"
+    );
+
+
+  }finally{
+
+    hideAddUpdateLoading();
+
+  }
 
 }
 
@@ -10536,24 +10812,26 @@ return `
 
 
 /* =========================================================
-
    REALTIME LOOP
-
 ========================================================= */
-
-
 
 setInterval(()=>{
 
+  /* =======================================================
+     MANUAL MODE
+     หยุดการโหลดจาก Google Sheet
+  ======================================================= */
+
+  if(isManualMode()){
+
+    return;
+
+  }
 
 
-  /*
-
-    ไม่โหลดขณะ EDIT
-
-  */
-
-
+  /* =======================================================
+     ไม่โหลดขณะ EDIT
+  ======================================================= */
 
   if(pauseRealtime){
 
@@ -10562,14 +10840,9 @@ setInterval(()=>{
   }
 
 
-
-  /*
-
-    ไม่โหลดขณะ REORDER
-
-  */
-
-
+  /* =======================================================
+     ไม่โหลดขณะ REORDER
+  ======================================================= */
 
   if(isReordering){
 
@@ -10578,13 +10851,13 @@ setInterval(()=>{
   }
 
 
+  /* =======================================================
+     ONLINE LOAD
+  ======================================================= */
 
   load();
 
-
-
 },1500);
-
 
 
 
