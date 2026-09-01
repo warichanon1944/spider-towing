@@ -6169,15 +6169,19 @@ function calculateAPX(){
       .trim()
       .toUpperCase();
 
-  // รองรับ:
-  // STD 10:00
-  // STD 1000
-  // STD 10.00
-  // STD10:00
-  // STD1000
+  /*
+    รองรับ:
+    10:00
+    STD 10:00
+    1000
+    STD 1000
+    10.00
+    STD 10.00
+  */
+
   const match =
     timeText.match(
-      /STD\s*(\d{1,2})[:.]?(\d{2})/
+      /(?:STD\s*)?(\d{1,2})[:.]?(\d{2})/
     );
 
   if(!match){
@@ -6190,7 +6194,10 @@ function calculateAPX(){
   const minute =
     Number(match[2]);
 
+  // =========================================
   // STD - 2 ชั่วโมง
+  // =========================================
+
   hour -= 2;
 
   // ข้ามวัน
@@ -6198,14 +6205,16 @@ function calculateAPX(){
     hour += 24;
   }
 
-  // AUTO ใส่ A/C@GATE
+  // =========================================
+  // AUTO ใส่ A/C @ GATE
+  // =========================================
+
   gate.value =
     String(hour).padStart(2,"0") +
     ":" +
     String(minute).padStart(2,"0");
 
 }
-
 
 /* =========================================================
    ADD / UPDATE ROW
