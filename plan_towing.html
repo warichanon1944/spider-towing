@@ -5307,29 +5307,6 @@ setInterval(()=>{
 
 function fmt(v){
 
-  if(!v){
-    return "";
-  }
-
-  const str = String(v).trim();
-
-  const match =
-    str.match(/^(\d{1,2}):(\d{2})$/);
-
-  if(!match){
-    return str;
-  }
-
-  return (
-    String(match[1]).padStart(2, "0") +
-    ":" +
-    match[2]
-  );
-
-}
-
-function fmtTime(v){
-
   if(
     v === "" ||
     v === null ||
@@ -5340,6 +5317,10 @@ function fmtTime(v){
 
   const str =
     String(v).trim();
+
+  if(!str){
+    return "-";
+  }
 
   const match =
     str.match(/^(\d{1,2}):(\d{2})$/);
@@ -5356,6 +5337,38 @@ function fmtTime(v){
 
 }
 
+
+function fmtTime(v){
+
+  if(
+    v === "" ||
+    v === null ||
+    v === undefined
+  ){
+    return "-";
+  }
+
+  const str =
+    String(v).trim();
+
+  if(!str){
+    return "-";
+  }
+
+  const match =
+    str.match(/^(\d{1,2}):(\d{2})$/);
+
+  if(!match){
+    return str;
+  }
+
+  return (
+    String(match[1]).padStart(2,"0") +
+    ":" +
+    match[2]
+  );
+
+}
 /* =========================================================
    SYSTEM MODE
    MANUAL / ONLINE
