@@ -4581,7 +4581,7 @@ let isSpeaking = false;
 
 const API =
 
-  "https://script.google.com/macros/s/AKfycbzrvcoyIlMQ8Btew5nJtGM1g4Kx8iOEDuId9EmTQNzNq4XdjPFddXJH0ykghPE4LF4c6A/exec";
+  "https://script.google.com/macros/s/AKfycbytviRYehdlbd48ENRkc8x6awTK31Dzeqy4DdRi5jQqGLJXT5emQXG_fE_txqFGsxljzA/exec";
 
 
 
@@ -4596,13 +4596,8 @@ const API =
 
 
 let pauseRealtime = false;
-
-
-
 let isReordering = false;
-
-
-
+let isLoading = false;
 let data = [];
 
 
@@ -5418,22 +5413,30 @@ async function load(){
      ห้าม LOAD ระหว่าง REORDER
   ======================================================= */
 
-  if(isReordering){
+if(isReordering){
 
-    return;
+  return;
 
-  }
-
-
-  try{
-
-    console.log(
-      "[ONLINE] Loading data from Google Sheet..."
-    );
+}
 
 
-    const res =
-      await fetch(API);
+if(isLoading){
+
+  return;
+
+}
+
+isLoading = true;
+
+
+try{
+
+  console.log(
+    "[ONLINE] Loading data from Google Sheet..."
+  );
+
+  const res =
+    await fetch(API);
 
 
     if(!res.ok){
@@ -5481,14 +5484,18 @@ async function load(){
     );
 
 
-  }catch(e){
+}catch(e){
 
-    console.log(
-      "[ONLINE] Load failed:",
-      e
-    );
+  console.log(
+    "[ONLINE] Load failed:",
+    e
+  );
 
-  }
+}finally{
+
+  isLoading = false;
+
+}
 
 }
 
