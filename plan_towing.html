@@ -4581,7 +4581,7 @@ let isSpeaking = false;
 
 const API =
 
-  "https://script.google.com/macros/s/AKfycbytviRYehdlbd48ENRkc8x6awTK31Dzeqy4DdRi5jQqGLJXT5emQXG_fE_txqFGsxljzA/exec";
+  "https://script.google.com/macros/s/AKfycbw6e8d3WglHGcTxgpHGiRuJULigLLjuGk-FnZ2A3vrBpE86qPq1ys8O2r0k2_ZtXTCi8w/exec";
 
 
 
@@ -5431,12 +5431,16 @@ isLoading = true;
 
 try{
 
-  console.log(
-    "[ONLINE] Loading data from Google Sheet..."
-  );
+console.log(
+  "[ONLINE] Loading data from Google Sheet..."
+);
 
-  const res =
-    await fetch(API);
+console.time("[LOAD] fetch");
+
+const res =
+  await fetch(API);
+
+console.timeEnd("[LOAD] fetch");
 
 
     if(!res.ok){
