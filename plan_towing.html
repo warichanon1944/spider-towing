@@ -3736,193 +3736,6 @@ body.zoom-mode td:first-child{
 }
 
 
-/* =========================================================
-   INITIAL DATA LOADING
-========================================================= */
-
-#initialDataLoading{
-  position:fixed;
-  inset:0;
-  z-index:99999;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(70,45,110,.28),
-      rgba(8,8,14,.98) 65%
-    );
-
-  opacity:1;
-  visibility:visible;
-
-  transition:
-    opacity .35s ease,
-    visibility .35s ease;
-}
-
-#initialDataLoading.hide{
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-}
-
-.initial-loading-box{
-  width:min(420px, calc(100vw - 40px));
-  padding:34px 30px 30px;
-
-  text-align:center;
-
-  background:rgba(20,20,30,.94);
-
-  border:1px solid rgba(190,155,70,.45);
-  border-radius:18px;
-
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.55),
-    0 0 30px rgba(120,80,180,.12);
-
-  backdrop-filter:blur(10px);
-}
-
-.initial-loading-title{
-  margin-bottom:8px;
-
-  color:#d8b866;
-
-  font-size:20px;
-  font-weight:700;
-  letter-spacing:1.8px;
-}
-
-.initial-loading-subtitle{
-  margin-bottom:24px;
-
-  color:#b8b8c5;
-
-  font-size:12px;
-  letter-spacing:1px;
-}
-
-.initial-loading-spinner{
-  width:46px;
-  height:46px;
-
-  margin:0 auto 20px;
-
-  border-radius:50%;
-
-  border:3px solid rgba(216,184,102,.18);
-  border-top-color:#d8b866;
-  border-right-color:#8060a8;
-
-  animation:
-    initialLoadingSpin 1s linear infinite;
-}
-
-@keyframes initialLoadingSpin{
-  to{
-    transform:rotate(360deg);
-  }
-}
-
-.initial-loading-status{
-  color:#e8e8ef;
-
-  font-size:13px;
-  font-weight:600;
-
-  letter-spacing:.8px;
-}
-
-.initial-loading-detail{
-  margin-top:8px;
-
-  color:#858593;
-
-  font-size:11px;
-
-  min-height:16px;
-}
-
-.initial-loading-dots::after{
-  content:"";
-  animation:initialLoadingDots 1.5s steps(4,end) infinite;
-}
-
-@keyframes initialLoadingDots{
-  0%   { content:""; }
-  25%  { content:"."; }
-  50%  { content:".."; }
-  75%  { content:"..."; }
-  100% { content:""; }
-}
-
-/* FAILED */
-
-.initial-loading-box.failed{
-  border-color:rgba(190,80,80,.55);
-}
-
-.initial-loading-box.failed .initial-loading-spinner{
-  display:none;
-}
-
-.initial-loading-error{
-  display:none;
-
-  margin-top:20px;
-}
-
-.initial-loading-box.failed .initial-loading-error{
-  display:block;
-}
-
-.initial-loading-error-title{
-  color:#e58a8a;
-
-  font-size:14px;
-  font-weight:700;
-  letter-spacing:.8px;
-}
-
-.initial-loading-error-detail{
-  margin-top:8px;
-
-  color:#9999a5;
-
-  font-size:11px;
-  line-height:1.5;
-}
-
-.initial-loading-retry{
-  margin-top:18px;
-
-  padding:9px 22px;
-
-  border:1px solid rgba(216,184,102,.55);
-  border-radius:8px;
-
-  background:rgba(216,184,102,.08);
-
-  color:#d8b866;
-
-  font-size:12px;
-  font-weight:700;
-
-  cursor:pointer;
-
-  transition:.2s ease;
-}
-
-.initial-loading-retry:hover{
-  background:rgba(216,184,102,.16);
-}
-
-
 
 
 </style>
@@ -3934,70 +3747,6 @@ body.zoom-mode td:first-child{
 
 
 <body>
-
-<!-- =========================================================
-     INITIAL DATA LOADING
-========================================================= -->
-
-<div id="initialDataLoading">
-
-  <div
-    class="initial-loading-box"
-    id="initialLoadingBox"
-  >
-
-    <div class="initial-loading-title">
-      SPIDER TOWING CONTROL
-    </div>
-
-    <div class="initial-loading-subtitle">
-      TOWING MANAGEMENT SYSTEM
-    </div>
-
-    <div
-      class="initial-loading-spinner"
-      id="initialLoadingSpinner"
-    ></div>
-
-    <div
-      class="initial-loading-status"
-      id="initialLoadingStatus"
-    >
-      CONNECTING TO DATA<span class="initial-loading-dots"></span>
-    </div>
-
-    <div
-      class="initial-loading-detail"
-      id="initialLoadingDetail"
-    >
-      Loading data from Google Sheet
-    </div>
-
-    <div class="initial-loading-error">
-
-      <div class="initial-loading-error-title">
-        DATA CONNECTION FAILED
-      </div>
-
-      <div
-        class="initial-loading-error-detail"
-        id="initialLoadingError"
-      >
-        Unable to load the latest data.
-      </div>
-
-      <button
-        class="initial-loading-retry"
-        onclick="retryInitialLoad()"
-      >
-        RETRY
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
 
 
 
@@ -4849,7 +4598,6 @@ const API =
 let pauseRealtime = false;
 let isReordering = false;
 let isLoading = false;
-let initialLoadComplete = false;
 let data = [];
 
 
@@ -5637,134 +5385,6 @@ function isOnlineMode(){
 
 }
 
-/* =========================================================
-   INITIAL LOADING UI
-========================================================= */
-
-function showInitialLoading(){
-
-  const el =
-    document.getElementById(
-      "initialDataLoading"
-    );
-
-  const box =
-    document.getElementById(
-      "initialLoadingBox"
-    );
-
-  const status =
-    document.getElementById(
-      "initialLoadingStatus"
-    );
-
-  const detail =
-    document.getElementById(
-      "initialLoadingDetail"
-    );
-
-  if(!el || !box){
-    return;
-  }
-
-  box.classList.remove("failed");
-
-  if(status){
-    status.innerHTML =
-      'CONNECTING TO DATA<span class="initial-loading-dots"></span>';
-  }
-
-  if(detail){
-    detail.textContent =
-      "Loading data from System";
-  }
-
-  el.classList.remove("hide");
-}
-
-
-function hideInitialLoading(){
-
-  const el =
-    document.getElementById(
-      "initialDataLoading"
-    );
-
-  if(!el){
-    return;
-  }
-
-  el.classList.add("hide");
-
-  setTimeout(()=>{
-    el.style.display = "none";
-  }, 400);
-}
-
-
-function showInitialLoadFailed(error){
-
-  const el =
-    document.getElementById(
-      "initialDataLoading"
-    );
-
-  const box =
-    document.getElementById(
-      "initialLoadingBox"
-    );
-
-  const status =
-    document.getElementById(
-      "initialLoadingStatus"
-    );
-
-  const detail =
-    document.getElementById(
-      "initialLoadingDetail"
-    );
-
-  const errorEl =
-    document.getElementById(
-      "initialLoadingError"
-    );
-
-  if(!el || !box){
-    return;
-  }
-
-  box.classList.add("failed");
-
-  if(status){
-    status.textContent =
-      "CONNECTION DELAYED";
-  }
-
-  if(detail){
-    detail.textContent =
-      "Waiting for data connection";
-  }
-
-  if(errorEl){
-    errorEl.textContent =
-      error && error.message
-        ? error.message
-        : "Unable to load the latest data.";
-  }
-}
-
-
-function retryInitialLoad(){
-
-  console.log(
-    "[INITIAL] Manual retry"
-  );
-
-  showInitialLoading();
-
-  load();
-}
-
 
 
 /* =========================================================
@@ -5811,20 +5431,16 @@ isLoading = true;
 
 try{
 
-  if(!initialLoadComplete){
-    showInitialLoading();
-  }
-
-  console.log(
-    "[ONLINE] Loading data from Google Sheet..."
-  );
-
-  const res =
-    await fetch(API);
-
 console.log(
-  "[LOAD] fetch completed"
+  "[ONLINE] Loading data from Google Sheet..."
 );
+
+console.time("[LOAD] fetch");
+
+const res =
+  await fetch(API);
+
+console.timeEnd("[LOAD] fetch");
 
 
     if(!res.ok){
@@ -5858,24 +5474,18 @@ console.log(
       hash;
 
 
-data =
-  newData;
+    data =
+      newData;
 
-render();
 
-if(!initialLoadComplete){
+    render();
 
-  initialLoadComplete = true;
 
-  hideInitialLoading();
-
-}
-
-console.log(
-  "[ONLINE] Load complete:",
-  data.length,
-  "records"
-);
+    console.log(
+      "[ONLINE] Load complete:",
+      data.length,
+      "records"
+    );
 
 
 }catch(e){
@@ -5885,16 +5495,8 @@ console.log(
     e
   );
 
-  // แสดงสถานะเฉพาะตอน Initial Load
-  if(!initialLoadComplete){
-
-    showInitialLoadFailed(e);
-
-  }
-
 }finally{
 
-  // ปลดล็อกให้ Realtime รอบถัดไปทำงานได้
   isLoading = false;
 
 }
