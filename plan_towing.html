@@ -5222,15 +5222,12 @@ function getFlightType(flight){
 
 
 
-  const clean =
-
-    String(flight)
-
-      .toUpperCase()
-
-      .replace("TG","")
-
-      .trim();
+const clean =
+  String(flight)
+    .toUpperCase()
+    .replace(/^TG/, "")
+    .trim()
+    .match(/^\d{3}/)?.[0];
 
 
 
